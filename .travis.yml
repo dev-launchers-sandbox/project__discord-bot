@@ -1,0 +1,33 @@
+language: node_js
+node_js:
+  - "8"
+script:
+  - parcel build index.html -d 'dist' --public-url ./ # use parcel to build project into /dist directory
+  - chmod 755 ./ # enable full permissions for root directory
+  - chmod 775 index.html # enable full permissions for index.html file in root directory
+  - chmod -R 775 dist/ # enable full permissions for dist/ directory and all subdirectories
+  - mv ./dist/* ./ # move built files from /dist to root (so github pages can serve up the apps)
+
+deploy:
+  #master -> release branch deployment
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    repo: dev-launchers/$REPO_NAME
+    target_branch: master
+    on:
+      branch: release
+  #masster branch parcel deployment
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    repo: dev-launchers-sandbox/$REPO_NAME
+    target_branch: gh-pages
+    on:
+      branch: master
+
+before_install:
+    - "npm install -g phaser@3.16.1"
+    - "npm install -g parcel-bundler@^1.6.1"

@@ -1,21 +1,23 @@
 {
-  "name": "template-activity",
+  "name": "devlaunchers-bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "src/index.js",
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "start": "npm install discord.js && ./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js"
   },
   "dependencies": {
-    "phaser": "3.16.1"
+    "dateformat": "^3.0.3",
+    "discord.js": "^12.2.0",
+    "moment": "^2.26.0",
+    "node": "12.16.3"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.6.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dev-launchers-sandbox/project_example.git"
+    "nodemon": "1.18.4",
+    "node": "12.16.3",
+    "axios": "^0.19.2",
+    "js-yaml": "^3.13.1",
+    "winston": "^3.2.1"
   },
   "keywords": []
 }

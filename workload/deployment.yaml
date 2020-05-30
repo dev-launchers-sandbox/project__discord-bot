@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: project-discord-bot
+  name: project-discord-bot
+  labels:
+    app: project-discord-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-discord-bot
+  template:
+    metadata:
+      labels:
+        app: project-discord-bot
+    spec:
+      containers:
+      - name: project-discord-bot
+        image: devlaunchers/project_discord-bot:latest
+        env:
+        - name: DISCORD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: discord-token
+        - name: COUNT_CHANNEL_TOTAL
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: count-channel-total
+        - name: COUNT_CHANNEL_MEMBERS
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: count-channel-members
+        - name: COUNT_CHANNEL_BOTS
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: count-channel-bots
+        - name: WHITE_BELT
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: white-belt
+        - name: INTERESTS
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: interests
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi

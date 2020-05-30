@@ -1,0 +1,4 @@
+  
+namespace: project-discord-bot
+bases:
+  - ./workload

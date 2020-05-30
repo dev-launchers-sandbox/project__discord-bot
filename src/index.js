@@ -82,7 +82,7 @@ bot.on("message", message => {
       return;
   }
 });
-bot.login(process.env.DISCORD_TOKEN));
+bot.login(process.env.DISCORD_TOKEN);
 
 function updateCounters(member, message) {
   const server = message || member;

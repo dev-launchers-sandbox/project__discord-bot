@@ -11,7 +11,7 @@ const PREFIX = "!";
 let countChannel = {
   total: process.env.COUNT_CHANNEL_TOTAL,
   members: process.env.COUNT_CHANNEL_MEMBERS,
-  bots: process.env.COUNT_CHANNEL_BOTS,
+  bots: process.env.COUNT_CHANNEL_BOTS
 };
 // Roles IDs:
 const whiteBelt = process.env.WHITE_BELT;
@@ -84,6 +84,12 @@ bot.on("message", message => {
 });
 bot.login(process.env.DISCORD_TOKEN);
 
+/**
+ * @function updateCounters
+ * @description Updates the server stats.
+ * @param {Discord.GuildMember} member Member who joined or left the guild.
+ * @param {Discord.Message} message The message sent to call this command.
+ */
 function updateCounters(member, message) {
   const server = message || member;
   bot.channels.cache
@@ -104,7 +110,11 @@ function updateCounters(member, message) {
       `Bots: ${server.guild.members.cache.filter(m => m.user.bot).size}`
     );
 }
-
+/**
+ * @function setUpNewMembers
+ * @description Sends an embed letting everyone know someone joined and it assigns the member some roles
+ * @param {Discord.GuildMember} member Member who joined the guild.
+ */
 function setUpNewMembers(member) {
   //Gets the channel where we want to send an embed.
   const welcomeChannel = member.guild.channels.cache.find(
@@ -322,7 +332,7 @@ function displayServerInfo(message) {
 
   let member = message.guild.members;
   let offline = member.cache.filter(m => m.user.presence.status === "offline")
-    .size,
+      .size,
     online = member.cache.filter(m => m.user.presence.status === "online").size,
     idle = member.cache.filter(m => m.user.presence.status === "idle").size,
     dnd = member.cache.filter(m => m.user.presence.status === "dnd").size,

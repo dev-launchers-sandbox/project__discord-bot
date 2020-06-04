@@ -6,7 +6,7 @@ const moment = require("moment");
 
 const dateformat = require("dateformat");
 
-const PREFIX = "!";
+const PREFIX = process.env.PREFIX;
 //Channels IDs:
 let countChannel = {
   total: process.env.COUNT_CHANNEL_TOTAL,
@@ -21,8 +21,39 @@ const interests = process.env.INTERESTS;
 bot.on("ready", () => {
   console.log("Connected as " + bot.user.tag);
 });
-
 // When a user joins it will run the following code.
+bot.on("messageDelete", async message => {
+  const auditLogChannel = message.guild.channels.cache.find(
+    channel => channel.id === process.env.AUDIT_LOG_CHANNEL_ID
+  );
+  if (!auditLogChannel) return;
+  const messageDeletedEmbed = new Discord.MessageEmbed()
+    .setTitle(`A Message By ${message.author.tag} Has Been Deleted!`)
+    .addField("Content", message.content)
+    .addField("Channel", message.channel.name)
+    .setThumbnail(message.author.displayAvatarURL())
+    .setColor(0xff9f01)
+    .setTimestamp();
+  auditLogChannel.send(messageDeletedEmbed);
+});
+
+bot.on("messageUpdate", (oldMessage, newMessage) => {
+  const auditLogChannel = oldMessage.guild.channels.cache.find(
+    channel => channel.id === process.env.AUDIT_LOG_CHANNEL_ID
+  );
+  if (!auditLogChannel) return;
+  if (!newMessage.content) return;
+  console.log("Message Was Updated");
+  const messageUpdatedEmbed = new Discord.MessageEmbed()
+    .setTitle(`${oldMessage.author.tag} has edited one message`)
+    .addField("Channel", `#${oldMessage.channel.name}`)
+    .addField("Old Message", oldMessage.content)
+    .addField("New Message", newMessage.content)
+    .setThumbnail(oldMessage.author.displayAvatarURL())
+    .setTimestamp()
+    .setColor(0xff9f01);
+  auditLogChannel.send(messageUpdatedEmbed);
+});
 bot.on("guildMemberAdd", member => {
   updateCounters(member);
   setUpNewMembers(member);
@@ -78,6 +109,18 @@ bot.on("message", message => {
     case "serverinfo":
       displayServerInfo(message);
       break;
+    case "roleinfo":
+      console.log(message.guild.roles);
+      const roleNames = [];
+      message.guild.roles.cache.forEach(role => {
+        roleNames.push(role.name);
+      });
+      const roleInfoEmbed = new Discord.MessageEmbed().addField(
+        "Roles",
+        roleNames
+      );
+      message.channel.send(roleInfoEmbed);
+      break;
     default:
       return;
   }
@@ -118,21 +161,23 @@ function updateCounters(member, message) {
 function setUpNewMembers(member) {
   //Gets the channel where we want to send an embed.
   const welcomeChannel = member.guild.channels.cache.find(
-    channel => channel.name === "general"
+    channel => channel.name === "welcome"
   );
-  // If a channel with the name "general", we just want to return.
+  // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
-  const welcomingEmbed = new Discord.MessageEmbed()
-    .setTitle(member.user.username + " joined!")
-    .setThumbnail(member.user.displayAvatarURL())
-    .addField(`Member Number ${member.guild.memberCount}!`);
+  const welcomeEmbed = new Discord.MessageEmbed()
+    .setTitle(member.user.username + "joined!")
+    .setThumbnail(member.user.avatarURL())
+    .setDescription(`He Is Member Number ${member.guild.memberCount}!`)
+    .setTimestamp()
+    .setColor(0xff9f01);
   member.send(
-    "Welcome to DevLaunchers! To access all of the channels in the server please click the checkbox on the readme channel! If you have any questions, please DM a moderator."
+    "**Welcome to DevLaunchers!** \nTo access all of the channels in the server please click the checkbox on the readme channel! If you have any questions, please DM a moderator/admin of the server. Have fun!."
   );
   //Adds the roles we want every member to have upon arrival.
   member.roles.add(whiteBelt);
   member.roles.add(interests);
-  welcomeChannel.send(welcomingEmbed);
+  welcomeChannel.send(welcomeEmbed);
 }
 
 function sendHelpEmbed(message, args) {

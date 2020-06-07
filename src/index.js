@@ -43,7 +43,7 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
   );
   if (!auditLogChannel) return;
   if (!newMessage.content) return;
-  console.log("Message Was Updated");
+  if ((oldMessage.embeds === []) & (newMessage.embeds !== [])) return;
   const messageUpdatedEmbed = new Discord.MessageEmbed()
     .setTitle(`${oldMessage.author.tag} has edited one message`)
     .addField("Channel", `#${oldMessage.channel.name}`)

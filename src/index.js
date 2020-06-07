@@ -43,7 +43,7 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
   );
   if (!auditLogChannel) return;
   if (!newMessage.content) return;
-  console.log("Message Was Updated");
+  if ((oldMessage.embeds === []) & (newMessage.embeds !== [])) return;
   const messageUpdatedEmbed = new Discord.MessageEmbed()
     .setTitle(`${oldMessage.author.tag} has edited one message`)
     .addField("Channel", `#${oldMessage.channel.name}`)
@@ -120,6 +120,7 @@ bot.on("message", message => {
         roleNames
       );
       message.channel.send(roleInfoEmbed);
+
       break;
     default:
       return;
@@ -166,9 +167,9 @@ function setUpNewMembers(member) {
   // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
   const welcomeEmbed = new Discord.MessageEmbed()
-    .setTitle(member.user.username + "joined!")
+    .setTitle(member.user.username + " joined the server!")
     .setThumbnail(member.user.avatarURL())
-    .setDescription(`He Is Member Number ${member.guild.memberCount}!`)
+    .setDescription(`Member Number ${member.guild.memberCount}!`)
     .setTimestamp()
     .setColor(0xff9f01);
   member.send(

@@ -43,7 +43,7 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
   );
   if (!auditLogChannel) return;
   if (!newMessage.content) return;
-  console.log("Message Was Updated");
+  if ((oldMessage.embeds === []) & (newMessage.embeds !== [])) return;
   const messageUpdatedEmbed = new Discord.MessageEmbed()
     .setTitle(`${oldMessage.author.tag} has edited one message`)
     .addField("Channel", `#${oldMessage.channel.name}`)
@@ -63,7 +63,18 @@ bot.on("guildMemberRemove", member => {
   updateCounters(member);
 });
 //When someone sends a message it will run the following code.
-bot.on("message", message => {
+bot.on("message", async message => {
+  let inviteLink = ["discord.gg", "discord.com/invite", "discord.com/invite"];
+  if (inviteLink.some(word => message.content.includes(word))) {
+    if (!message.author.permissions.has("ADMINISTRATOR")) return;
+    if (message.channel.id === process.env.SHOWCASE_CHANNEL_ID) return;
+    message.delete();
+    return message
+      .reply(
+        "\n You can only post invites on #showcase. \n Make sure they are invites to art, coding, music, based servers."
+      )
+      .then(m => m.delete({ timeout: 10000 }));
+  }
   //If the message doesn’t start with the prefix (!), we don’t want the bot to do anything, so we just return.
   if (!message.content.startsWith(PREFIX)) {
     return;
@@ -110,16 +121,24 @@ bot.on("message", message => {
       displayServerInfo(message);
       break;
     case "roleinfo":
-      console.log(message.guild.roles);
-      const roleNames = [];
-      message.guild.roles.cache.forEach(role => {
-        roleNames.push(role.name);
-      });
-      const roleInfoEmbed = new Discord.MessageEmbed().addField(
-        "Roles",
-        roleNames
+      if ([!args[1]]) {
+        console.log(message.guild.roles);
+        const roleNames = [];
+        message.guild.roles.cache.forEach(role => {
+          roleNames.push(role.name);
+        });
+        const roleInfoEmbed = new Discord.MessageEmbed().addField(
+          "Roles",
+          roleNames
+        );
+        message.channel.send(roleInfoEmbed);
+      }
+      break;
+    case "teamsRules":
+      message.delete();
+      message.channel.send(
+        "**teams-and-projects guidelines:** \n *We'll pin your message if:* \n  - The message has enough detail to be helpful to people who may want to help out with the project, or invite you to theirs \n - The message isn't excessively long (like taking up an entire screen) \n    - The message isn't a verbatim copy of a recent already pinned message \n *We'll remove your message if:* \n - The message takes up too much space \n - The message is spammy or an advertisement \n -You leave the server after posting your message"
       );
-      message.channel.send(roleInfoEmbed);
       break;
     default:
       return;
@@ -166,9 +185,9 @@ function setUpNewMembers(member) {
   // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
   const welcomeEmbed = new Discord.MessageEmbed()
-    .setTitle(member.user.username + "joined!")
+    .setTitle(member.user.username + " joined the server!")
     .setThumbnail(member.user.avatarURL())
-    .setDescription(`He Is Member Number ${member.guild.memberCount}!`)
+    .setDescription(`Member Number ${member.guild.memberCount}!`)
     .setTimestamp()
     .setColor(0xff9f01);
   member.send(

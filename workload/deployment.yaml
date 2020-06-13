@@ -19,6 +19,11 @@ spec:
       - name: project-discord-bot
         image: devlaunchers/project_discord-bot:latest
         env:
+        - name: AUDIT_LOG_CHANNEL_ID
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: audit-log-channel-id
         - name: DISCORD_TOKEN
           valueFrom:
             secretKeyRef:
@@ -44,6 +49,11 @@ spec:
             secretKeyRef:
               name: project-discord-bot
               key: white-belt
+        - name: PREFIX
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: prefix
         - name: INTERESTS
           valueFrom:
             secretKeyRef:
@@ -51,8 +61,8 @@ spec:
               key: interests
         resources:
           limits:
-            cpu: 500m
-            memory: 256Mi
+            cpu: 250m
+            memory: 160Mi
           requests:
-            cpu: 100m
-            memory: 64Mi
+            cpu: 50m
+            memory: 32Mi

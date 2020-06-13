@@ -25,6 +25,7 @@ Types: -
 75% - Common
 25% - Uncommon
 
+
 25 - Iron
 20% - Common
 60% - Uncommon
@@ -97,3 +98,4 @@ Low Priority:
 Process:
 
 1. Create space/file for game system code
+

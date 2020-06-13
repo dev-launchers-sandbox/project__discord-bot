@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
-
 const bot = new Discord.Client();
-
 const moment = require("moment");
 
 const dateformat = require("dateformat");
@@ -12,7 +10,7 @@ let countChannel = {
   total: process.env.COUNT_CHANNEL_TOTAL,
   members: process.env.COUNT_CHANNEL_MEMBERS,
   bots: process.env.COUNT_CHANNEL_BOTS
-};
+}; //are you ok...
 // Roles IDs:
 const whiteBelt = process.env.WHITE_BELT;
 const interests = process.env.INTERESTS;
@@ -63,7 +61,8 @@ bot.on("guildMemberRemove", member => {
   updateCounters(member);
 });
 //When someone sends a message it will run the following code.
-bot.on("message", message => {
+bot.on("message", async message => {
+  checkIfInviteCode(message);
   //If the message doesn’t start with the prefix (!), we don’t want the bot to do anything, so we just return.
   if (!message.content.startsWith(PREFIX)) {
     return;
@@ -110,17 +109,24 @@ bot.on("message", message => {
       displayServerInfo(message);
       break;
     case "roleinfo":
-      console.log(message.guild.roles);
-      const roleNames = [];
-      message.guild.roles.cache.forEach(role => {
-        roleNames.push(role.name);
-      });
-      const roleInfoEmbed = new Discord.MessageEmbed().addField(
-        "Roles",
-        roleNames
+      if ([!args[1]]) {
+        console.log(message.guild.roles);
+        const roleNames = [];
+        message.guild.roles.cache.forEach(role => {
+          roleNames.push(role.name);
+        });
+        const roleInfoEmbed = new Discord.MessageEmbed().addField(
+          "Roles",
+          roleNames
+        );
+        message.channel.send(roleInfoEmbed);
+      }
+      break;
+    case "teamsRules":
+      message.delete();
+      message.channel.send(
+        "**teams-and-projects guidelines:** \n *We'll pin your message if:* \n  - The message has enough detail to be helpful to people who may want to help out with the project, or invite you to theirs \n - The message isn't excessively long (like taking up an entire screen) \n    - The message isn't a verbatim copy of a recent already pinned message \n *We'll remove your message if:* \n - The message takes up too much space \n - The message is spammy or an advertisement \n -You leave the server after posting your message"
       );
-      message.channel.send(roleInfoEmbed);
-
       break;
     default:
       return;
@@ -416,4 +422,17 @@ function displayServerInfo(message) {
       `Text: ${text} \nVoice: ${vc} \nCategory: ${category}`
     );
   message.channel.send(serverInfoEmbed);
+}
+function checkIfInviteCode(message) {
+  let inviteLink = ["discord.gg", "discord.com/invite", "discord.com/invite"];
+  if (!message.member.permissions.has("ADMINISTRATOR"))
+    if (inviteLink.some(word => message.content.includes(word))) {
+      if (message.channel.id === process.env.SHOWCASE_CHANNEL_ID) return;
+      message.delete();
+      return message
+        .reply(
+          "\n You can only post invites on #showcase. \n Make sure they are invites to art, coding, music, based servers."
+        )
+        .then(m => m.delete({ timeout: 10000 }));
+    }
 }

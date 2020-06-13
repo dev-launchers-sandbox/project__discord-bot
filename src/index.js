@@ -1,19 +1,16 @@
 const Discord = require("discord.js");
-
 const bot = new Discord.Client();
-
 const moment = require("moment");
 
 const dateformat = require("dateformat");
 
 const PREFIX = process.env.PREFIX;
 //Channels IDs:
-//Comment
 let countChannel = {
   total: process.env.COUNT_CHANNEL_TOTAL,
   members: process.env.COUNT_CHANNEL_MEMBERS,
   bots: process.env.COUNT_CHANNEL_BOTS
-};
+}; //are you ok...
 // Roles IDs:
 const whiteBelt = process.env.WHITE_BELT;
 const interests = process.env.INTERESTS;
@@ -65,17 +62,7 @@ bot.on("guildMemberRemove", member => {
 });
 //When someone sends a message it will run the following code.
 bot.on("message", async message => {
-  let inviteLink = ["discord.gg", "discord.com/invite", "discord.com/invite"];
-  if (inviteLink.some(word => message.content.includes(word))) {
-    if (!message.author.permissions.has("ADMINISTRATOR")) return;
-    if (message.channel.id === process.env.SHOWCASE_CHANNEL_ID) return;
-    message.delete();
-    return message
-      .reply(
-        "\n You can only post invites on #showcase. \n Make sure they are invites to art, coding, music, based servers."
-      )
-      .then(m => m.delete({ timeout: 10000 }));
-  }
+  checkIfInviteCode(message);
   //If the message doesn’t start with the prefix (!), we don’t want the bot to do anything, so we just return.
   if (!message.content.startsWith(PREFIX)) {
     return;
@@ -435,4 +422,17 @@ function displayServerInfo(message) {
       `Text: ${text} \nVoice: ${vc} \nCategory: ${category}`
     );
   message.channel.send(serverInfoEmbed);
+}
+function checkIfInviteCode(message) {
+  let inviteLink = ["discord.gg", "discord.com/invite", "discord.com/invite"];
+  if (!message.member.permissions.has("ADMINISTRATOR"))
+    if (inviteLink.some(word => message.content.includes(word))) {
+      if (message.channel.id === process.env.SHOWCASE_CHANNEL_ID) return;
+      message.delete();
+      return message
+        .reply(
+          "\n You can only post invites on #showcase. \n Make sure they are invites to art, coding, music, based servers."
+        )
+        .then(m => m.delete({ timeout: 10000 }));
+    }
 }

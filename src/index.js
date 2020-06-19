@@ -5,19 +5,23 @@ const moment = require("moment");
 const dateformat = require("dateformat");
 
 const PREFIX = process.env.PREFIX;
+//let points = 0;
 //Channels IDs:
 let countChannel = {
-  total: process.env.COUNT_CHANNEL_TOTAL,
-  members: process.env.COUNT_CHANNEL_MEMBERS,
-  bots: process.env.COUNT_CHANNEL_BOTS
-}; //are you ok...
-// Roles IDs:
-const whiteBelt = process.env.WHITE_BELT;
-const interests = process.env.INTERESTS;
-
+  total: process.env.COUNT_CHANNEL_TOTAL
+};
+let showcaseChannelID;
 //When the bot is ready it will let us know.
 bot.on("ready", () => {
   console.log("Connected as " + bot.user.tag);
+  bot.user.setActivity("DevLaunchers  ", { type: "WATCHING" });
+  if (bot.user.tag === "DevLaunchers Testing Bot#1408") {
+    showcaseChannelID = "720018913143947304";
+    console.log("Alt Bot");
+  } else {
+    showcaseChannelID = "696792114683445338";
+    console.log("Actual Bot");
+  }
 });
 // When a user joins it will run the following code.
 bot.on("messageDelete", async message => {
@@ -27,24 +31,26 @@ bot.on("messageDelete", async message => {
   if (!auditLogChannel) return;
   const messageDeletedEmbed = new Discord.MessageEmbed()
     .setTitle(`A Message By ${message.author.tag} Has Been Deleted!`)
+    .addField("Channel", `<#${message.channel.id}>`)
     .addField("Content", message.content)
-    .addField("Channel", message.channel.name)
     .setThumbnail(message.author.displayAvatarURL())
     .setColor(0xff9f01)
     .setTimestamp();
   auditLogChannel.send(messageDeletedEmbed);
 });
-
+// dd
 bot.on("messageUpdate", (oldMessage, newMessage) => {
   const auditLogChannel = oldMessage.guild.channels.cache.find(
     channel => channel.id === process.env.AUDIT_LOG_CHANNEL_ID
   );
   if (!auditLogChannel) return;
   if (!newMessage.content) return;
-  if ((oldMessage.embeds === []) & (newMessage.embeds !== [])) return;
+  if (oldMessage.embeds.length === 0 && newMessage.embeds.length !== 0) {
+    return;
+  }
   const messageUpdatedEmbed = new Discord.MessageEmbed()
     .setTitle(`${oldMessage.author.tag} has edited one message`)
-    .addField("Channel", `#${oldMessage.channel.name}`)
+    .addField("Channel", `<#${oldMessage.channel.id}>`)
     .addField("Old Message", oldMessage.content)
     .addField("New Message", newMessage.content)
     .setThumbnail(oldMessage.author.displayAvatarURL())
@@ -109,25 +115,46 @@ bot.on("message", async message => {
       displayServerInfo(message);
       break;
     case "roleinfo":
-      if ([!args[1]]) {
-        console.log(message.guild.roles);
-        const roleNames = [];
-        message.guild.roles.cache.forEach(role => {
-          roleNames.push(role.name);
-        });
-        const roleInfoEmbed = new Discord.MessageEmbed().addField(
-          "Roles",
-          roleNames
-        );
-        message.channel.send(roleInfoEmbed);
-      }
+      sendRoleInfoEmbed(message, args);
       break;
+
     case "teamsRules":
-      message.delete();
+      sendTeamsRulesMessage(message);
+      break;
+
+    /*
+    case "givePoints":
+      if (message.mentions.users.first() === undefined) {
+        return message.channel.send("You need to mention someone");
+      }
+      console.log(points);
+      const userToGivePointsTo = message.mentions.users.first();
+      const actualPoints = parseInt(points, 10);
+      points = actualPoints + 10;
+      console.log(points);
       message.channel.send(
-        "**teams-and-projects guidelines:** \n *We'll pin your message if:* \n  - The message has enough detail to be helpful to people who may want to help out with the project, or invite you to theirs \n - The message isn't excessively long (like taking up an entire screen) \n    - The message isn't a verbatim copy of a recent already pinned message \n *We'll remove your message if:* \n - The message takes up too much space \n - The message is spammy or an advertisement \n -You leave the server after posting your message"
+        userToGivePointsTo.tag + " has " + points + " points!"
       );
       break;
+    case "buyWoodLootBox":
+      console.log(points);
+      if (points >= 10) {
+        points = points - 10;
+      } else {
+        message.channel.send(
+          "You do not have enough points to purchase this item!"
+        );
+      }
+      //TODO: Make a function that will just get called to display this message
+
+      break;
+    case "displayPoints":
+      message.channel.send(`You have ${points} points`);
+      break;
+    case "reset":
+      points = 0;
+      message.channel.send(`points now equal ${points}`);
+      break;*/
     default:
       return;
   }
@@ -145,20 +172,6 @@ function updateCounters(member, message) {
   bot.channels.cache
     .get(countChannel.total)
     .setName(`Total Members: ${server.guild.memberCount}`);
-
-  //This updates the membes counter by setting it to the server’s member count.
-  bot.channels.cache
-    .get(countChannel.members)
-    .setName(
-      `Members: ${server.guild.members.cache.filter(m => !m.user.bot).size}`
-    );
-
-  //This updates the bot counter by setting it to the server’s bot count.
-  bot.channels.cache
-    .get(countChannel.bots)
-    .setName(
-      `Bots: ${server.guild.members.cache.filter(m => m.user.bot).size}`
-    );
 }
 /**
  * @function setUpNewMembers
@@ -168,23 +181,21 @@ function updateCounters(member, message) {
 function setUpNewMembers(member) {
   //Gets the channel where we want to send an embed.
   const welcomeChannel = member.guild.channels.cache.find(
-    channel => channel.name === "welcome"
+    channel => channel.name === "general"
   );
+  let icon = bot.user.displayAvatarURL({ size: 2048 });
+  let avatar = member.user.displayAvatarURL({ size: 2048 });
   // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
   const welcomeEmbed = new Discord.MessageEmbed()
-    .setTitle(member.user.username + " joined the server!")
-    .setThumbnail(member.user.avatarURL())
-    .setDescription(`Member Number ${member.guild.memberCount}!`)
-    .setTimestamp()
+    .setAuthor(`${member.user.tag}`, avatar, avatar)
+    .setDescription(`Welcome **${member.user.username}**, thanks for joining!`)
+    .setFooter(`DevLaunchers`, icon, icon)
     .setColor(0xff9f01);
-  member.send(
-    "**Welcome to DevLaunchers!** \nTo access all of the channels in the server please click the checkbox on the readme channel! If you have any questions, please DM a moderator/admin of the server. Have fun!."
-  );
-  //Adds the roles we want every member to have upon arrival.
-  member.roles.add(whiteBelt);
-  member.roles.add(interests);
   welcomeChannel.send(welcomeEmbed);
+  //Adds the roles we want every member to have upon arrival.
+  member.roles.add(process.env.WHITE_BELT);
+  member.roles.add(process.env.INTERESTS);
 }
 
 function sendHelpEmbed(message, args) {
@@ -341,7 +352,7 @@ function displayInfo(message) {
     userInfo.presence.status = "Offline";
   if (userInfo.presence.status === "online")
     userInfo.presence.status = "Online";
-
+  console.log("info = ", userInfo);
   let createdate = moment
     .utc(userInfo.createdAt)
     .format("dddd, MMMM Do YYYY, HH:mm:ss");
@@ -427,12 +438,32 @@ function checkIfInviteCode(message) {
   let inviteLink = ["discord.gg", "discord.com/invite", "discord.com/invite"];
   if (!message.member.permissions.has("ADMINISTRATOR"))
     if (inviteLink.some(word => message.content.includes(word))) {
-      if (message.channel.id === process.env.SHOWCASE_CHANNEL_ID) return;
+      if (message.channel.id === showcaseChannelID) return;
       message.delete();
       return message
         .reply(
-          "\n You can only post invites on #showcase. \n Make sure they are invites to art, coding, music, based servers."
+          `\n You can only post invites on <#${showcaseChannelID}>. \n Make sure they are invites to art, coding, music, based servers.`
         )
-        .then(m => m.delete({ timeout: 10000 }));
+        .then(m => m.delete({ timeout: 10000 }))
+        .catch(console.err);
     }
+}
+function sendTeamsRulesMessage(message) {
+  message.delete();
+  message.channel.send(
+    "**teams-and-projects guidelines:** \n *We'll pin your message if:* \n  - The message has enough detail to be helpful to people who may want to help out with the project, or invite you to theirs \n - The message isn't excessively long (like taking up an entire screen) \n    - The message isn't a verbatim copy of a recent already pinned message \n *We'll remove your message if:* \n - The message takes up too much space \n - The message is spammy or an advertisement \n -You leave the server after posting your message"
+  );
+}
+function sendRoleInfoEmbed(message, args) {
+  if ([!args[1]]) {
+    const roleNames = [];
+    message.guild.roles.cache.forEach(role => {
+      roleNames.push(role.name);
+    });
+    const roleInfoEmbed = new Discord.MessageEmbed().addField(
+      "Roles",
+      roleNames
+    );
+    message.channel.send(roleInfoEmbed);
+  }
 }

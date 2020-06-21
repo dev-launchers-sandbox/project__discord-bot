@@ -18,7 +18,11 @@ spec:
       containers:
       - name: project-discord-bot
         image: devlaunchers/project_discord-bot:latest
+        ports:
+        - containerPort: 3000
         env:
+        - name: PORT
+          value: "3000"
         - name: AUDIT_LOG_CHANNEL_ID
           valueFrom:
             secretKeyRef:
@@ -61,8 +65,16 @@ spec:
               key: interests
         resources:
           limits:
-            cpu: 250m
-            memory: 160Mi
-          requests:
             cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 25m
             memory: 32Mi
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5

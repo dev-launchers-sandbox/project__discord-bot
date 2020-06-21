@@ -1,8 +1,14 @@
+const express = require('express');
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 const moment = require("moment");
+const promClient = require('prom-client');
 
 const dateformat = require("dateformat");
+
+const metrics = registerMetrics()
+
+startMetricsServer(metrics);
 
 const PREFIX = process.env.PREFIX;
 //let points = 0;
@@ -25,6 +31,7 @@ bot.on("ready", () => {
 });
 // When a user joins it will run the following code.
 bot.on("messageDelete", async message => {
+  metrics.events.inc({ "event": "message_delete" })
   const auditLogChannel = message.guild.channels.cache.find(
     channel => channel.id === process.env.AUDIT_LOG_CHANNEL_ID
   );
@@ -40,6 +47,7 @@ bot.on("messageDelete", async message => {
 });
 // dd
 bot.on("messageUpdate", (oldMessage, newMessage) => {
+  metrics.events.inc({ "event": "message_update" })
   const auditLogChannel = oldMessage.guild.channels.cache.find(
     channel => channel.id === process.env.AUDIT_LOG_CHANNEL_ID
   );
@@ -59,11 +67,13 @@ bot.on("messageUpdate", (oldMessage, newMessage) => {
   auditLogChannel.send(messageUpdatedEmbed);
 });
 bot.on("guildMemberAdd", member => {
+  metrics.events.inc({ "event": "guild_member_add" })
   updateCounters(member);
   setUpNewMembers(member);
 });
 // When a user leaves the guild (server) the following code will run.
 bot.on("guildMemberRemove", member => {
+  metrics.events.inc({ "event": "guild_member_remove" })
   updateCounters(member);
 });
 //When someone sends a message it will run the following code.
@@ -78,47 +88,57 @@ bot.on("message", async message => {
   switch (args[0]) {
     //Help command: This explains all of the commands. It contains 2 pages.
     case "help":
+      metrics.events.inc({ "event": "message_help" })
       sendHelpEmbed(message, args);
       break;
 
     //Clear commmand: Clears (deletes) the number of messages specified by whoever ran the command.
     case "clear":
+      metrics.events.inc({ "event": "message_clear" })
       clearMessages(message, args);
       break;
 
     //Command Kick: Kicks a the user from the server specified by whoever ran the command.
     case "kick":
+      metrics.events.inc({ "event": "message_kick" })
       kickMember(message, args);
       break;
 
     //Command Ban: Bans a the user from the server specified by whoever ran the command.
     case "ban":
+      metrics.events.inc({ "event": "message_ban" })
       banMember(message, args);
       break;
 
     //Creates a simple yes or no poll. The content of the poll is specified by whoever ran the command.
     case "poll":
+      metrics.events.inc({ "event": "message_poll" })
       createPoll(message, args);
       break;
 
     //Command Info: Sends an embed containing the information of a U  ser in the guild (server).
     // Whoever runs the command specifies who the User is.
     case "info":
+      metrics.events.inc({ "event": "message_info" })
       displayInfo(message);
       break;
     //Command Update Counters: Updates the server stats
     case "updateCounters":
+      metrics.events.inc({ "event": "message_update_counters" })
       updateCounters(message);
       break;
     // Command Server Info: Displays informations about the server (members, channels, owner, etc.)
     case "serverinfo":
+      metrics.events.inc({ "event": "message_server_info" })
       displayServerInfo(message);
       break;
     case "roleinfo":
+      metrics.events.inc({ "event": "message_role_info" })
       sendRoleInfoEmbed(message, args);
       break;
 
     case "teamsRules":
+      metrics.events.inc({ "event": "message_teams_rules" })
       sendTeamsRulesMessage(message);
       break;
 
@@ -395,7 +415,7 @@ function displayServerInfo(message) {
 
   let member = message.guild.members;
   let offline = member.cache.filter(m => m.user.presence.status === "offline")
-      .size,
+    .size,
     online = member.cache.filter(m => m.user.presence.status === "online").size,
     idle = member.cache.filter(m => m.user.presence.status === "idle").size,
     dnd = member.cache.filter(m => m.user.presence.status === "dnd").size,
@@ -466,4 +486,34 @@ function sendRoleInfoEmbed(message, args) {
     );
     message.channel.send(roleInfoEmbed);
   }
+}
+
+function registerMetrics() {
+  const collectDefaultMetrics = promClient.collectDefaultMetrics;
+  const Registry = promClient.Registry;
+  const register = new Registry();
+  collectDefaultMetrics({ register });
+  const events = new promClient.Counter({
+    name: 'events_count',
+    help: 'Count of discrod events',
+    labelNames: ['event'],
+  });
+  register.registerMetric(events);
+  return {
+    register: register,
+    events: events,
+  }
+}
+
+function startMetricsServer(metrics) {
+  const server = express();
+  server.get('/metrics', (req, res) => {
+    res.set('Content-Type', metrics.register.contentType);
+    res.end(metrics.register.metrics());
+  });
+
+  const port = process.env.PORT;
+  console.log(`Metrics server listening to ${port}, metrics exposed on /metrics endpoint`);
+  server.listen(port);
+
 }

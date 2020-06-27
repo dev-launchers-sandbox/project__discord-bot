@@ -4,7 +4,7 @@ on:
     branches:
       - master
     tags-ignore:
-      - flux-sync
+      - flux*
 jobs:
   build:
     runs-on: ubuntu-latest

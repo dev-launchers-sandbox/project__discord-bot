@@ -1,0 +1,14 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-discord-bot
+  namespace: project-discord-bot
+spec:
+  template:
+    spec:
+      $setElementOrder/containers:
+      - name: project-discord-bot
+      containers:
+      - image: devlaunchers/project_discord-bot:sha-9e30a28
+        name: project-discord-bot

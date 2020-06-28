@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   namespace: project-discord-bot
   name: project-discord-bot
-  annotations:
-    fluxcd.io/automated: "true"
   labels:
     app: project-discord-bot
 spec:

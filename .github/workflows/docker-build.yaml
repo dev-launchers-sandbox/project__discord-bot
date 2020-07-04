@@ -3,8 +3,9 @@ on:
   push:
     branches:
       - master
-    tags-ignore:
-      - flux*
+    # Build image whenever a file under src/ is changed
+    paths:
+      - 'src/**'
 jobs:
   build:
     runs-on: ubuntu-latest

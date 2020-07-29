@@ -2,8 +2,10 @@ const db = require("quick.db");
 const Discord = require("discord.js");
 let ms = require("parse-ms");
 
+// quickdb uses json.sqlite file in current folder as storage
+
 module.exports = {
-  awardDevBean: async function(messageReaction, user) {
+  awardDevBean: async function (messageReaction, user) {
     //if the user does not react with the correct emoji, we do not want to do anything
     if (messageReaction.emoji.name !== "DevBean") return;
     let userToGiveBeansTo = messageReaction.message.author.id; //id of the users whos message got a reaction
@@ -37,7 +39,7 @@ module.exports = {
       );
     }
   },
-  removeBean: async function(messageReaction, user) {
+  removeBean: async function (messageReaction, user) {
     //if the user did not unreact with the correct emoji, we do not want to do anything
     if (messageReaction.emoji.name !== "DevBean")
       return console.log("not beans");
@@ -60,7 +62,7 @@ module.exports = {
       );
     }
   },
-  awardGoldenBean: async function(messageReaction, user) {
+  awardGoldenBean: async function (messageReaction, user) {
     //if there were any bots involved in the message we do not want to continue
     if (user.bot || messageReaction.message.author.bot) return;
     //if the user does not react with the correct emoji, we do not want to do anything
@@ -90,7 +92,7 @@ module.exports = {
         db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
         user.send(
           `Golden Bean added to **${
-            messageReaction.message.author.tag
+          messageReaction.message.author.tag
           }** balance!`
         );
 
@@ -107,7 +109,7 @@ module.exports = {
       console.log(err);
     }
   },
-  removeGoldenBean: async function(messageReaction, user) {
+  removeGoldenBean: async function (messageReaction, user) {
     //if the user does not "unreact" with the correct emoji, we do not want to do anything
     if (messageReaction.emoji.name !== "GoldenBean") return;
     let lastGoldenBeanAwarded = db.get(`lastGoldenBeanAwarded.${user.id}`);
@@ -123,7 +125,7 @@ module.exports = {
       console.log("messageReaction.message.id =", messageReaction.message.id);
       return user.send(
         `**${
-          user.username
+        user.username
         }**, you can only remove the last golden-bean you awarded!`
       );
     }
@@ -140,7 +142,7 @@ module.exports = {
       );
     }
   },
-  getBeans: function(message, args) {
+  getBeans: function (message, args) {
     // determine user to inquire balance
     let userDevBeans; // user object
     // if another username is specified, get the balance of that user
@@ -180,10 +182,10 @@ module.exports = {
       .setTimestamp(new Date());
     message.channel.send(embed);
   },
-  endSeason: function(message, args) {
+  endSeason: function (message, args) {
     message.channel.send(
       `**${message.author.username}**, do you want to end the bean season? ` +
-        "`Y`, `N`"
+      "`Y`, `N`"
     );
     const collector = message.channel.createMessageCollector(
       m =>
@@ -202,7 +204,7 @@ module.exports = {
           });
           message.channel.send(
             `**${
-              message.author.username
+            message.author.username
             }**, I successfully ended the bean season`
           );
         } else if (msg.content === "N") {
@@ -212,7 +214,7 @@ module.exports = {
         console.log(error);
         message.channel.send(
           `**${
-            msg.author.username
+          msg.author.username
           }**, I could not end the season! Try again later...!`
         );
       }
@@ -225,7 +227,7 @@ module.exports = {
       }
     });
   },
-  leaderboard: async function(bot, message, type) {
+  leaderboard: async function (bot, message, type) {
     const getUserAccounts = () => {
       let allData = db.all();
       let accounts = allData.filter(data => data.ID === "account")[0].data;
@@ -261,7 +263,7 @@ module.exports = {
     lbEmbed.setColor(setColorAndDescriptionEmbed(message, lbArray, type).color);
     message.channel.send(lbEmbed);
   },
-  leaderboardManager: function(bot, message, args) {
+  leaderboardManager: function (bot, message, args) {
     let lbType;
     let goldenBeanEmoji = message.guild.emojis.cache.find(
       emoji => emoji.name === "GoldenBean"
@@ -272,7 +274,7 @@ module.exports = {
     if (!goldenBeanEmoji || !devBeanEmoji) {
       return message.channel.send(
         `**${
-          message.author.username
+        message.author.username
         }**, this server does not have the devBeans and/or goldenBeans emojis!`
       );
     }
@@ -323,7 +325,7 @@ function setColorAndDescriptionEmbed(message, lbArray, type) {
       let userObject = message.guild.members.cache.get(userEntrie.id);
       let addWord = `**${rankOfUser}) ${userObject.user.tag}: ${
         userEntrie.type
-      }** ${emoji} \n`;
+        }** ${emoji} \n`;
       description = description.concat(addWord);
       rankOfUser = rankOfUser + 1;
     });

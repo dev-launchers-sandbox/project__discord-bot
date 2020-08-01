@@ -81,7 +81,7 @@ spec:
           timeoutSeconds: 10
           failureThreshold: 5
         volumeMounts:
-          - name: quickdb-persistent-storage
+          - name: project-discord-bot-storage
             mountPath: /usr/src/app/json.sqlite
       volumes:
         - name: project-discord-bot-storage

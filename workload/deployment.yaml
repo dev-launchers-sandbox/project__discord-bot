@@ -80,9 +80,9 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 10
           failureThreshold: 5
-        volumeMounts:
-          - name: project-discord-bot-storage
-            mountPath: /usr/src/app/json.sqlite
+        #volumeMounts:
+        #  - name: project-discord-bot-storage
+        #    mountPath: /usr/src/app/json.sqlite
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:

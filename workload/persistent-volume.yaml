@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: project-discord-bot-pv-claim
 spec:
-  storageClassName: manual
+  storageClassName: project-discord-bot-pv
   accessModes:
     - ReadWriteOnce
   resources:

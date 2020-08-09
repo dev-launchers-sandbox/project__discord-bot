@@ -6,6 +6,7 @@ on:
     # Build image whenever a file under src/ is changed
     paths:
       - 'src/**'
+      - 'package*.json'
 jobs:
   build:
     runs-on: ubuntu-latest

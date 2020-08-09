@@ -83,7 +83,7 @@ spec:
         #volumeMounts:
         #  - name: project-discord-bot-storage
         #    mountPath: /usr/src/app/json.sqlite
-      volumes:
-        - name: project-discord-bot-storage
-          persistentVolumeClaim:
-            claimName: project-discord-bot-pv-claim
+      #volumes:
+      #  - name: project-discord-bot-storage
+      #    persistentVolumeClaim:
+      #      claimName: project-discord-bot-pv-claim

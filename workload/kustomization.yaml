@@ -1,5 +1,4 @@
 resources:
   - deployment.yaml
-  - persistent-volume.yaml
   - sealed-secret.yaml
   - service.yaml

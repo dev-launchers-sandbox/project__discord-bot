@@ -9,4 +9,4 @@ require("./handler/Event.js")(client);
 client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
-client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.MmyxhHQO0xQVK4wrRwbFRy1TtzM");
+client.login(process.env.DISCORD_TOKEN);

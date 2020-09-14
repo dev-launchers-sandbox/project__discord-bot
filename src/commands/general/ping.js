@@ -24,6 +24,6 @@ exports.help = {
 };
 
 exports.conf = {
-  aliases: ["latency", "API", "response"],
+  aliases: ["latency", "api", "response"],
   cooldown: 5,
 };

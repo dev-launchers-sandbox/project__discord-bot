@@ -2,7 +2,7 @@
   "name": "discord-bot-07-20-2020",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "npm install discord.js && ./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
     "prod-start": "cd data && node ../src/index.js"

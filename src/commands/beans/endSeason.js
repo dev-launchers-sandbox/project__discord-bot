@@ -46,8 +46,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "endseason",
   description: "Ends the current bean season",
-  usage: `-endSeason`,
-  example: `-endSeason`,
+  usage: `endSeason`,
+  example: `endSeason`,
 };
 
 exports.conf = {

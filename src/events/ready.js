@@ -2,12 +2,13 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 let channelsDeletedIDs = [];
 const punishments = require("../utils/instancedManager.js");
+const inviteManager = require("../utils/inviteManager.js");
 
 module.exports = async (client) => {
   console.log("The bot is ready!");
   client.user.setActivity("DevLaunchers", { type: "WATCHING" });
-  //instancedManager.updateInstancedChannels();
-  setInterval(checkActivity, 10000, client);
+  inviteManager.fetchInvites(client);
+  setInterval(checkActivity, 60000, client);
 };
 
 async function checkActivity(client) {
@@ -43,7 +44,7 @@ async function checkActivity(client) {
 
       // more readable code if we just return here.
       // if the channel hasn't expired
-      if (time < 20000) return;
+      if (time < 4.32e7) return;
 
       // see if we can find this role (could use one find for ...
       // ... the check and the delete instead of doing the same one twice)
@@ -59,6 +60,7 @@ async function checkActivity(client) {
 
       // delete the channel once we remove the roles attached to it.
       await deleteChannel(channelChecking);
+      await sendModerationMessage(client, channel);
       await channelsDeletedIDs.push(channel.newChannel);
     });
     const updatedChannels = instancedChannels.filter(
@@ -71,6 +73,12 @@ async function checkActivity(client) {
 
 async function deleteChannel(channel) {
   await channel.delete();
+}
+
+async function sendModerationMessage(client, channel) {
+  let modChannel = client.channels.resolve(channel.channelForModeration.id);
+  if (!modChannel) return;
+  modChannel.send("This channel has been deleted");
 }
 
 async function deleteRole(role) {

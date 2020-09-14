@@ -15,8 +15,8 @@ exports.run = async (client, message, args) => {
   let messageArgs = args.slice(0).join(" ");
   const pollEmbed = new Discord.MessageEmbed()
     .setColor(0xff9f01)
-    .setTitle("Poll initated by " + message.author.username)
-    .setDescription("📝 " + "**" + messageArgs + "**");
+    .setTitle("📝 " + "**" + messageArgs + "**")
+    .setDescription("Poll initated by " + message.author.username);
   message.channel.send(pollEmbed).then((msgReaction) => {
     msgReaction.react("👍");
     msgReaction.react("👎");
@@ -27,7 +27,7 @@ exports.help = {
   name: "poll",
   description: "Create a simple poll",
   usage: "poll <content>",
-  example: "poll Do you want to be my friend :( ??",
+  example: "poll Is this helpful?",
 };
 
 exports.conf = {

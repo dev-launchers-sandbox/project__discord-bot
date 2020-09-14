@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const dateformat = require("dateformat");
 
 exports.run = async (client, message, args) => {
-  let icon = message.guild.iconURL({ size: 2048 });
+  let icon = message.guild.iconURL({ size: 2048, dynamic: true });
   let region = {
     brazil: "Brazil",
     "eu-central": "Central Europe",
@@ -65,8 +65,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "serverinfo",
   description: "Displays information about the server",
-  usage: "-serverinfo",
-  example: "-serverinfo",
+  usage: "serverinfo",
+  example: "serverinfo",
 };
 
 exports.conf = {

@@ -39,8 +39,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "beans",
   description: "Shows your beans",
-  usage: `-beans [user]`,
-  example: `-beans`,
+  usage: `beans [@user]`,
+  example: `beans`,
 };
 
 exports.conf = {

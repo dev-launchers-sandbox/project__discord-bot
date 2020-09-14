@@ -9,6 +9,15 @@ async function fetchMessage(client, messageReaction, user) {
 }
 
 async function removeEmoji(messageReaction, user) {
+  try {
+    await db.push(`ignore_reactions`, {
+      message: messageReaction.message.id,
+      user: user.id,
+      emoji: messageReaction.emoji.id,
+    });
+  } catch (error) {
+    console.log(error);
+  }
   const userReactions = messageReaction.message.reactions.cache.filter(
     (reaction) => reaction.users.cache.has(user.id)
   );
@@ -36,7 +45,7 @@ module.exports = async (client, messageReaction, user) => {
   }
 };
 
-function awardDevBean(client, messageReaction, user) {
+async function awardDevBean(client, messageReaction, user) {
   let userToGiveBeansTo = messageReaction.message.author.id; //id of the users whos message got a reaction
   let userWhoReacted = user.id; //user that reacted
   //if there were any bots involved in the message we do not want to continue
@@ -52,7 +61,7 @@ function awardDevBean(client, messageReaction, user) {
       timeObj = ms(cooldown - (Date.now() - lastDevBean));
       let seconds = pad_zero(timeObj.seconds).padStart(2, "");
       let finalTime = `**${seconds} second(s)**`;
-      removeEmoji(messageReaction, user);
+      await removeEmoji(messageReaction, user);
       return user.send(`You need to wait ${finalTime} `);
     } else {
       db.set(`lastDevBean.${user.id}`, Date.now());
@@ -69,7 +78,7 @@ function awardDevBean(client, messageReaction, user) {
   }
 }
 
-function awardGoldenBean(client, messageReaction, user) {
+async function awardGoldenBean(client, messageReaction, user) {
   //if there were any bots involved in the message we do not want to continue
   if (user.bot || messageReaction.message.author.bot) return;
   //if the user does not react with the correct emoji, we do not want to do anything
@@ -92,7 +101,7 @@ function awardGoldenBean(client, messageReaction, user) {
       let hours = pad_zero(timeObj.hours).padStart(2, "0"),
         minutes = pad_zero(timeObj.minutes).padStart(2, "");
       let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
-      removeEmoji(messageReaction, user);
+      await removeEmoji(messageReaction, user);
       return user.send(`You need to wait ${finalTime} `);
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());

@@ -5,12 +5,19 @@ const getMessageTarget = require("../../utils/getMessageTarget.js");
 const punishments = require("../../utils/punishments.js");
 
 exports.run = async (client, message, args) => {
+  if (
+    !message.member.hasPermission("ADMINISTRATOR") &&
+    !message.member.roles.cache.find((r) => r.name === "Moderator")
+  ) {
+    return commandUsage.noPerms(message, "Moderator or Administrator");
+  }
+
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
     return commandUsage.error(
       message,
-      "mute",
-      "Either the user was not found, or there was an error while running the mute command."
+      "warn",
+      "Make sure you specified the user to warn."
     );
   if (
     target.hasPermission("ADMINISTRATOR") ||
@@ -23,12 +30,7 @@ exports.run = async (client, message, args) => {
       .setTimestamp();
     return message.channel.send(embed);
   }
-  if (
-    !message.member.hasPermission("ADMINISTRATOR") &&
-    !message.member.roles.cache.find((r) => r.name === "Moderator")
-  ) {
-    return commandUsage.noPerms(message, "Moderator or Administrator");
-  }
+
   let reason = args.slice(1).join(" ");
   let now = new Date();
   let utcDate = now.toLocaleString("en-GB", { timeZone: "UTC" });

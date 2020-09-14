@@ -10,13 +10,16 @@ async function fetchMessage(client, messageReaction, user) {
 
 module.exports = async (client, messageReaction, user) => {
   if (user.bot) return;
+
   if (messageReaction.emoji.name === "DevBean") {
     let message = await fetchMessage(client, messageReaction, user);
-    return removeDevBean(client, message, user);
+    const doIgnore = await isReactionIgnored(client, messageReaction, user);
+    if (!doIgnore) return removeDevBean(client, message, user);
   }
   if (messageReaction.emoji.name === "GoldenBean") {
     let message = await fetchMessage(client, messageReaction, user);
-    return removeGoldenBean(client, message, user);
+    const doIgnore = await isReactionIgnored(client, messageReaction, user);
+    if (!doIgnore) return removeGoldenBean(client, message, user);
   }
   if (messageReaction.emoji.name === "✔️") {
     let message = await fetchMessage(client, messageReaction, user);
@@ -109,4 +112,25 @@ function leaveChannel(client, messageReaction, user) {
     .get(user.id)
     .roles.remove(messageRole.role)
     .then(channel.send("`" + `${user.username}` + "`" + " left the channel!"));
+}
+
+async function isReactionIgnored(client, messageReaction, user) {
+  let ignoreReactions = await db.get(`ignore_reactions`);
+  let reaction;
+  if (!ignoreReactions) return false;
+  ignoreReactions.forEach((r) => {
+    if (
+      r.message === messageReaction.message.id &&
+      r.user === user.id &&
+      r.emoji === messageReaction.emoji.id
+    ) {
+      reaction = r;
+    }
+  });
+  if (!reaction) return false;
+
+  let index = ignoreReactions.indexOf(reaction);
+  ignoreReactions.splice(index, 1);
+  await db.set(`ignore_reactions`, ignoreReactions);
+  return true;
 }

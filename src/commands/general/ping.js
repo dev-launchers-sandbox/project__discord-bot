@@ -4,7 +4,7 @@ exports.run = async (client, message, args) => {
   try {
     const m = await message.channel.send("Pinging...");
     const embed = new Discord.MessageEmbed()
-      .setColor("BLACK")
+      .setColor("0xff9f01")
       .addField(
         `⌛ Latency`,
         `**${m.createdTimestamp - message.createdTimestamp} ms**`
@@ -19,8 +19,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "ping",
   description: "Check how fast the bot is and why",
-  usage: "-ping",
-  example: "-ping",
+  usage: "ping",
+  example: "ping",
 };
 
 exports.conf = {

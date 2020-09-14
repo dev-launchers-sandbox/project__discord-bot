@@ -28,6 +28,8 @@ module.exports = async (client, message) => {
 
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
 
+  moderateInstancedChannels(client, message);
+
   if (
     message.content.startsWith(`<@!${client.user.id}>`) &&
     message.content.length === 22
@@ -66,11 +68,18 @@ module.exports = async (client, message) => {
 
     if (now < expirationTime) {
       const timeLeft = (expirationTime - now) / 1000;
-      return message.channel.send(
-        `You need to wait **${timeLeft.toFixed(
-          1
-        )}** seconds to use this command again!`
-      );
+      try {
+        message.delete();
+      } catch {
+        console.log("ERROR IN DELETING MESSAGE --> message.js");
+      }
+      return message.channel
+        .send(
+          `You need to wait **${timeLeft.toFixed(
+            1
+          )}** seconds to use this command again!`
+        )
+        .then((msg) => commandUsage.deleteMsg(msg));
     }
 
     timestamps.set(member.id, now);
@@ -84,3 +93,32 @@ module.exports = async (client, message) => {
     console.log(error);
   }
 };
+
+function moderateInstancedChannels(client, message) {
+  let instancedChannels = db.get(`instanced.${message.guild.id}`);
+  let instancedChannel;
+  if (Array.isArray(instancedChannels)) {
+    instancedChannel = instancedChannels.find(
+      (channel) => channel.newChannel === message.channel.id
+    );
+  }
+  if (!instancedChannel) return;
+
+  let moderationChannel = client.channels.resolve(
+    instancedChannel.channelForModeration.id
+  );
+
+  if (!moderationChannel) return;
+  let messageData =
+    "`" +
+    "Author:" +
+    "` " +
+    `<@${message.author.id}>` +
+    "\n`" +
+    "Message Content:" +
+    "`" +
+    ` ${message.content}` +
+    "\n------------------------------------------";
+
+  moderationChannel.send(messageData);
+}

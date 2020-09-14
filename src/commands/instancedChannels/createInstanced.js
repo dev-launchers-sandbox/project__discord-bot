@@ -48,18 +48,19 @@ exports.run = async (client, message, args) => {
       .then((role) => createChannel(message, args, role, client))
       .catch((err) => console.log(err));
   }
-  function createChannel(message, args, role, client) {
+  async function createChannel(message, args, role, client) {
     const channelName = args[0];
     if (!channelName) {
       return message.channel.send(
         "I could not create an instanced channel. Reason: `No Name Provided`"
       );
     }
-    message.guild.channels.create(channelName).then((channel) => {
-      channel.updateOverwrite(channel.guild.roles.everyone, {
+
+    await message.guild.channels.create(channelName).then(async (channel) => {
+      await channel.updateOverwrite(channel.guild.roles.everyone, {
         VIEW_CHANNEL: false,
       });
-      channel.updateOverwrite(role.id, {
+      await channel.updateOverwrite(role.id, {
         VIEW_CHANNEL: true,
       });
       channel
@@ -70,7 +71,7 @@ exports.run = async (client, message, args) => {
           )
         );
       client.guilds.cache
-        .find((guild) => guild.id === "747645891481042985")
+        .find((guild) => guild.id === "736715831962107924")
         .channels.create(channelName)
         .then((channelForMod) => {
           channelForMod.send(
@@ -86,13 +87,14 @@ exports.run = async (client, message, args) => {
         .catch((err) => console.err);
     });
   }
+
   function createEmbed(message, args, channel, role, channelForMod) {
     message.channel
       .send(
         "A instanced channel has been created by " +
           "`" +
           message.author.tag +
-          "`\n`React` to this message to join the instanced channel."
+          "`\n`React` to this message to join the instanced channel.\n This channels are also moderated!"
       )
       .then((msg) =>
         storeChannel(message, msg, args, channel, role, channelForMod)
@@ -130,8 +132,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "createinstanced",
   description: "Create an instanced channel!",
-  usage: "-createInstanced [channelName]",
-  example: "-createInstanced gamenight",
+  usage: "createInstanced <channelName>",
+  example: "createInstanced gamenight",
 };
 
 exports.conf = {

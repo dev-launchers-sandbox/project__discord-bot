@@ -35,7 +35,7 @@ exports.run = async (client, message, args) => {
       "You have been invited to an instanced channel!" +
         "`" +
         message.author.tag +
-        "`\n`React` to this message to join!"
+        "`\n`React` to this message to join!\n This channels are also moderated!"
     )
     .then((msg) => {
       msg.react("✔️");
@@ -48,8 +48,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "invite",
   description: "Creates an invite to an instanced channel",
-  usage: "-invite #channel",
-  example: "-invite #secret-chat",
+  usage: "invite <#channel>",
+  example: "invite #secret-chat",
 };
 
 exports.conf = {

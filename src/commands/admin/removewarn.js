@@ -48,7 +48,7 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "removewarn",
   description: "Removes a warning from a user",
-  usage: "removewarn <@user> <#ofwarn>",
+  usage: "removewarn <@user> <#of warn>",
   example: "removewarn @Wumpus#0001 2",
 };
 

@@ -65,8 +65,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "ban",
   description: "Ban a member from the server",
-  usage: `ban <@member> [reason]`,
-  example: `ban @discord#0000 spamming`,
+  usage: `ban <@user> [reason]`,
+  example: `ban @Wumpus#0001 spamming`,
 };
 exports.conf = {
   aliases: [],

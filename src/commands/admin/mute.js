@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
     return commandUsage.error(
       message,
       "mute",
-      "Either the user was not found, or there was an error while running the mute command."
+      "Make sure you specified the user to mute!"
     );
 
   function noMuteEmbed(description) {

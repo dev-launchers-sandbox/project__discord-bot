@@ -40,8 +40,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "leave",
   description: `Use this command to leave an instanced channel`,
-  usage: "-leave",
-  example: "-leave",
+  usage: "leave",
+  example: "leave",
 };
 
 exports.conf = {

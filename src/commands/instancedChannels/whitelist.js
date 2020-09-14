@@ -73,8 +73,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "whitelist",
   description: "Whitelists a member from an instanced channel",
-  usage: "-whitelist <@user>",
-  example: "-whitelist @discord#0000",
+  usage: "whitelist <@user>",
+  example: "whitelist @Wumpus#0001",
 };
 
 exports.conf = {

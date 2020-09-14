@@ -9,8 +9,8 @@ exports.run = async (client, message, args) => {
   if (!target)
     return commandUsage.error(
       message,
-      "mute",
-      "Either the user was not found, or there was an error while running the mute command."
+      "unmute",
+      "Make sure you specified the user to unmute."
     );
 
   function noMuteEmbed(description) {
@@ -53,7 +53,7 @@ exports.help = {
   name: "unmute",
   description: "Unmuted a user",
   usage: "unmute <@user>",
-  example: "unmute #Wumpus#0000",
+  example: "unmute @Wumpus#0001",
 };
 
 exports.conf = {

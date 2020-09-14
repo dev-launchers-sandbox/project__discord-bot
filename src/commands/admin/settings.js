@@ -10,6 +10,7 @@ exports.run = async (client, message, args) => {
     "audit",
     "total",
     "instanced-category",
+    "invite",
   ];
   if (!message.member.hasPermission("ADMINISTRATOR"))
     return commandUsage.noPerms(message, "Administrator");
@@ -63,8 +64,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "settings",
   description: "Change the settings for the server",
-  usage: "settings",
-  example: "settings",
+  usage: "settings [type] [value]",
+  example: "settings prefix !",
 };
 
 exports.conf = {

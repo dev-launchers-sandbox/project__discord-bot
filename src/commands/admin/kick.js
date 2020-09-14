@@ -65,8 +65,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "kick",
   description: "Kicks a member",
-  usage: `kick <@member> [reason]`,
-  example: `kick @discord#0000`,
+  usage: `kick <@user> [reason]`,
+  example: `kick @Wumpus#0001 being rude`,
 };
 exports.conf = {
   aliases: [],

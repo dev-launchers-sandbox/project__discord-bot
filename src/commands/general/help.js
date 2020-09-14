@@ -52,7 +52,7 @@ exports.run = async (client, message, args) => {
         .addField("Cooldown", cooldown, true)
         .addField("Aliases", aliases, true)
         .addField("Usage", usage, true)
-        .addField("Example", example, true);
+        .addField("Example", prefix + example, true);
 
       return message.channel.send(embed);
     } else {

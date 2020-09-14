@@ -26,16 +26,21 @@ exports.run = async (client, message, args) => {
       .send("Please insert a number greater than 1")
       .then((msg) => commandUsage.deleteMsg(msg));
 
-  message.channel.bulkDelete(messagesToDelete).then((messages) =>
-    message.channel
-      .send({
-        embed: {
-          color: 0xff9f01,
-          description: `Deleted \`${messages.size - 1}/${args[0]}\` messages.`,
-        },
-      })
-      .then((msg) => commandUsage.deleteMsg(msg))
-  );
+  message.channel
+    .bulkDelete(messagesToDelete)
+    .then((messages) =>
+      message.channel
+        .send({
+          embed: {
+            color: 0xff9f01,
+            description: `Deleted \`${messages.size - 1}/${
+              args[0]
+            }\` messages.`,
+          },
+        })
+        .then((msg) => commandUsage.deleteMsg(msg))
+    )
+    .catch(console.log("Unknown Message In Clear"));
 };
 
 exports.help = {

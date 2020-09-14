@@ -91,8 +91,8 @@ exports.run = async (client, message, args) => {
 exports.help = {
   name: "blacklist",
   description: "Kicks a member from an instanced channel",
-  usage: "-blacklist <@user>",
-  example: "-blacklist @discord#0000",
+  usage: "blacklist <@user>",
+  example: "blacklist @Wumpus#0001",
 };
 
 exports.conf = {

@@ -125,8 +125,8 @@ function formatLeaderboard(
 exports.help = {
   name: "leaderboard",
   description: "Displays the bean leaderboard",
-  usage: `-leaderboard <type>`,
-  example: `-leaderboard 1`,
+  usage: `leaderboard`,
+  example: `leaderboard`,
 };
 
 exports.conf = {

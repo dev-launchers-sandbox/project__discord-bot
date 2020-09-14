@@ -1,24 +1,25 @@
 const Discord = require("discord.js");
+const commandUsage = require("../../utils/commandUsage.js");
+const getMessageTarget = require("../../utils/getMessageTarget.js");
 
 exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission(["MANAGE_GUILD", "ADMINISTRATOR"])) {
-    return message.channel.send({
-      embed: { color: "RED", description: "You cannot use this command!" },
-    });
+  if (!message.member.hasPermission("MANAGE_NICKNAMES")) {
+    return commandUsage.noPerms(message, "Manage Nicknames");
   }
 
-  let user = message.mentions.users.first();
-  if (!user)
+  let target = getMessageTarget.getMessageTarget(message, args);
+  if (!target)
     return message.channel.send({
       embed: { color: "RED", description: "You need to mention the user" },
     });
+
   let nick = args.slice(1).join(" ");
   if (!nick)
     return message.channel.send({
       embed: { color: "RED", description: "You need to provide a nickname" },
     });
 
-  let member = message.guild.members.cache.get(user.id);
+  let member = message.guild.members.cache.get(target.id);
   if (member.hasPermission("ADMINISTRATOR") && member.user !== client.user) {
     return message.channel.send({
       embed: {
@@ -31,7 +32,7 @@ exports.run = async (client, message, args) => {
   return message.channel.send({
     embed: {
       color: "GREEN",
-      description: `Successfully changed **${user.tag}**’s nickname to **${nick}**`,
+      description: `Successfully changed **${target.user.tag}**’s nickname to **${nick}**`,
     },
   });
 };
@@ -40,7 +41,7 @@ exports.help = {
   name: "setnickname",
   description: "Set a user’s nickname",
   usage: "setnickname <@user> <nickname>",
-  example: "setNickname @Pango#0000 modbot",
+  example: "setnickname @Wumpus#0001 Wompas",
 };
 
 exports.conf = {

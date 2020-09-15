@@ -2,6 +2,7 @@ const Discord = require("discord.js"),
   cooldowns = new Discord.Collection();
 const db = require("quick.db");
 const commandUsage = require("../utils/commandUsage.js");
+const metrics = require("../index.js");
 
 module.exports = async (client, message) => {
   if (!message.guild) return;
@@ -88,6 +89,7 @@ module.exports = async (client, message) => {
 
   try {
     if (!commandFile) return;
+    metrics.sendEvent("message_" + commandFile.help.name);
     commandFile.run(client, message, args);
   } catch (error) {
     console.log(error);

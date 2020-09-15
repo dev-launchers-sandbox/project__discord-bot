@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
+const metrics = require("../index.js");
 
 module.exports = async (client, message) => {
+  metrics.sendEvent("message_delete");
   if (!message.guild) return; //No audit log for dms
   if (message.partial) return;
   sendAuditLogMessage(client, message);

@@ -1,12 +1,14 @@
 const Discord = require("discord.js"),
   fs = require("fs");
+const path = require("path");
 
 module.exports = (client) => {
   client.commands = new Discord.Collection();
   client.aliases = new Discord.Collection();
   client.helps = new Discord.Collection();
 
-  fs.readdir("src/commands", (err, categories) => {
+  const commandsFolder = path.join(__dirname, "../commands/");
+  fs.readdir(commandsFolder, (err, categories) => {
     if (err) console.log(err);
     console.log(`Found total ${categories.length} categories`);
 
@@ -19,7 +21,8 @@ module.exports = (client) => {
 
       client.helps.set(category, moduleConf);
 
-      fs.readdir(`src/commands/${category}`, (err, files) => {
+      const categoryFolder = path.join(__dirname, `../commands/${category}`);
+      fs.readdir(categoryFolder, (err, files) => {
         console.log(
           `Found total ${files.length - 1} command(s) from ${category}`
         );

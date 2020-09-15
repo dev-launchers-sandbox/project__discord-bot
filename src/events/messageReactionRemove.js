@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 const ms = require("parse-ms");
+const metrics = require("../index.js");
 
 async function fetchMessage(client, messageReaction, user) {
   if (messageReaction.message.partial) {
@@ -9,6 +10,7 @@ async function fetchMessage(client, messageReaction, user) {
 }
 
 module.exports = async (client, messageReaction, user) => {
+  metrics.sendEvent("remove");
   if (user.bot) return;
 
   if (messageReaction.emoji.name === "DevBean") {

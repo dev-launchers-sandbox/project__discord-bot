@@ -1,7 +1,9 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
+const metrics = require("../index.js");
 
 module.exports = async (client, oldMessage, newMessage) => {
+  metrics.sendEvent("message_update");
   if (!oldMessage.guild) return; //No audit log for dms
   if (oldMessage.partial) return;
   sendAuditLogMessage(client, oldMessage, newMessage);

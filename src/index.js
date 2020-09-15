@@ -17,7 +17,7 @@ client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 
-client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.NoWIQ1yTG5zOdPNhVqp5-FuYhzQ");
+client.login("NzA5ODg5NTA5ODY0NjM2NDk2.XrseIA.8HmK18LLL_FtNaeHPVHqVLj0Jc0");
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;

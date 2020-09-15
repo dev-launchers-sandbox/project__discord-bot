@@ -95,7 +95,11 @@ function formatLeaderboard(
   if (devBeansArray.length !== 0) {
     devBeansArray.forEach((useEntry) => {
       let userObject = message.guild.members.cache.get(useEntry.id);
-      let addWord = `**${rankOfUser}) ${userObject.user.tag}: ${useEntry.type}** ${devBeanEmoji} \n`;
+      let username = userObject.user.username;
+      if (username.length > 25) {
+        username = username.substring(0, 22).concat("...");
+      }
+      let addWord = `**${rankOfUser}) ${username}: ${useEntry.type}** ${devBeanEmoji} \n`;
       devBeans = devBeans.concat(addWord);
       rankOfUser = rankOfUser + 1;
     });
@@ -110,7 +114,11 @@ function formatLeaderboard(
   if (goldenBeansArray.length !== 0) {
     goldenBeansArray.forEach((useEntry) => {
       let userObject = message.guild.members.cache.get(useEntry.id);
-      let addWord = `**${rankOfUser}) ${userObject.user.tag}: ${useEntry.type}** ${goldenBeanEmoji} \n`;
+      let username = userObject.user.username;
+      if (username.length > 25) {
+        username = username.substring(0, 22).concat("...");
+      }
+      let addWord = `**${rankOfUser}) ${username}: ${useEntry.type}** ${goldenBeanEmoji} \n`;
       goldenBeans = goldenBeans.concat(addWord);
       rankOfUser = rankOfUser + 1;
     });

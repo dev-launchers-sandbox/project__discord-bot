@@ -26,7 +26,7 @@ exports.run = async (client, message, args) => {
   // format balance output message
   const embed = new Discord.MessageEmbed()
     .setColor(0xff9f01)
-    .setAuthor(`${target.user.tag} DevBeans Balance`, avatar)
+    .setAuthor(`${target.user.username}’s Beans Balance`, avatar)
     .addField("Dev-Beans", `${devBeans} Dev Bean(s) ${devBeanEmoji}`)
     .addField(
       "Golden-Beans",

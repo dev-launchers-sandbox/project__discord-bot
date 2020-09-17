@@ -35,7 +35,7 @@ exports.run = async (client, message, args) => {
       "You have been invited to an instanced channel!" +
         "`" +
         message.author.tag +
-        "`\n`React` to this message to join!\n This channels are also moderated!"
+        "`\n`React` to this message to join!\n These channels are also moderated!"
     )
     .then((msg) => {
       msg.react("✔️");

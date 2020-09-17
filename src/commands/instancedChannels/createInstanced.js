@@ -94,7 +94,7 @@ exports.run = async (client, message, args) => {
         "A instanced channel has been created by " +
           "`" +
           message.author.tag +
-          "`\n`React` to this message to join the instanced channel.\n This channels are also moderated!"
+          "`\n`React` to this message to join the instanced channel.\n These channels are also moderated!"
       )
       .then((msg) =>
         storeChannel(message, msg, args, channel, role, channelForMod)

@@ -21,7 +21,7 @@ module.exports = async (client, message) => {
       .delete()
       .then(
         message.channel.send(
-          `**${message.author.username}** you cannot promote you server here!. Only in the teams and projects channel if it is related to a project`
+          `**${message.author.username}** you cannot promote your server here! You can only promote it in the teams and projects channel __if it is related to a project__`
         )
       )
       .then((msg) => commandUsage.deleteMsg(msg));

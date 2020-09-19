@@ -7,7 +7,7 @@ const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!isValid(message, target)) return;
+  if (!(await isValid(message, target))) return;
 
   try {
     const reason = buildReason(args);
@@ -20,10 +20,13 @@ exports.run = async (client, message, args) => {
   }
 };
 
-function isValid(message, target) {
+async function isValid(message, target) {
+  let modRoleID = await db.get(`moderator.${message.guild.id}`);
+  if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
+
   if (
     !message.member.hasPermission("ADMINISTRATOR") &&
-    !message.member.roles.cache.find((r) => r.name === "Moderator")
+    !message.member.roles.cache.has(modRoleID)
   ) {
     commandUsage.noPerms(message, "Moderator or Administrator");
     return;
@@ -40,7 +43,7 @@ function isValid(message, target) {
 
   if (
     target.hasPermission("ADMINISTRATOR") ||
-    target.roles.cache.find((r) => r.name === "Moderator")
+    target.roles.cache.has(modRoleID)
   ) {
     let embed = new Discord.MessageEmbed()
       .setColor("RED")

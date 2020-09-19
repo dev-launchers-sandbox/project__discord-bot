@@ -20,14 +20,14 @@ function sendWelcomeEmbed(client, member) {
     (channel) => channel.id === welcomeChannelID
   );
   if (!welcomeChannelID) return;
-  let icon = client.user.displayAvatarURL({ size: 2048 });
+  let icon = member.guild.iconURL({ size: 2048, dynamic: true });
   let avatar = member.user.displayAvatarURL({ size: 2048 });
   // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
   const welcomeEmbed = new Discord.MessageEmbed()
-    .setAuthor(`${member.user.tag}`, avatar, avatar)
+    .setAuthor(`${member.user.tag}`, avatar)
     .setDescription(`Welcome **${member.user.username}**, thanks for joining!`)
-    .setFooter(`DevLaunchers`, icon, icon)
+    .setFooter(`DevLaunchers`, icon)
     .setColor(0xff9f01);
   welcomeChannel.send(welcomeEmbed);
 }

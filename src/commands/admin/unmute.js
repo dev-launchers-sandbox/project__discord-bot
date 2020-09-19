@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const commandUsage = require("../../utils/commandUsage.js");
 const getMessageTarget = require("../../utils/getMessageTarget.js");
-const punishments = require("../../utils/punishments.js");
+const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
   let mutedRole = message.guild.roles.cache.find((r) => r.name === "Muted");
   target.roles.remove(mutedRole);
 
-  punishments.sendMessage(message, target, reason, "unmuted");
+  directMessage.sendPunishment(message.guild.name, target, reason, "unmuted");
 
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")

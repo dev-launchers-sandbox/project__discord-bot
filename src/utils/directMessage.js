@@ -1,11 +1,11 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-async function sendMessage(message, target, reason, punishment) {
+async function sendPunishment(guildName, target, reason, punishment) {
   let embed = new Discord.MessageEmbed()
     .setColor(0xff9f01)
     .setAuthor(
-      `You have been ${punishment} from: ${message.guild.name}`,
+      `You have been ${punishment} from: ${guildName}`,
       target.user.displayAvatarURL()
     )
     .setDescription(`Reason: ${reason || "No Reason Provided"}`)
@@ -17,4 +17,4 @@ async function sendMessage(message, target, reason, punishment) {
   }
 }
 
-exports.sendMessage = sendMessage;
+exports.sendPunishment = sendPunishment;

@@ -1,24 +1,43 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
+
 const commandUsage = require("../../utils/commandUsage.js");
 const getMessageTarget = require("../../utils/getMessageTarget.js");
-const punishments = require("../../utils/punishments.js");
+const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
+  let target = getMessageTarget.getMessageTarget(message, args);
+  if (!isValid(message, target)) return;
+
+  try {
+    const reason = buildReason(args);
+    const warning = buildWarning(target.user.id, message.author.id, reason);
+    addWarningToDb(message.guild.id, target.user.id, warning);
+    directMessage.sendPunishment(message.guild.name, target, reason, "warned");
+    sendConfirmation(message.channel, target, reason);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+function isValid(message, target) {
   if (
     !message.member.hasPermission("ADMINISTRATOR") &&
     !message.member.roles.cache.find((r) => r.name === "Moderator")
   ) {
-    return commandUsage.noPerms(message, "Moderator or Administrator");
+    commandUsage.noPerms(message, "Moderator or Administrator");
+    return;
   }
 
-  let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
-    return commandUsage.error(
+  if (!target) {
+    commandUsage.error(
       message,
       "warn",
       "Make sure you specified the user to warn."
     );
+    return;
+  }
+
   if (
     target.hasPermission("ADMINISTRATOR") ||
     target.roles.cache.find((r) => r.name === "Moderator")
@@ -28,34 +47,46 @@ exports.run = async (client, message, args) => {
       .setAuthor("You cannot warn this user", target.user.displayAvatarURL())
       .setDescription("This user is an Administrator or a Moderator!")
       .setTimestamp();
-    return message.channel.send(embed);
+    message.channel.send(embed);
+    return;
   }
+  return true;
+}
 
+function buildReason(args) {
   let reason = args.slice(1).join(" ");
-  let now = new Date();
+  if (!reason) reason = "Not Provided";
+  return reason;
+}
+
+function buildTime() {
+  const now = new Date();
   let utcDate = now.toLocaleString("en-GB", { timeZone: "UTC" });
   const utcArray = utcDate.split("/");
   utcArray.splice(2, 1, utcArray[2].substring(0, 4));
-  let utcClean = utcArray.join("/");
-  if (!reason) reason = "Not Provided";
+  const utcClean = utcArray.join("/");
+  return { fullDate: utcDate, cleanDate: utcClean };
+}
 
-  try {
-    let userWarns = db.get(`warnings.${message.guild.id}.${target.user.id}`);
-    if (!userWarns)
-      db.set(`warnings.${message.guild.id}.${target.user.id}`, []);
-    let warn = {
-      userWarned: target.user.id,
-      reason: reason,
-      staffUser: message.author.id,
-      time: { fullDate: utcDate, cleanDate: utcClean },
-    };
-    await db.push(`warnings.${message.guild.id}.${target.user.id}`, warn);
-    punishments.sendMessage(message, target, reason, "warned");
-  } catch (error) {
-    console.log(error);
+function buildWarning(userId, staffId, reason) {
+  return {
+    userWarned: userId,
+    reason: reason,
+    staffUser: staffId,
+    time: buildTime(),
+  };
+}
+
+async function addWarningToDb(guildId, userId, warning) {
+  const userWarns = await db.get(`warnings.${guildId}.${userId}`);
+  if (!userWarns) {
+    await db.set(`warnings.${guildId}.${userId}`, []);
   }
+  await db.push(`warnings.${guildId}.${userId}`, warning);
+}
 
-  let successEmbed = new Discord.MessageEmbed()
+function sendConfirmation(channel, target, reason) {
+  const embed = new Discord.MessageEmbed()
     .setColor("GREEN")
     .setAuthor(
       `${target.user.username} has been warned`,
@@ -63,8 +94,9 @@ exports.run = async (client, message, args) => {
     )
     .setDescription(`Reason: ${reason}`)
     .setTimestamp();
-  message.channel.send(successEmbed);
-};
+
+  channel.send(embed);
+}
 
 exports.help = {
   name: "warn",

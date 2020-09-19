@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const commandUsage = require("../../utils/commandUsage.js");
 const getMessageTarget = require("../../utils/getMessageTarget.js");
-const punishments = require("../../utils/punishments.js");
+const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
   if (!message.member.hasPermission("MANAGE_ROLES")) {
@@ -39,7 +39,7 @@ exports.run = async (client, message, args) => {
   let mutedRole = message.guild.roles.cache.find((r) => r.name === "Muted");
   target.roles.add(mutedRole);
 
-  punishments.sendMessage(message, target, reason, "muted");
+  directMessage.sendPunishment(message.guild.name, target, reason, "muted");
 
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")

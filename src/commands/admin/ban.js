@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const commandUsage = require("./../../utils/commandUsage.js");
 const getMessageTarget = require("./../../utils/getMessageTarget.js");
-const punishments = require("../../utils/punishments.js");
+const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
   if (!message.member.hasPermission("BAN_MEMBERS")) {
@@ -48,7 +48,7 @@ exports.run = async (client, message, args) => {
 
   const updateAndDMUser = async (msg) => {
     try {
-      await punishments.sendMessage(message, target, reason, "banned");
+      await directMessage.sendPunishment(message.guild.name, target, reason, "banned");
       await target.ban({
         reason: `Banned By: ${message.author.username}  Reason: ${
           reason || "No reason provided"

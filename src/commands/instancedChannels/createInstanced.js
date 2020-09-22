@@ -24,14 +24,15 @@ exports.run = async (client, message, args) => {
   createRole(message, args, client);
 
   function createRole(message, args, client) {
-    const channelName = args[0];
+    let channelName = args[0];
+    if (args[0] === "public") channelName = args[1];
     const roleExists = message.guild.roles.cache.find(
       (role) => role.name === channelName
     );
     const channelExists = message.guild.channels.cache.find(
       (channel) => channel.name === channelName
     );
-    if (!args[0]) {
+    if (!channelName) {
       return commandUsage.missingParams(
         message,
         "Name Of Channel",
@@ -49,11 +50,16 @@ exports.run = async (client, message, args) => {
       .catch((err) => console.log(err));
   }
   async function createChannel(message, args, role, client) {
-    const channelName = args[0];
+    let isPublic = false;
+    let channelName = args[0];
     if (!channelName) {
       return message.channel.send(
         "I could not create an instanced channel. Reason: `No Name Provided`"
       );
+    }
+    if (channelName === "public") {
+      channelName = args[1];
+      isPublic = true;
     }
 
     await message.guild.channels.create(channelName).then(async (channel) => {
@@ -108,16 +114,50 @@ exports.run = async (client, message, args) => {
     role,
     channelForMod
   ) {
+    const directoryChannelId =
+      (await db.get(`directory.${message.guild.id}`)) || "None";
+    const directoryChannel = message.guild.channels.resolve(directoryChannelId);
+    let dirMsgId;
+    if (args[0] === "public") {
+      if (directoryChannel) {
+        const newChannelEmbed = new Discord.MessageEmbed()
+          .setColor(0xff9f01)
+          .setAuthor(
+            "New public instanced channel: " + args[1],
+            message.guild.iconURL({ dynamic: true })
+          )
+          .setDescription("React to this message to join!")
+          .setTimestamp();
+
+        await directoryChannel.send(newChannelEmbed).then((dirMsg) => {
+          dirMsgId = dirMsg.id;
+          dirMsg.react("✔️");
+        });
+      }
+    }
     try {
-      let channelObj = (channel = {
-        id: [msg.id],
-        role: role.id,
-        newChannel: channel.id,
-        blacklist: [],
-        creator: message.author.id,
-        channelEmbed: message.channel,
-        channelForModeration: channelForMod,
-      });
+      let channelObj;
+      if (dirMsgId) {
+        channelObj = channel = {
+          id: [msg.id, dirMsgId],
+          role: role.id,
+          newChannel: channel.id,
+          blacklist: [],
+          creator: message.author.id,
+          channelEmbed: message.channel,
+          channelForModeration: channelForMod,
+        };
+      } else {
+        channelObj = channel = {
+          id: [msg.id],
+          role: role.id,
+          newChannel: channel.id,
+          blacklist: [],
+          creator: message.author.id,
+          channelEmbed: message.channel,
+          channelForModeration: channelForMod,
+        };
+      }
       let channelsCreated =
         (await db.get(`instanced.${message.guild.id}`)) || [];
       channelsCreated.push(channelObj);

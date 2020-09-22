@@ -13,6 +13,7 @@ exports.run = async (client, message, args) => {
     "invite",
     "moderator",
     "mod-cooldown",
+    "directory",
   ];
   if (!message.member.hasPermission("ADMINISTRATOR"))
     return commandUsage.noPerms(message, "Administrator");

@@ -94,7 +94,8 @@ function formatLeaderboard(
   if (devBeansArray.length >= 10) devBeansArray = devBeansArray.slice(0, 10);
   if (devBeansArray.length !== 0) {
     devBeansArray.forEach((useEntry) => {
-      let userObject = message.guild.members.cache.get(useEntry.id);
+      let userObject = message.guild.members.resolve(useEntry.id);
+      if (!userObject) userObject = { user: { username: "User not found" } };
       let username = userObject.user.username;
       if (username.length > 25) {
         username = username.substring(0, 22).concat("...");
@@ -114,7 +115,8 @@ function formatLeaderboard(
   if (goldenBeansArray.length !== 0) {
     goldenBeansArray.forEach((useEntry) => {
       let userObject = message.guild.members.cache.get(useEntry.id);
-      let username = userObject.user.username;
+      if (!userObject) userObject = { user: { username: "User not found" } };
+      let username = userObject.user.username || "User not found";
       if (username.length > 25) {
         username = username.substring(0, 22).concat("...");
       }

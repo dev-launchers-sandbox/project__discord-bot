@@ -39,17 +39,28 @@ function sendInviteInfo(client, invite, member) {
   const inviteChannel = client.channels.resolve(inviteChannelID);
   if (!inviteChannel) return;
 
-  const code = invite.code;
-  const uses = invite.uses;
-  const inviter = invite.inviter.tag;
+  let code;
+  let uses;
+  let inviter;
   const newMember = member.user.tag;
   const avatar = member.user.avatarURL({ size: 2048 });
+  let inviteEmbed;
+  if (invite) {
+    code = invite.code;
+    uses = invite.uses;
+    inviter = invite.inviter.tag;
 
-  const inviteEmbed = new Discord.MessageEmbed()
-    .setAuthor(`${newMember} using ${inviter}`, avatar)
-    .setColor(0xff9f01)
-    .setDescription(`Num of Uses: \`${uses}\` Invite Used: \`${code}\``)
-    .setFooter(`Member Count: ${invite.guild.memberCount}`);
+    inviteEmbed = new Discord.MessageEmbed()
+      .setAuthor(`${newMember} using ${inviter}`, avatar)
+      .setColor(0xff9f01)
+      .setDescription(`Num of Uses: \`${uses}\` Invite Used: \`${code}\``)
+      .setFooter(`Member Count: ${invite.guild.memberCount}`);
+  } else {
+    inviteEmbed = new Discord.MessageEmbed.setColor(0xff9f01)
+      .setAuthor(`${newMember} joined`, avatar)
+      .setDescription(`I could not figure out how ${newMember} joined...`)
+      .setFooter(`Member Count: ${member.guild.memberCount}`);
+  }
 
   inviteChannel.send(inviteEmbed);
 }

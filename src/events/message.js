@@ -1,8 +1,10 @@
 const Discord = require("discord.js"),
   cooldowns = new Discord.Collection();
+
 const db = require("quick.db");
 const commandUsage = require("../utils/commandUsage.js");
 const metrics = require("../index.js");
+const tagManager = require("../utils/tagManager.js");
 
 module.exports = async (client, message) => {
   if (!message.guild) return;
@@ -30,6 +32,17 @@ module.exports = async (client, message) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
 
   moderateInstancedChannels(client, message);
+  if (message.content.toLowerCase().includes("+"))
+    tagManager.attributeTags(
+      message,
+      message.content
+        .trim()
+        .split(" ")
+        .join(",")
+        .split("\n")
+        .join(",")
+        .split(",")
+    );
 
   if (
     message.content.startsWith(`<@!${client.user.id}>`) &&
@@ -37,8 +50,10 @@ module.exports = async (client, message) => {
   ) {
     return message.channel.send(`My prefix is **${prefix}**`);
   }
+
   if (message.author.bot || message.author === client.user) return;
   if (!message.content.startsWith(prefix)) return;
+
   const args = message.content.slice(prefix.length).trim().split(" ");
   let msg = message.content.toLowerCase();
   let cmd = args.shift().toLowerCase();

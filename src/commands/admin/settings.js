@@ -14,6 +14,7 @@ exports.run = async (client, message, args) => {
     "moderator",
     "mod-cooldown",
     "directory",
+    "tags",
   ];
   if (!message.member.hasPermission("ADMINISTRATOR"))
     return commandUsage.noPerms(message, "Administrator");
@@ -37,6 +38,8 @@ exports.run = async (client, message, args) => {
   );
 
   if (!args[0]) return message.channel.send(allSettingsEmbed);
+  if (args[0] === "tag" || args[0] === "tags")
+    return tagSettings(message, args);
   if (!settings.includes(args[0])) {
     return message.channel.send(allSettingsEmbed);
   }
@@ -46,7 +49,6 @@ exports.run = async (client, message, args) => {
       `The current value of **${args[0]}** is **${currentValue || "null!"} **`
     );
   }
-
   if (args[1] === "delete" || args[1] === "disable" || args[1] === "default") {
     try {
       await db.delete(`${args[0]}.${message.guild.id}`);
@@ -63,6 +65,38 @@ exports.run = async (client, message, args) => {
     return commandUsage.error(message, "settings");
   }
 };
+
+async function tagSettings(message, args) {
+  const privateTags = await db.get(`privateTags.${message.guild.id}`);
+  if (!args[1]) {
+    if (!privateTags)
+      return message.channel.send(`The private tags are: **null**`);
+    const content = privateTags.map((x) => `\`${x}\``).join(" | ");
+    return message.channel.send(
+      `The private tags are: ${content || "**none**"}`
+    );
+  }
+  if (!args[2] && args[1] !== "remove-all")
+    return message.channel.send("You need to type a tag to add or remove");
+  if (args[1] === "add") {
+    if (privateTags && privateTags.includes(args[2])) {
+      return message.channel.send("That already is a private tag!");
+    }
+    await db.push(`privateTags.${message.guild.id}`, args[2]);
+    message.channel.send(`👍 I added ${args[2]} as a private tag`);
+  } else if (args[1] === "remove" || args[1] === "delete") {
+    if (!privateTags) return message.channel.send("Tag not found!");
+    const index = privateTags.indexOf(args[2]);
+    if (index < 0) return message.channel.send("Tag not found!");
+
+    privateTags.splice(index, 1);
+    await db.set(`privateTags.${message.guild.id}`, privateTags);
+    message.channel.send(`👍 I removed ${args[2]} as a private tag`);
+  } else if (args[1] === "remove-all") {
+    await db.delete(`privateTags.${message.guild.id}`);
+    message.channel.send("👍 Done");
+  }
+}
 
 exports.help = {
   name: "settings",

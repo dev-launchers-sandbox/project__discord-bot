@@ -40,6 +40,7 @@ async function removeDevBean(client, messageReaction, user) {
   if (userToRemoveBeansTo.id === userWhoReacted) return;
   try {
     db.subtract(`account.${userToRemoveBeansTo.id}.devBeans`, 1); //subtract the amount of beans
+    db.subtract(`account.${userToRemoveBeansTo.id}.foreverDevBeans`, 1);
     db.delete(`account.${user.id}.lastDevBean`);
 
     user.send(
@@ -69,6 +70,7 @@ async function removeGoldenBean(client, messageReaction, user) {
   }
   try {
     db.subtract(`account.${target}.goldenBeans`, 1); //remove the amount of golden-beans
+    db.subtract(`account.${target}.foreverGoldenBeans`, 1);
     db.delete(`lastGoldenBean.${user.id}`);
     user.send(
       `Golden-Bean removed from **${messageReaction.message.author.tag}**`
@@ -78,6 +80,7 @@ async function removeGoldenBean(client, messageReaction, user) {
     user.send(
       "Oopsie, for some reason I could not remove a golden-bean from the user"
     );
+    console.log(err);
   }
 }
 

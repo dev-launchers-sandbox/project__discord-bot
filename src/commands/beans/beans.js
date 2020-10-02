@@ -11,31 +11,51 @@ exports.run = async (client, message, args) => {
       "Bots do not have a balance. They will **always have infinite beans.**"
     );
   }
-  // access user specific balance
-  let devBeans = db.get(`account.${target.user.id}.devBeans`);
-  let avatar = target.user.avatarURL({ size: 2048 }); //target avatar
-  let devBeanEmoji = message.guild.emojis.cache.find(
-    (emoji) => emoji.name === "DevBean"
-  );
   let goldenBeanEmoji = message.guild.emojis.cache.find(
     (emoji) => emoji.name === "GoldenBean"
   );
-  if (!devBeans) devBeans = 0; // if there is no balance object, set to 0
-  let goldenBeans = db.get(`account.${target.user.id}.goldenBeans`);
-  if (!goldenBeans) goldenBeans = 0;
+  let devBeanEmoji = message.guild.emojis.cache.find(
+    (emoji) => emoji.name === "DevBean"
+  );
+  // access user specific balance
+  const data = getUserData(target);
   // format balance output message
   const embed = new Discord.MessageEmbed()
     .setColor(0xff9f01)
-    .setAuthor(`${target.user.username}’s Beans Balance`, avatar)
-    .addField("Dev-Beans", `${devBeans} Dev Bean(s) ${devBeanEmoji}`)
+    .setAuthor(`${target.user.username}’s Beans Balance`, data.avatar)
+    .addField("Dev-Beans", `${data.devBeans} Dev Bean(s) ${devBeanEmoji}`)
     .addField(
       "Golden-Beans",
-      `${goldenBeans} Golden Bean(s) ${goldenBeanEmoji}`
+      `${data.goldenBeans} Golden Bean(s) ${goldenBeanEmoji}`
     )
-    .setTimestamp(new Date());
+    .setFooter(
+      `All-time Dev Beans: ${data.foreverDevBeans} | All-time Golden Beans: ${data.foreverGoldenBeans}`
+    );
   message.channel.send(embed);
 };
 
+function getUserData(target) {
+  let foreverDevBeans = db.get(`account.${target.user.id}.foreverDevBeans`);
+  let foreverGoldenBeans = db.get(
+    `account.${target.user.id}.foreverGoldenBeans`
+  );
+
+  let devBeans = db.get(`account.${target.user.id}.devBeans`);
+  let goldenBeans = db.get(`account.${target.user.id}.goldenBeans`);
+  let avatar = target.user.avatarURL({ size: 2048 }); //target avatar
+
+  if (!devBeans) devBeans = 0; // if there is no balance object, set to 0
+  if (!goldenBeans) goldenBeans = 0;
+  if (!foreverDevBeans) foreverDevBeans = 0;
+  if (!foreverGoldenBeans) foreverGoldenBeans = 0;
+
+  return {
+    devBeans: devBeans,
+    goldenBeans: goldenBeans,
+    foreverDevBeans: foreverDevBeans,
+    foreverGoldenBeans: foreverGoldenBeans,
+  };
+}
 exports.help = {
   name: "beans",
   description: "Shows your beans",

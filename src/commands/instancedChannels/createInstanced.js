@@ -39,6 +39,9 @@ exports.run = async (client, message, args) => {
         "createinstanced"
       );
     }
+    if (channelName.length > 100)
+      return message.channel.send("Channel names must be lower than 100");
+
     if (channelExists || roleExists) {
       return message.channel.send(
         "I could not create an instanced channel. Reason: `There is a channel or role with the same name`"
@@ -93,7 +96,8 @@ exports.run = async (client, message, args) => {
         .catch((err) => console.err);
     });
   }
-
+  //701268417096712203
+  //736715831962107924
   function createEmbed(message, args, channel, role, channelForMod) {
     message.channel
       .send(
@@ -123,11 +127,11 @@ exports.run = async (client, message, args) => {
         const newChannelEmbed = new Discord.MessageEmbed()
           .setColor(0xff9f01)
           .setAuthor(
-            "New public instanced channel: " + args[1],
+            `${channel.name} channel`,
             message.guild.iconURL({ dynamic: true })
           )
-          .setDescription("React to this message to join!")
-          .setTimestamp();
+          .setDescription("*No description*")
+          .setFooter("React to this message to join the channel!");
 
         await directoryChannel.send(newChannelEmbed).then((dirMsg) => {
           dirMsgId = dirMsg.id;
@@ -146,6 +150,7 @@ exports.run = async (client, message, args) => {
           creator: message.author.id,
           channelEmbed: message.channel,
           channelForModeration: channelForMod,
+          directoryEntry: dirMsgId,
         };
       } else {
         channelObj = channel = {

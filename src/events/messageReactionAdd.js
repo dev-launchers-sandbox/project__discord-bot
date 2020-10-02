@@ -68,6 +68,7 @@ async function awardDevBean(client, messageReaction, user) {
     } else {
       db.set(`lastDevBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveBeansTo}.devBeans`, 1);
+      db.add(`account.${userToGiveBeansTo}.foreverDevBeans`, 1);
       user.send(
         `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
       );
@@ -108,6 +109,7 @@ async function awardGoldenBean(client, messageReaction, user) {
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
+      db.add(`account.${userToGiveGoldenBeansTo}.foreverGoldenBeans`, 1);
       user.send(
         `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
       );

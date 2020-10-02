@@ -5,7 +5,7 @@ const directMessage = require("../utils/instancedManager.js");
 const inviteManager = require("../utils/inviteManager.js");
 
 module.exports = async (client) => {
-  console.log("The bot is ready!");
+  console.log("The bot super ready!");
   client.user.setActivity("DevLaunchers", { type: "WATCHING" });
   inviteManager.fetchInvites(client);
   setInterval(checkActivity, 60000, client);

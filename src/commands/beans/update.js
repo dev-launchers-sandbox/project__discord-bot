@@ -6,6 +6,7 @@ exports.run = async (client, message, args) => {
   console.log("Ran");
   if (!message.member.hasPermission("ADMINISTRATOR")) return;
   if (!client.config.owners.includes(message.author.id)) return;
+  console.log("check complete");
   let userRank = 1;
   await message.guild.members.cache.forEach(async (member) => {
     let devBeans = await db.get(`account.${member.id}.devBeans`);

@@ -3,6 +3,7 @@ const db = require("quick.db");
 const getMessageTarget = require("../../utils/getMessageTarget");
 
 exports.run = async (client, message, args) => {
+  console.log("Ran");
   if (!message.member.hasPermission("ADMINISTRATOR")) return;
   if (!client.config.owners.includes(message.author.id)) return;
   let userRank = 1;

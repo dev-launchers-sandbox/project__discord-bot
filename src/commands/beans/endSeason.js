@@ -9,22 +9,24 @@ exports.run = async (client, message, args) => {
   const collector = message.channel.createMessageCollector(
     (m) =>
       m.author.id === message.author.id &&
-      (m.content === "Y" || m.content === "N"),
+      (m.content.toLowerCase() === "y" || m.content.toLowerCase() === "n"),
     { time: 7000, max: 1 }
   );
   collector.on("collect", (msg) => {
     try {
-      if (msg.content === "Y") {
-        message.guild.members.cache.forEach((member) => {
-          db.delete(`account.${member.user.id}.devBeans`);
-          db.delete(`account.${member.user.id}.goldenBeans`);
-          db.delete(`lastGoldenBean.${member.user.id}`);
-          db.delete(`lastGoldenBeanAwarded.${member.user.id}`);
+      content = msg.content.toLowerCase();
+      if (content === "y") {
+        const accounts = db.get("account");
+        Object.keys(accounts).forEach((userId) => {
+          db.delete(`account.${userId}.devBeans`);
+          db.delete(`account.${userId}.goldenBeans`);
+          db.delete(`lastGoldenBean.${userId}`);
+          db.delete(`lastGoldenBeanAwarded.${userId}`);
         });
         message.channel.send(
           `**${message.author.username}**, I successfully ended the bean season`
         );
-      } else if (msg.content === "N") {
+      } else {
         return msg.channel.send(`**${msg.author.username}**, Okay!`);
       }
     } catch (error) {

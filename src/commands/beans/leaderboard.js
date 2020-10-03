@@ -41,10 +41,11 @@ const getSortedDevBeansArray = (message, accounts) => {
 };
 
 exports.run = async (bot, message, args) => {
-  message.channel.send(
+  /*message.channel.send(
     "We are trying to fix an error with the leaderboard! It will be back soon!"
-  );
-  /*let lbType;
+  );*/
+
+  let lbType;
   let goldenBeanEmoji = message.guild.emojis.cache.find(
     (emoji) => emoji.name === "GoldenBean"
   );
@@ -79,7 +80,7 @@ exports.run = async (bot, message, args) => {
     { name: "GoldenBeans", value: fields.goldenBeans, inline: true }
   );
 
-  message.channel.send(lbEmbed);*/
+  message.channel.send(lbEmbed); /**/
 };
 
 function formatLeaderboard(

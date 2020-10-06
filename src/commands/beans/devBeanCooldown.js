@@ -13,7 +13,7 @@ exports.run = async (client, message, args) => {
 
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) target = message.member;
-  console.log(target);
+
   const isAuthorTarget = message.author.id === target.id;
   const lastDevBean = db.get(`lastDevBean.${target.id}`);
 

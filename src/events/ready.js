@@ -11,6 +11,9 @@ module.exports = async (client) => {
   setInterval(checkActivity, 60000, client);
 };
 
+//setInterval(checkActivity, 60000, client);
+//4.32e7
+
 async function checkActivity(client) {
   const clientGuilds = client.guilds.cache;
 
@@ -61,6 +64,8 @@ async function checkActivity(client) {
       // delete the channel once we remove the roles attached to it.
       await deleteChannel(channelChecking);
       await sendModerationMessage(client, channel);
+      await deleteDirectoryEntry(channel, guild);
+
       await channelsDeletedIDs.push(channel.newChannel);
     });
     const updatedChannels = instancedChannels.filter(
@@ -85,8 +90,18 @@ async function deleteRole(role) {
   await role.delete();
 }
 
-// loop through guilds
-// get instanced channels for the guild
-// filter out expired channels
-// clear up roles and channels for the instanced channel
-// update database
+async function deleteDirectoryEntry(channelObj, guild) {
+  const directoryChannelId = db.get(`directory.${guild.id}`);
+  if (!directoryChannelId) return;
+  const directoryChannel = guild.channels.resolve(directoryChannelId);
+  if (!directoryChannel) return;
+
+  if (!channelObj.directoryEntry) return;
+  const message = await directoryChannel.messages.fetch(
+    channelObj.directoryEntry
+  );
+  if (!message) return;
+  if (message.deleted) return;
+
+  message.delete();
+}

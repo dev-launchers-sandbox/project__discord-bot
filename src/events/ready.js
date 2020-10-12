@@ -47,7 +47,7 @@ async function checkActivity(client) {
 
       // more readable code if we just return here.
       // if the channel hasn't expired
-      if (time < 4.32e7) return;
+      if (time < 8.64e7) return;
 
       // see if we can find this role (could use one find for ...
       // ... the check and the delete instead of doing the same one twice)

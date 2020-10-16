@@ -8,7 +8,7 @@ exports.run = async (client, message, args) => {
       "`" +
         message.author.username +
         "`" +
-        " , you cannot blacklist someone from this channel!"
+        " , you cannot blacklist someone from this thread!"
     );
   }
   let messageRole;
@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
       "`" +
         message.author.username +
         "`" +
-        " , you cannot blacklist someone from this channel!"
+        " , you cannot blacklist someone from this thread!"
     );
   }
   if (
@@ -79,7 +79,7 @@ exports.run = async (client, message, args) => {
       "`" +
         userToForceLeave.user.username +
         "`" +
-        " has been blacklisted from this channel"
+        " has been blacklisted from this thread"
     )
     .then(
       userToForceLeave.send(
@@ -90,7 +90,7 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: "blacklist",
-  description: "Kicks a member from an instanced channel",
+  description: "Blacklists a member from an thread",
   usage: "blacklist <@user>",
   example: "blacklist @Wumpus#0001",
 };

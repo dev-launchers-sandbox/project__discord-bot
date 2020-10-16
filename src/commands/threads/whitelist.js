@@ -5,10 +5,7 @@ exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated || !Array.isArray(channelsCreated)) {
     return message.channel.send(
-      "`" +
-        message.author.username +
-        "`" +
-        " , you cannot whitelist someone from this channel!"
+      "`" + message.author.username + "`" + " , this channel is not a thread!"
     );
   }
   const messageRoles = channelsCreated.find(
@@ -16,10 +13,7 @@ exports.run = async (client, message, args) => {
   );
   if (messageRoles === undefined)
     return message.channel.send(
-      "`" +
-        message.author.username +
-        "`" +
-        " , you cannot whitelist someone from this channel!"
+      "`" + message.author.username + "`" + " , this channel is not a thread!"
     );
   const userPing = message.mentions.users.first();
   if (
@@ -40,7 +34,7 @@ exports.run = async (client, message, args) => {
       "`" +
         message.author.username +
         "`" +
-        " please specify a user to blacklist!"
+        " please specify a user to whitelist!"
     );
   }
   const userToWhiteList = message.guild.members.cache.get(userPing.id);
@@ -61,7 +55,7 @@ exports.run = async (client, message, args) => {
   await db.set(`instanced.${message.guild.id}`, channelsCreated);
   channelToSend
     .send(
-      "`" + userPing.username + "`" + " has been whitelisted from this channel"
+      "`" + userPing.username + "`" + " has been whitelisted from this thread"
     )
     .then(
       userPing.send(
@@ -72,7 +66,7 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: "whitelist",
-  description: "Whitelists a member from an instanced channel",
+  description: "Whitelists a member from a thread",
   usage: "whitelist <@user>",
   example: "whitelist @Wumpus#0001",
 };

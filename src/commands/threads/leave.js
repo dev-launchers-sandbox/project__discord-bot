@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
   );
 
   if (!messageRole) {
-    return message.channel.send("You cannot leave this channel");
+    return message.channel.send("This channel is not a thread");
   }
 
   const isRoleActive = message.guild.roles.cache.find(
@@ -32,14 +32,14 @@ exports.run = async (client, message, args) => {
     .roles.remove(messageRole.role)
     .then(
       channel.send(
-        "`" + `${message.author.username}` + "`" + " left the channel!"
+        "`" + `${message.author.username}` + "`" + " left the thread!"
       )
     );
 };
 
 exports.help = {
   name: "leave",
-  description: `Use this command to leave an instanced channel`,
+  description: `Use this command to leave a thread`,
   usage: "leave",
   example: "leave",
 };

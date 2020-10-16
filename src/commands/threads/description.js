@@ -59,7 +59,7 @@ exports.run = async (client, message, args) => {
     );
   }
   if (newDescription.length > 80) {
-    message.channel.send("Descriptions must be less than 30 characters!");
+    message.channel.send("Descriptions must be less than 80 characters!");
     return;
   }
   if (newDescription === "remove" || newDescription === "delete") {

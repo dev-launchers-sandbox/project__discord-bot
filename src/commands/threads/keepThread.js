@@ -5,10 +5,7 @@ exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
     return message.channel.send(
-      `"` +
-        message.author.username +
-        "`" +
-        "this channel is not an instanced channel!"
+      `"` + message.author.username + "`" + "this channel is not a thread!"
     );
   }
   if (!message.member.permissions.has("ADMINISTRATOR" || "MANAGE_CHANNELS")) {
@@ -24,23 +21,20 @@ exports.run = async (client, message, args) => {
   );
   if (!channelToKeep) {
     return message.channel.send(
-      "`" +
-        message.author.username +
-        "`" +
-        " this channel is not an instanced channel!"
+      "`" + message.author.username + "`" + " this channel is not a thread!"
     );
   }
   let indexOfChannelToKeep = channelsCreated.indexOf(channelToKeep);
   channelsCreated.splice(indexOfChannelToKeep, 1);
   await db.set(`instanced.${message.guild.id}`, channelsCreated);
-  message.channel.send("Channel removed!");
+  message.channel.send("Thread removed!");
 };
 
 exports.help = {
-  name: "keepchannel",
-  description: `Removes a channel from the ${"instanced"} list`,
-  usage: "keepChannel",
-  example: "keepChannel",
+  name: "keepthread",
+  description: `Removes a channel from the "thread" list`,
+  usage: "keepthread",
+  example: "keepthread",
 };
 
 exports.conf = {

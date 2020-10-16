@@ -9,8 +9,7 @@ exports.run = async (client, message, args) => {
     return message.channel.send({
       embed: {
         color: "RED",
-        description:
-          "You can only run this command in a public instanced channel",
+        description: "You can only run this command in a public thread",
       },
     });
 
@@ -22,8 +21,7 @@ exports.run = async (client, message, args) => {
     return message.channel.send({
       embed: {
         color: "RED",
-        description:
-          "You can only run this command in a public instanced channel",
+        description: "You can only run this command in a public thread",
       },
     });
 
@@ -35,13 +33,13 @@ exports.run = async (client, message, args) => {
       instancedOwner === message.author.id
     )
   ) {
-    return commandUsage.noPerms(message, "Administrator or channel creator");
+    return commandUsage.noPerms(message, "Administrator or thread creator");
   }
 
   const directoryEntryId = instancedChannel.directoryEntry;
   if (!directoryEntryId)
     return message.channel.send(
-      "In order to run this command, you need to be in a __public__ instanced channel!"
+      "In order to run this command, you need to be in a __public__ thread!"
     );
 
   const directoryChannelID = db.get(`directory.${message.guild.id}`) || "None";
@@ -64,29 +62,31 @@ exports.run = async (client, message, args) => {
     message.channel.send("Descriptions must be less than 30 characters!");
     return;
   }
-  if (newDescription === "remove" || newDescription === "delete")
+  if (newDescription === "remove" || newDescription === "delete") {
     newDescription = "No description";
+    message.channel.setTopic(null);
+  }
 
   const newEntry = new Discord.MessageEmbed()
     .setColor(0xff9f01)
     .setAuthor(
-      `${message.channel.name} channel`,
+      `${message.channel.name} thread`,
       message.guild.iconURL({ dynamic: true })
     )
     .setDescription(`*${newDescription}*`)
-    .setFooter("React to this message to join the channel!");
+    .setFooter("React to this message to join this thread!");
 
   directoryEntry
     .edit(newEntry)
     .then(workedConfirmation(message, newDescription))
     .catch((err) => console.log("Error in directory"));
+  message.channel.setTopic(newDescription);
 };
-//message.channel.send("There was an unexpected error!")
 
 function workedConfirmation(message, newDescription) {
   if (newDescription === "No description") {
     message.channel.send(
-      "I successfully removed the description for this channel!"
+      "I successfully removed the description for this thread!"
     );
   } else {
     message.channel.send(
@@ -96,9 +96,9 @@ function workedConfirmation(message, newDescription) {
 }
 exports.help = {
   name: "description",
-  description: "Sets the description for an instanced channel",
+  description: "Sets the description for a thread",
   usage: `description <content>`,
-  example: `description in this channel we play games!`,
+  example: `description we love potatoes!`,
 };
 
 exports.conf = {

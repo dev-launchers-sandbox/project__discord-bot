@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
   });
   if (!categoryExists) {
     return message.channel.send(
-      "Umm... It seems like the instanced channels are not 100% set up"
+      "Umm... It seems like the threads  are not 100% set up"
     );
   }
   createRole(message, args, client);
@@ -33,18 +33,14 @@ exports.run = async (client, message, args) => {
       (channel) => channel.name === channelName
     );
     if (!channelName) {
-      return commandUsage.missingParams(
-        message,
-        "Name Of Channel",
-        "createinstanced"
-      );
+      return commandUsage.missingParams(message, "Name Of Thread", "create");
     }
     if (channelName.length > 100)
-      return message.channel.send("Channel names must be lower than 100");
+      return message.channel.send("Thread names must be lower than 100");
 
     if (channelExists || roleExists) {
       return message.channel.send(
-        "I could not create an instanced channel. Reason: `There is a channel or role with the same name`"
+        "I could not create a thread. Reason: `There is a channel or role with the same name`"
       );
     }
     message.guild.roles
@@ -57,7 +53,7 @@ exports.run = async (client, message, args) => {
     let channelName = args[0];
     if (!channelName) {
       return message.channel.send(
-        "I could not create an instanced channel. Reason: `No Name Provided`"
+        "I could not create a thread. Reason: `No Name Provided`"
       );
     }
     if (channelName === "public") {
@@ -76,7 +72,7 @@ exports.run = async (client, message, args) => {
         .setParent(instancedParentID)
         .then((channel) =>
           channel.send(
-            "`" + message.author.username + "`" + " has created this channel"
+            "`" + message.author.username + "`" + " has created this thread"
           )
         );
       client.guilds.cache
@@ -101,10 +97,10 @@ exports.run = async (client, message, args) => {
   function createEmbed(message, args, channel, role, channelForMod) {
     message.channel
       .send(
-        "A instanced channel has been created by " +
+        "A thread has been created by " +
           "`" +
           message.author.tag +
-          "`\n`React` to this message to join the instanced channel.\n These channels are also moderated!"
+          "`\n`React` to this message to join the thread.\n These channels are also moderated!"
       )
       .then((msg) =>
         storeChannel(message, msg, args, channel, role, channelForMod)
@@ -127,11 +123,11 @@ exports.run = async (client, message, args) => {
         const newChannelEmbed = new Discord.MessageEmbed()
           .setColor(0xff9f01)
           .setAuthor(
-            `${channel.name} channel`,
+            `${channel.name} thread`,
             message.guild.iconURL({ dynamic: true })
           )
           .setDescription("*No description*")
-          .setFooter("React to this message to join the channel!");
+          .setFooter("React to this message to join the thread!");
 
         await directoryChannel.send(newChannelEmbed).then((dirMsg) => {
           dirMsgId = dirMsg.id;
@@ -175,14 +171,14 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-  name: "createinstanced",
-  description: "Create an instanced channel!",
-  usage: "createInstanced <channelName>",
+  name: "create",
+  description: "Create an thread!",
+  usage: "create <threadName>",
   example: "createInstanced gamenight",
 };
 
 exports.conf = {
-  aliases: ["create", "createinstance", "createchannel"],
+  aliases: ["createthread"],
   cooldown: 5,
 };
 

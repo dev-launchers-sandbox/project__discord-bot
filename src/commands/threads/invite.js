@@ -5,10 +5,7 @@ exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated || !Array.isArray(channelsCreated)) {
     return message.channel.send(
-      "`" +
-        message.author.username +
-        "`" +
-        ", you cannot invite someone to this channel "
+      "`" + message.author.username + "`" + ", this channel is not a thread! "
     );
   }
   let channelToInviteUserTo;
@@ -23,16 +20,13 @@ exports.run = async (client, message, args) => {
   );
   if (!channelIn) {
     return message.channel.send(
-      "`" +
-        message.author.username +
-        "`" +
-        ", you cannot invite someone to this channel "
+      "`" + message.author.username + "`" + ", this channel is not a thread!"
     );
   }
   let index = channelsCreated.indexOf(channelIn);
   await message.channel
     .send(
-      "You have been invited to an instanced channel!" +
+      "You have been invited to a thread!" +
         "`" +
         message.author.tag +
         "`\n`React` to this message to join!\n These channels are also moderated!"
@@ -47,7 +41,7 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: "invite",
-  description: "Creates an invite to an instanced channel",
+  description: "Creates an invite to a thread",
   usage: "invite <#channel>",
   example: "invite #secret-chat",
 };

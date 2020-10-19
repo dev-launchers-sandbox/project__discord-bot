@@ -7,6 +7,8 @@ const metrics = require("../index.js");
 module.exports = async (client, message) => {
   if (!message.guild) return;
 
+  if (message.author.id === "302050872383242240") bumpCheck(message);
+
   let inviteLink = [
     "discord.gg",
     "discord.com/invite",
@@ -123,4 +125,51 @@ function moderateInstancedChannels(client, message) {
     "\n------------------------------------------";
 
   moderationChannel.send(messageData);
+}
+
+function bumpCheck(message) {
+  const embed = message.embeds[0];
+  if (!embed) return;
+  if (!embed.image) return;
+  if (
+    embed.image.url === "https://disboard.org/images/bot-command-image-bump.png"
+  ) {
+    const description = embed.description;
+    const openingSign = description.indexOf("<");
+    const closingSign = description.indexOf(">");
+    const userId = description.substring(openingSign + 2, closingSign);
+
+    const user = message.guild.members.resolve(userId);
+
+    const beans = getRandomBeans();
+
+    const emote = getEmote(message.guild, beans.type);
+
+    const userEmbed = new Discord.MessageEmbed()
+      .setColor(0xff9f01)
+      .setAuthor("You are the best!")
+      .setDescription(
+        `Thank you for bumping the server! Please take ${beans.value}  ${emote}`
+      );
+
+    user.send(userEmbed);
+    db.add(`account.${userId}.${beans.type}`, beans.value);
+  }
+}
+
+function getRandomBeans() {
+  const num = Math.random();
+
+  if (num <= 0.31) return { type: "devBeans", value: 1 };
+  else if (num < 0.61) return { type: "devBeans", value: 2 };
+  else if (num < 0.92) return { type: "devBeans", value: 3 };
+  else return { type: "goldenBeans", value: 1 };
+}
+
+function getEmote(guild, type) {
+  type = type.substring(0, type.length - 1);
+  type = type.charAt(0).toUpperCase() + type.slice(1);
+  const emote = guild.emojis.cache.find((emoji) => emoji.name === type);
+
+  return emote || type;
 }

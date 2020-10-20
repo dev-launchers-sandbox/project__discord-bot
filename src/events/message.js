@@ -152,8 +152,8 @@ function bumpCheck(message) {
         `Thank you for bumping the server! Please take ${beans.value}  ${emote}`
       );
 
-    user.send(userEmbed);
     db.add(`account.${userId}.${beans.type}`, beans.value);
+    message.channel.send(userEmbed);
   }
 }
 

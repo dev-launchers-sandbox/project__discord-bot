@@ -172,9 +172,10 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
   name: "create",
-  description: "Create an thread!",
-  usage: "create <threadName>",
-  example: "createInstanced gamenight",
+  description:
+    "Create an thread! Public threads will show in the directory channel!",
+  usage: "create [public] <threadName>",
+  example: "createInstanced public gamenight",
 };
 
 exports.conf = {

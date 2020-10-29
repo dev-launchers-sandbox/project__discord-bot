@@ -45,6 +45,11 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return instancedChannelAddRole(client, message, user);
   }
+  if (messageReaction.emoji.name === "🎟️") {
+    console.log("GOT IT");
+    let message = await fetchMessage(client, messageReaction, user);
+    return openTicket(client, message, user);
+  }
 };
 
 async function awardDevBean(client, messageReaction, user) {
@@ -170,4 +175,55 @@ function instancedChannelAddRole(client, messageReaction, user) {
     .then(
       channel.send("`" + `${user.username}` + "`" + " joined the channel!")
     );
+}
+
+async function openTicket(client, messageReaction, user) {
+  const ticketMessage = await db.get(
+    `ticket.${messageReaction.message.guild.id}`
+  );
+
+  if (messageReaction.message.id !== ticketMessage) return;
+
+  const message = messageReaction.message;
+
+  const ticketCategory = db.get(`ticket-category.${message.guild.id}`);
+  if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
+
+  const newTicket = await message.guild.channels.create(
+    `ticket-${message.author.username}`
+  );
+
+  newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
+    VIEW_CHANNEL: false,
+  });
+
+  newTicket.updateOverwrite(user.id, {
+    VIEW_CHANNEL: true,
+  });
+
+  newTicket.setParent(ticketCategory);
+
+  const userReactions = message.reactions.cache.filter((reaction) =>
+    reaction.users.cache.has(user.id)
+  );
+  try {
+    for (const reaction of userReactions.values()) {
+      await reaction.users.remove(user.id);
+    }
+  } catch (error) {
+    console("Failed to remove reactions.");
+  }
+}
+
+function categoryExists(ticketCategory, guild) {
+  let categoryExists;
+  const guildChannels = guild.channels.cache;
+
+  guildChannels.forEach((channel) => {
+    if (channel.type === "category" && channel.id === ticketCategory) {
+      categoryExists = true;
+    }
+  });
+
+  return categoryExists;
 }

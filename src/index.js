@@ -1,7 +1,10 @@
 const Discord = require("discord.js");
 const express = require("express");
 const devlaunchersBot = require("./handler/ClientBuilder.js");
-const client = new devlaunchersBot({ partials: ["MESSAGE", "REACTION"] });
+const client = new devlaunchersBot({
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"],
+});
+
 const promClient = require("prom-client");
 
 const metrics = registerMetrics();

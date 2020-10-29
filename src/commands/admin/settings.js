@@ -15,6 +15,8 @@ exports.run = async (client, message, args) => {
     "mod-cooldown",
     "directory",
     "teams",
+    "ticket",
+    "ticket-category",
   ];
   if (!message.member.hasPermission("ADMINISTRATOR"))
     return commandUsage.noPerms(message, "Administrator");

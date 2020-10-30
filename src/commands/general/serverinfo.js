@@ -19,14 +19,13 @@ exports.run = async (client, message, args) => {
     "eu-west": "Western Europe",
   };
 
-  let member = message.guild.members;
-  let offline = member.cache.filter((m) => m.user.presence.status === "offline")
+  const members = await message.guild.members.fetch();
+  let offline = members.filter((m) => m.user.presence.status === "offline")
       .size,
-    online = member.cache.filter((m) => m.user.presence.status === "online")
-      .size,
-    idle = member.cache.filter((m) => m.user.presence.status === "idle").size,
-    dnd = member.cache.filter((m) => m.user.presence.status === "dnd").size,
-    bots = member.cache.filter((m) => m.user.bot).size,
+    online = members.filter((m) => m.user.presence.status === "online").size,
+    idle = members.filter((m) => m.user.presence.status === "idle").size,
+    dnd = members.filter((m) => m.user.presence.status === "dnd").size,
+    bots = members.filter((m) => m.user.bot).size,
     total = message.guild.memberCount;
 
   let channels = message.guild.channels;
@@ -39,6 +38,8 @@ exports.run = async (client, message, args) => {
 
   let created = dateformat(message.guild.createdAt);
 
+  const owner = await message.guild.members.fetch(message.guild.ownerID);
+
   const serverInfoEmbed = new Discord.MessageEmbed()
     .setColor(0xff9f01)
     .setTimestamp(new Date())
@@ -47,10 +48,7 @@ exports.run = async (client, message, args) => {
     .setDescription(`ID: **${message.guild.id}**`)
     .addField("Region", location)
     .addField("Created On", `${created} `)
-    .addField(
-      "Owner",
-      `**${message.guild.owner.user.tag}** \n\`${message.guild.owner.user.id}\``
-    )
+    .addField("Owner", `**${owner.user.tag}** \n\`${owner.user.id}\``)
     .addField(
       `Members [${total}]`,
       `Online: ${online} \nIdle ${idle} \nDND: ${dnd} \nOffline ${offline} \nBots: ${bots}`

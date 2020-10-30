@@ -16,10 +16,8 @@ module.exports = async (client, member) => {
 function sendWelcomeEmbed(client, member) {
   let welcomeChannelID = db.get(`welcome.${member.guild.id}`);
   if (!welcomeChannelID) return;
-  const welcomeChannel = member.guild.channels.cache.find(
-    (channel) => channel.id === welcomeChannelID
-  );
-  if (!welcomeChannelID) return;
+  const welcomeChannel = member.guild.channels.resolve(welcomeChannelID);
+  if (!welcomeChannel) return;
   let icon = member.guild.iconURL({ size: 2048, dynamic: true });
   let avatar = member.user.displayAvatarURL({ size: 2048 });
   // If a channel with the name "welcome", we just want to return.
@@ -35,8 +33,7 @@ function sendWelcomeEmbed(client, member) {
 function sendInviteInfo(client, invite, member) {
   const inviteChannelID = db.get(`invite.${invite.guild.id}`);
   if (!inviteChannelID) return;
-
-  const inviteChannel = client.channels.resolve(inviteChannelID);
+  const inviteChannel = member.guild.channels.resolve(inviteChannelID);
   if (!inviteChannel) return;
 
   let code;

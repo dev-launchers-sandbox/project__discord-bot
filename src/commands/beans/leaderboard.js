@@ -118,7 +118,7 @@ function formatLeaderboard(
     goldenBeansArray = goldenBeansArray.slice(0, 10);
   if (goldenBeansArray.length !== 0) {
     goldenBeansArray.forEach((useEntry) => {
-      let userObject = message.guild.members.cache.get(useEntry.id);
+      let userObject = message.guild.members.resolve(useEntry.id);
       if (!userObject) userObject = { user: { username: "User not found" } };
       let username = userObject.user.username || "User not found";
       if (username.length > 25) {

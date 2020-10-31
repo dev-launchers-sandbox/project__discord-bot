@@ -193,32 +193,55 @@ function halloweenCheck(message, args) {
   const conclusionRole = db.get(`halloween.conclusion.${message.guild.id}`);
 
   if (answer[1] === "code") {
-    if (message.member.roles.cache.has(kitchenRoomRole)) return;
+    if (message.member.roles.cache.has(kitchenRoomRole)) {
+      incorrect(message, answer);
+      return;
+    }
     message.member.roles.add(kitchenRoomRole);
     correct(message, answer);
   } else if (answer[1] === "footprints") {
-    if (!message.member.roles.cache.has(kitchenRoomRole)) return;
-    if (message.member.roles.cache.has(backyardRole)) return;
+    if (!message.member.roles.cache.has(kitchenRoomRole)) {
+      incorrect(message, answer);
+      return;
+    }
+    if (message.member.roles.cache.has(backyardRole)) {
+      incorrect(message, answer);
+      return;
+    }
     message.member.roles.add(backyardRole);
     correct(message, answer);
   } else if (answer[1] === "dog" && answer[2] === "park") {
-    if (!message.member.roles.cache.has(backyardRole)) return;
-    if (message.member.roles.cache.has(dogParkRole)) return;
+    if (!message.member.roles.cache.has(backyardRole)) {
+      incorrect(message, answer);
+      return;
+    }
+
+    if (message.member.roles.cache.has(dogParkRole)) incorrect(message, answer);
+    return;
     message.member.roles.add(dogParkRole);
     correct(message, answer);
   } else if (answer[1] === "090") {
-    if (!message.member.roles.cache.has(dogParkRole)) return;
-    if (message.member.roles.cache.has(phoneRole)) return;
+    if (!message.member.roles.cache.has(dogParkRole))
+      incorrect(message, answer);
+    return;
+    if (message.member.roles.cache.has(phoneRole)) incorrect(message, answer);
+    return;
     message.member.roles.add(phoneRole);
     correct(message, answer);
   } else if (answer[1] === "7") {
-    if (!message.member.roles.cache.has(phoneRole)) return;
-    if (message.member.roles.cache.has(devlaunchersHqRole)) return;
+    if (!message.member.roles.cache.has(phoneRole)) incorrect(message, answer);
+    return;
+    if (message.member.roles.cache.has(devlaunchersHqRole))
+      incorrect(message, answer);
+    return;
     message.member.roles.add(devlaunchersHqRole);
     correct(message, answer);
   } else if (answer[1] === "pass123") {
-    if (!message.member.roles.cache.has(devlaunchersHqRole)) return;
-    if (message.member.roles.cache.has(vaultRole)) return;
+    if (!message.member.roles.cache.has(devlaunchersHqRole))
+      incorrect(message, answer);
+    return;
+    if (message.member.roles.cache.has(vaultRole)) incorrect(message, answer);
+    return;
     message.member.roles.add(vaultRole);
     correct(message, answer);
   } else if (
@@ -227,8 +250,10 @@ function halloweenCheck(message, args) {
     answer[1] === "red" ||
     (answer[1] === "lava" && answer[2] === "luffy")
   ) {
-    if (!message.member.roles.cache.has(vaultRole)) return;
-    if (message.member.roles.cache.has(conclusionRole)) return;
+    if (!message.member.roles.cache.has(vaultRole));
+    return;
+    if (message.member.roles.cache.has(conclusionRole));
+    return;
     message.member.roles.add(conclusionRole);
     correct(message, answer);
   } else incorrect(message, answer);

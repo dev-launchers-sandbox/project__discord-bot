@@ -6,6 +6,10 @@ const metrics = require("../index.js");
 
 module.exports = async (client, message) => {
   if (!message.guild) return;
+  if (message.content.startsWith(".key")) {
+    message.delete();
+    return halloweenCheck(message);
+  }
 
   if (message.author.id === "302050872383242240") bumpCheck(message);
 
@@ -172,4 +176,76 @@ function getEmote(guild, type) {
   const emote = guild.emojis.cache.find((emoji) => emoji.name === type);
 
   return emote || type;
+}
+
+function halloweenCheck(message, args) {
+  const answer = message.content.slice(1).trim().split(" ");
+
+  const krisRoomRole = db.get(`halloween.kris-room.${message.guild.id}`);
+  const kitchenRoomRole = db.get(`halloween.kitchen.${message.guild.id}`);
+  const backyardRole = db.get(`halloween.backyard.${message.guild.id}`);
+  const dogParkRole = db.get(`halloween.dog-park.${message.guild.id}`);
+  const phoneRole = db.get(`halloween.phone.${message.guild.id}`);
+  const devlaunchersHqRole = db.get(
+    `halloween.devlaunchers-hq.${message.guild.id}`
+  );
+  const vaultRole = db.get(`halloween.vault.${message.guild.id}`);
+  const conclusionRole = db.get(`halloween.conclusion.${message.guild.id}`);
+
+  if (answer[1] === "code") {
+    if (message.member.roles.cache.has(kitchenRoomRole)) return;
+    message.member.roles.add(kitchenRoomRole);
+    correct(message, answer);
+  } else if (answer[1] === "footprints") {
+    if (!message.member.roles.cache.has(kitchenRoomRole)) return;
+    if (message.member.roles.cache.has(backyardRole)) return;
+    message.member.roles.add(backyardRole);
+    correct(message, answer);
+  } else if (answer[1] === "dog" && answer[2] === "park") {
+    if (!message.member.roles.cache.has(backyardRole)) return;
+    if (message.member.roles.cache.has(dogParkRole)) return;
+    message.member.roles.add(dogParkRole);
+    correct(message, answer);
+  } else if (answer[1] === "090") {
+    if (!message.member.roles.cache.has(dogParkRole)) return;
+    if (message.member.roles.cache.has(phoneRole)) return;
+    message.member.roles.add(phoneRole);
+    correct(message, answer);
+  } else if (answer[1] === "7") {
+    if (!message.member.roles.cache.has(phoneRole)) return;
+    if (message.member.roles.cache.has(devlaunchersHqRole)) return;
+    message.member.roles.add(devlaunchersHqRole);
+    correct(message, answer);
+  } else if (answer[1] === "pass123") {
+    if (!message.member.roles.cache.has(devlaunchersHqRole)) return;
+    if (message.member.roles.cache.has(vaultRole)) return;
+    message.member.roles.add(vaultRole);
+    correct(message, answer);
+  } else if (
+    answer[1] === "luffy" ||
+    answer[1] === "lava" ||
+    answer[1] === "red" ||
+    (answer[1] === "lava" && answer[2] === "luffy")
+  ) {
+    if (!message.member.roles.cache.has(vaultRole)) return;
+    if (message.member.roles.cache.has(conclusionRole)) return;
+    message.member.roles.add(conclusionRole);
+    correct(message, answer);
+  } else incorrect(message, answer);
+
+  function correct(message, answer) {
+    message.author.send("*New Room Open*");
+    const logChannelId = db.get(`halloween.log-channel.${message.guild.id}`);
+    const logChannel = message.guild.channels.resolve(logChannelId);
+
+    logChannel.send(
+      `<@${message.author.id}> entered the room with the code ${answer[1]}`
+    );
+  }
+
+  function incorrect(message, answer) {
+    message.author.send(
+      `**Wrong key**\nYou entered ${"`"}${answer.map((x) => `${x}`)} ${"`"}`
+    );
+  }
 }

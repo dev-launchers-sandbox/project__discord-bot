@@ -193,7 +193,7 @@ function halloweenCheck(message, args) {
   const vaultRole = db.get(`halloween.vault.${message.guild.id}`);
   const conclusionRole = db.get(`halloween.conclusion.${message.guild.id}`);
 
-  if (answer[1] === "code") {
+  if (answer[1] === "wa9g") {
     if (message.member.roles.cache.has(kitchenRoomRole)) {
       incorrect(message, answer);
       return;

@@ -179,7 +179,8 @@ function getEmote(guild, type) {
 }
 
 function halloweenCheck(message, args) {
-  const answer = message.content.slice(1).trim().split(" ");
+  const content = message.content.toLowerCase();
+  const answer = content.slice(1).trim().split(" ");
 
   const krisRoomRole = db.get(`halloween.kris-room.${message.guild.id}`);
   const kitchenRoomRole = db.get(`halloween.kitchen.${message.guild.id}`);

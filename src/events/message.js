@@ -157,6 +157,9 @@ function bumpCheck(message) {
       );
 
     db.add(`account.${userId}.${beans.type}`, beans.value);
+    if (beans.type === "devBeans") {
+      db.add(`account.${userId}.foreverDevBeans`, beans.value);
+    } else db.add(`account.${userId}.foreverGoldenBeans`, beans.value);
     message.channel.send(userEmbed);
   }
 }

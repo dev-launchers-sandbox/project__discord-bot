@@ -200,7 +200,7 @@ async function openTicket(client, messageReaction, user) {
   if (!modRole) modRole = "blank"; //Avoid empty message error in line 222
 
   const newTicket = await message.guild.channels.create(
-    `ticket-${message.author.username}`
+    `ticket-${user.username}`
   );
 
   newTicket.updateOverwrite(message.channel.guild.roles.everyone, {

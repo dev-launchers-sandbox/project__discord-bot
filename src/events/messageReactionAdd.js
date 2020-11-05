@@ -198,6 +198,8 @@ async function openTicket(client, messageReaction, user) {
 
   const modRole = db.get(`moderator.${message.guild.id}`);
   if (!modRole) modRole = "blank"; //Avoid empty message error in line 222
+  const adminRole = db.get(`admin.${message.guild.id}`);
+  if (!adminRole) adminRole = "blank"; //Avoid empty message error in line 222
 
   const newTicket = await message.guild.channels.create(
     `ticket-${user.username}`
@@ -221,6 +223,7 @@ async function openTicket(client, messageReaction, user) {
 
   newTicket.send(`<@${user.id}>`).then((msg) => msg.delete());
   newTicket.send(`<@&${modRole}>`).then((msg) => msg.delete());
+  newTicket.send(`<@&${adminRole}>`).then((msg) => msg.delete());
 }
 
 async function removeReaction(client, message, user) {

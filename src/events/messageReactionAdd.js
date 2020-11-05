@@ -46,7 +46,6 @@ module.exports = async (client, messageReaction, user) => {
     return instancedChannelAddRole(client, message, user);
   }
   if (messageReaction.emoji.name === "🎟️") {
-    console.log("GOT IT");
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
   }
@@ -178,6 +177,7 @@ function instancedChannelAddRole(client, messageReaction, user) {
 }
 
 async function openTicket(client, messageReaction, user) {
+  if (user.bot) return;
   const ticketMessage = await db.get(
     `ticket.${messageReaction.message.guild.id}`
   );
@@ -189,6 +189,12 @@ async function openTicket(client, messageReaction, user) {
   const ticketCategory = db.get(`ticket-category.${message.guild.id}`);
   if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
 
+  if (numOfTicketsOpen(message, ticketCategory) >= 10) {
+    message.author.send(
+      "There are too many tickets open! If it is an emergency, please dm an admin/mod"
+    );
+    return removeReaction(client, message, user);
+  }
   const newTicket = await message.guild.channels.create(
     `ticket-${message.author.username}`
   );
@@ -203,18 +209,18 @@ async function openTicket(client, messageReaction, user) {
 
   newTicket.setParent(ticketCategory);
 
-  const userReactions = message.reactions.cache.filter((reaction) =>
-    reaction.users.cache.has(user.id)
-  );
-  try {
-    for (const reaction of userReactions.values()) {
-      await reaction.users.remove(user.id);
-    }
-  } catch (error) {
-    console("Failed to remove reactions.");
-  }
+  removeReaction(client, message, user);
+  const modRole = db.get(`moderator.${message.guild.id}`);
+  if (!modRole) modRole = "blank"; //Avoid empty message error
+
+  newTicket.send(`<@${message.author.id}>`).then((msg) => msg.delete());
+  newTicket.send(`<@&${modRole}>`).then((msg) => msg.delete());
 }
 
+async function removeReaction(client, message, user) {
+  message.reactions.removeAll();
+  message.react("🎟️");
+}
 function categoryExists(ticketCategory, guild) {
   let categoryExists;
   const guildChannels = guild.channels.cache;
@@ -226,4 +232,9 @@ function categoryExists(ticketCategory, guild) {
   });
 
   return categoryExists;
+}
+
+function numOfTicketsOpen(message, ticketCategoryId) {
+  const category = message.guild.channels.resolve(ticketCategoryId);
+  return category.children.size;
 }

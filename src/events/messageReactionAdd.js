@@ -195,6 +195,10 @@ async function openTicket(client, messageReaction, user) {
     );
     return removeReaction(client, message, user);
   }
+
+  const modRole = db.get(`moderator.${message.guild.id}`);
+  if (!modRole) modRole = "blank"; //Avoid empty message error in line 222
+
   const newTicket = await message.guild.channels.create(
     `ticket-${message.author.username}`
   );
@@ -207,11 +211,13 @@ async function openTicket(client, messageReaction, user) {
     VIEW_CHANNEL: true,
   });
 
+  newTicket.updateOverwrite(modRole, {
+    VIEW_CHANNEL: true,
+  });
+
   newTicket.setParent(ticketCategory);
 
   removeReaction(client, message, user);
-  const modRole = db.get(`moderator.${message.guild.id}`);
-  if (!modRole) modRole = "blank"; //Avoid empty message error
 
   newTicket.send(`<@${message.author.id}>`).then((msg) => msg.delete());
   newTicket.send(`<@&${modRole}>`).then((msg) => msg.delete());

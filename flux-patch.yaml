@@ -10,5 +10,5 @@ spec:
       $setElementOrder/containers:
       - name: project-discord-bot
       containers:
-      - image: devlaunchers/project_discord-bot:sha-3f96fb6
+      - image: devlaunchers/project_discord-bot:sha-6f5c6ed
         name: project-discord-bot

@@ -45,6 +45,10 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return instancedChannelAddRole(client, message, user);
   }
+  if (messageReaction.emoji.name === "🎟️") {
+    let message = await fetchMessage(client, messageReaction, user);
+    return openTicket(client, message, user);
+  }
 };
 
 async function awardDevBean(client, messageReaction, user) {
@@ -170,4 +174,67 @@ function instancedChannelAddRole(client, messageReaction, user) {
     .then(
       channel.send("`" + `${user.username}` + "`" + " joined the channel!")
     );
+}
+
+async function openTicket(client, messageReaction, user) {
+  if (user.bot) return;
+  const ticketMessage = await db.get(
+    `ticket.${messageReaction.message.guild.id}`
+  );
+
+  if (messageReaction.message.id !== ticketMessage) return;
+
+  const message = messageReaction.message;
+
+  const ticketCategory = db.get(`ticket-category.${message.guild.id}`);
+  if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
+
+  if (numOfTicketsOpen(message, ticketCategory) >= 10) {
+    message.author.send(
+      "There are too many tickets open! If it is an emergency, please dm an admin/mod"
+    );
+    return removeReaction(client, message, user);
+  }
+  const newTicket = await message.guild.channels.create(
+    `ticket-${message.author.username}`
+  );
+
+  newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
+    VIEW_CHANNEL: false,
+  });
+
+  newTicket.updateOverwrite(user.id, {
+    VIEW_CHANNEL: true,
+  });
+
+  newTicket.setParent(ticketCategory);
+
+  removeReaction(client, message, user);
+  const modRole = db.get(`moderator.${message.guild.id}`);
+  if (!modRole) modRole = "blank"; //Avoid empty message error
+
+  newTicket.send(`<@${message.author.id}>`).then((msg) => msg.delete());
+  newTicket.send(`<@&${modRole}>`).then((msg) => msg.delete());
+}
+
+async function removeReaction(client, message, user) {
+  message.reactions.removeAll();
+  message.react("🎟️");
+}
+function categoryExists(ticketCategory, guild) {
+  let categoryExists;
+  const guildChannels = guild.channels.cache;
+
+  guildChannels.forEach((channel) => {
+    if (channel.type === "category" && channel.id === ticketCategory) {
+      categoryExists = true;
+    }
+  });
+
+  return categoryExists;
+}
+
+function numOfTicketsOpen(message, ticketCategoryId) {
+  const category = message.guild.channels.resolve(ticketCategoryId);
+  return category.children.size;
 }

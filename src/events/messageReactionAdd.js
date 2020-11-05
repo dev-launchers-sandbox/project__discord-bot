@@ -219,7 +219,7 @@ async function openTicket(client, messageReaction, user) {
 
   removeReaction(client, message, user);
 
-  newTicket.send(`<@${message.author.id}>`).then((msg) => msg.delete());
+  newTicket.send(`<@${user.id}>`).then((msg) => msg.delete());
   newTicket.send(`<@&${modRole}>`).then((msg) => msg.delete());
 }
 

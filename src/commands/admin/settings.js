@@ -17,6 +17,7 @@ exports.run = async (client, message, args) => {
     "teams",
     "ticket",
     "ticket-category",
+    "admin",
   ];
   if (!message.member.hasPermission("ADMINISTRATOR"))
     return commandUsage.noPerms(message, "Administrator");

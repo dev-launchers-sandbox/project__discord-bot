@@ -30,7 +30,7 @@ exports.run = async (client, message, args) => {
   const updatedThreads = updateThreads(message);
   const pastIds = updatedThreads.thread.id;
 
-  updatedThreads.thread.directoryMsg = directoryMsg.id;
+  updatedThreads.thread.directoryEntry = directoryMsg.id;
   updatedThreads.thread.id = [...pastIds, directoryMsg.id];
 
   const index = updatedThreads.threads.indexOf(updatedThreads.thread);

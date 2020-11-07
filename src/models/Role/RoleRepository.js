@@ -1,4 +1,4 @@
-const User = require("./User");
+const Role = require("./Role");
 
 module.exports = class RoleRepository {
   // dependency injection - pass database access object to constructor

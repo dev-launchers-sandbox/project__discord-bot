@@ -1,10 +1,19 @@
 const Discord = require("discord.js");
+const db = require("quick.db");
+const ms = require("parse-ms");
+
 const commandUsage = require("./../../utils/commandUsage.js");
 const getMessageTarget = require("./../../utils/getMessageTarget.js");
 const directMessage = require("../../utils/directMessage.js");
 
 exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission("BAN_MEMBERS")) {
+  let modRoleID = await db.get(`moderator.${message.guild.id}`);
+  if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
+
+  if (
+    !message.member.hasPermission("BAN_MEMBERS") &&
+    !message.member.roles.cache.has(modRoleID)
+  ) {
     return commandUsage.noPerms(message, "Ban Members");
   }
   let target = getMessageTarget.getMessageTarget(message, args);
@@ -21,7 +30,10 @@ exports.run = async (client, message, args) => {
     return commandUsage.error(message, "ban");
   }
 
-  if (target.hasPermission("ADMINISTRATOR" || "BAN_MEMBERS")) {
+  if (
+    target.hasPermission("ADMINISTRATOR" || "BAN_MEMBERS") ||
+    target.roles.cache.has(modRoleID)
+  ) {
     let embed = new Discord.MessageEmbed()
       .setColor("RED")
       .setTitle("You cannot ban this user!")
@@ -31,6 +43,20 @@ exports.run = async (client, message, args) => {
       .setTimestamp();
     return message.channel.send(embed);
   }
+
+  let canModBan;
+
+  if (
+    message.member.roles.cache.has(modRoleID) &&
+    !message.member.hasPermission("BAN_MEMBERS")
+  ) {
+    canModBan = await canModeratorBan(message);
+  }
+
+  if (canModBan && !canModBan.canBan) {
+    return message.channel.send(canModBan.finalTime);
+  }
+
   let reason = args.slice(1).join(" ");
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")
@@ -46,9 +72,16 @@ exports.run = async (client, message, args) => {
     .then((msg) => updateAndDMUser(msg))
     .catch((err) => console.log(err));
 
+  if (canModBan) await addCooldown(message);
+
   const updateAndDMUser = async (msg) => {
     try {
-      await directMessage.sendPunishment(message.guild.name, target, reason, "banned");
+      await directMessage.sendPunishment(
+        message.guild.name,
+        target,
+        reason,
+        "banned"
+      );
       await target.ban({
         reason: `Banned By: ${message.author.username}  Reason: ${
           reason || "No reason provided"
@@ -61,6 +94,34 @@ exports.run = async (client, message, args) => {
     }
   };
 };
+
+async function canModeratorBan(message) {
+  let moderator = message.author;
+  let cooldownString = await db.get(`mod-cooldown.${message.guild.id}`);
+  let cooldown = parseInt(cooldownString) || 15;
+  let pad_zero = (num) => (num < 10 ? "0" : "") + num; //do not ask me what this does
+  let timeObj;
+  let lastBan = await db.get(`lastBan.${moderator.id}`);
+  try {
+    if (lastBan !== null && cooldown * 60000 - (Date.now() - lastBan) > 0) {
+      timeObj = ms(cooldown * 60000 - (Date.now() - lastBan));
+      let seconds = pad_zero(timeObj.seconds).padStart(2, ""),
+        minutes = pad_zero(timeObj.minutes).padStart(2, "");
+      let finalTime = `**You need to wait ${minutes} minutes(s) and ${seconds} second(s) to be able to ban again!**`;
+      return { canBan: false, finalTime: finalTime };
+    } else {
+      return { canBan: true };
+    }
+  } catch (err) {
+    console.log(err);
+    console.log("Unexpected error in canModeratorBan()");
+  }
+}
+
+async function addCooldown(message) {
+  console.log(`Setted cooldown for ${message.author.id}`);
+  await db.set(`lastBan.${message.author.id}`, Date.now());
+}
 
 exports.help = {
   name: "ban",

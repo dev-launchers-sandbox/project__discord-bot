@@ -2,6 +2,9 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 
 exports.run = async (client, message, args) => {
+  if (!message.member.permissions.has("ADMINISTRATOR")) {
+    return message.channel.send("This command is only for admins.");
+  }
   message.channel.send(
     `**${message.author.username}**, do you want to end the bean season? ` +
       "`Y`, `N`"

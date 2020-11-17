@@ -190,7 +190,7 @@ async function openTicket(client, messageReaction, user) {
   if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
 
   if (numOfTicketsOpen(message, ticketCategory) >= 10) {
-    message.author.send(
+    user.send(
       "There are too many tickets open! If it is an emergency, please dm an admin/mod"
     );
     return removeReaction(client, message, user);
@@ -205,15 +205,15 @@ async function openTicket(client, messageReaction, user) {
     `ticket-${user.username}`
   );
 
-  newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
+  await newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
     VIEW_CHANNEL: false,
   });
 
-  newTicket.updateOverwrite(user.id, {
+  await newTicket.updateOverwrite(user.id, {
     VIEW_CHANNEL: true,
   });
 
-  newTicket.updateOverwrite(modRole, {
+  await newTicket.updateOverwrite(modRole, {
     VIEW_CHANNEL: true,
   });
 

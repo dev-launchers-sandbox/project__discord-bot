@@ -52,14 +52,12 @@ async function checkActivity(client) {
 
       // see if we can find this role (could use one find for ...
       // ... the check and the delete instead of doing the same one twice)
-      if (guild.roles.cache.find((role) => role.id === channel.role)) {
+      if (guild.roles.resolve(channel.role)) {
         // find the role linked to this channel
-        let roleToEleminate = guild.roles.cache.find(
-          (r) => r.id === channel.role
-        );
 
+        const roleToDelete = guild.roles.resolve(channel.role);
         // delete the role
-        await deleteRole(roleToEleminate);
+        await deleteRole(roleToDelete);
       }
 
       // delete the channel once we remove the roles attached to it.

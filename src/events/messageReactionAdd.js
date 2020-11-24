@@ -132,7 +132,7 @@ async function awardGoldenBean(client, messageReaction, user) {
   }
 }
 
-function instancedChannelAddRole(client, messageReaction, user) {
+async function instancedChannelAddRole(client, messageReaction, user) {
   let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
   if (!channelsCreated) return;
   if (user.bot) return;
@@ -141,9 +141,7 @@ function instancedChannelAddRole(client, messageReaction, user) {
     channel.id.includes(messageReaction.message.id)
   );
   if (!messageRole) return;
-  const isUserBlacklisted = messageRole.blacklist.find(
-    (blacklisted) => blacklisted === user.id
-  );
+  const isUserBlacklisted = messageRole.blacklist.includes(user.id);
   if (isUserBlacklisted) {
     return messageReaction.message.channel
       .send(
@@ -168,12 +166,15 @@ function instancedChannelAddRole(client, messageReaction, user) {
     return;
 
   let channel = client.channels.cache.get(messageRole.newChannel);
-  messageReaction.message.guild.members.cache
+  await messageReaction.message.guild.members.cache
     .get(user.id)
     .roles.add(messageRole.role)
     .then(
       channel.send("`" + `${user.username}` + "`" + " joined the channel!")
     );
+  channel.send(`<@${user.id}>`).then((msg) => {
+    if (!msg.deleted) msg.delete();
+  });
 }
 
 async function openTicket(client, messageReaction, user) {

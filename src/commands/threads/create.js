@@ -68,6 +68,9 @@ exports.run = async (client, message, args) => {
       await channel.updateOverwrite(role.id, {
         VIEW_CHANNEL: true,
       });
+      await channel.updateOverwrite(message.author.id, {
+        MANAGE_MESSAGES: true,
+      });
       channel
         .setParent(instancedParentID)
         .then((channel) =>
@@ -76,7 +79,7 @@ exports.run = async (client, message, args) => {
           )
         );
       client.guilds.cache
-        .find((guild) => guild.id === "736715831962107924")
+        .find((guild) => guild.id === "701268417096712203")
         .channels.create(channelName)
         .then((channelForMod) => {
           channelForMod.send(

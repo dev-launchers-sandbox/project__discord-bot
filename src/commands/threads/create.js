@@ -79,7 +79,7 @@ exports.run = async (client, message, args) => {
           )
         );
       client.guilds.cache
-        .find((guild) => guild.id === "701268417096712203")
+        .find((guild) => guild.id === "736715831962107924")
         .channels.create(channelName)
         .then((channelForMod) => {
           channelForMod.send(

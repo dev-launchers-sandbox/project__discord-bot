@@ -18,71 +18,34 @@ spec:
         app: project-discord-bot
     spec:
       containers:
-      - name: project-discord-bot
-        image: devlaunchers/project_discord-bot:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: PORT
-          value: "3000"
-        - name: AUDIT_LOG_CHANNEL_ID
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: audit-log-channel-id
-        - name: DISCORD_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: discord-token
-        - name: COUNT_CHANNEL_TOTAL
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: count-channel-total
-        - name: COUNT_CHANNEL_MEMBERS
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: count-channel-members
-        - name: COUNT_CHANNEL_BOTS
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: count-channel-bots
-        - name: WHITE_BELT
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: white-belt
-        - name: PREFIX
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: prefix
-        - name: INTERESTS
-          valueFrom:
-            secretKeyRef:
-              name: project-discord-bot
-              key: interests
-        resources:
-          limits:
-            cpu: 50m
-            memory: 64Mi
-          requests:
-            cpu: 25m
-            memory: 32Mi
-        livenessProbe:
-          httpGet:
-            path: /metrics
-            port: 3000
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 10
-          failureThreshold: 5
-        volumeMounts:
-          - name: project-discord-bot-storage
-            mountPath: /usr/src/app/data
+        - name: project-discord-bot
+          image: devlaunchers/project_discord-bot:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DISCORD_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: project-discord-bot
+                  key: discord-token
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+            requests:
+              cpu: 25m
+              memory: 32Mi
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 3000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 5
+          volumeMounts:
+            - name: project-discord-bot-storage
+              mountPath: /usr/src/app/data
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:

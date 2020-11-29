@@ -28,6 +28,8 @@ spec:
                 secretKeyRef:
                   name: project-discord-bot
                   key: discord-token
+            - name: PORT
+              value: "3000"
           resources:
             limits:
               cpu: 50m

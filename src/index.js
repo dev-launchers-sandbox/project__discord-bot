@@ -46,7 +46,7 @@ function startMetricsServer(metrics) {
     res.end(metrics.register.metrics());
   });
 
-  const port = process.env.PORT;
+  const port = process.env.PORT || 3000;
   console.log(
     `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
   );

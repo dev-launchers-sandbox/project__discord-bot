@@ -13,6 +13,7 @@ module.exports = {
       .setFooter(`|  ${message.guild.name}`, icon);
     message.channel.send(missingPermissionEmbed);
   },
+
   missingParams: async function (message, missingParams, commandName) {
     let prefix = (await db.get(`prefix.${message.guild.id}`)) || ".";
     let missingParamsEmbed = new Discord.MessageEmbed()
@@ -22,6 +23,7 @@ module.exports = {
       .setFooter(`For further help, type ${prefix}help ${commandName}`);
     message.channel.send(missingParamsEmbed);
   },
+
   error: function (message, commandName, errorDescription) {
     let errorEmbed = new Discord.MessageEmbed()
       .setColor("RED")
@@ -33,6 +35,7 @@ module.exports = {
       .setTimestamp();
     message.channel.send(errorEmbed);
   },
+
   deleteMsg: function (message, miliseconds) {
     if (!miliseconds) miliseconds = 3000;
     setTimeout(() => {

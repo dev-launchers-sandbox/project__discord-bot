@@ -30,7 +30,7 @@ client.on("warn", console.warn);
 client.on("error", console.error);
 
 //client.login(process.env.DISCORD_TOKEN);
-client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.TVUUcbBlcOKREonrqg_QZ6wRC58");
+client.login(process.env.DISCORD_TOKEN);
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;

@@ -7,21 +7,24 @@ module.exports = (client) => {
   client.aliases = new Discord.Collection();
   client.helps = new Discord.Collection();
 
-  const commandsFolder = path.join(__dirname, "../commands/");
+  const commandsFolder = path.join(__dirname, "../controllers/commands/");
   fs.readdir(commandsFolder, (err, categories) => {
     if (err) console.log(err);
     console.log(`Found total ${categories.length} categories`);
 
     categories.forEach((category) => {
-      let moduleConf = require(`../commands/${category}/module.json`);
-      moduleConf.path = `./commands/${category}`;
+      let moduleConf = require(`../controllers/commands/${category}/module.json`);
+      moduleConf.path = `./controllers/commands/${category}`;
       moduleConf.cmds = [];
 
       if (!moduleConf) return;
 
       client.helps.set(category, moduleConf);
 
-      const categoryFolder = path.join(__dirname, `../commands/${category}`);
+      const categoryFolder = path.join(
+        __dirname,
+        `../controllers/commands/${category}`
+      );
       fs.readdir(categoryFolder, (err, files) => {
         console.log(
           `Found total ${files.length - 1} command(s) from ${category}`
@@ -31,7 +34,7 @@ module.exports = (client) => {
 
         files.forEach((file) => {
           if (!file.endsWith(".js")) return;
-          let prop = require(`../commands/${category}/${file}`);
+          let prop = require(`../controllers/commands/${category}/${file}`);
           let cmdName = file.split(".")[0];
 
           client.commands.set(prop.help.name, prop);

@@ -1,5 +1,14 @@
 const Discord = require("discord.js");
 const express = require("express");
+
+// Run extensions after initializing client, before doing any other work
+const extensions = require("./extensions");
+/*
+for (const extension of extensions) {
+
+}
+*/
+
 const devlaunchersBot = require("./handler/ClientBuilder.js");
 const client = new devlaunchersBot({
   partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"],
@@ -20,7 +29,8 @@ client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 
-client.login(process.env.DISCORD_TOKEN);
+//client.login(process.env.DISCORD_TOKEN);
+client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.s1xBhLM4fXpmx4AuML-2sGKWYPU");
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;

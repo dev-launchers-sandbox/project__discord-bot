@@ -5,9 +5,6 @@ Structures.extend("Message", (Message) => {
   class MessageExtension extends Message {
     constructor(client, data, channel) {
       super(client, data, channel);
-
-      message.args = this.getArgs();
-      message.targets = this.getTargets();
     }
 
     getTargets() {}

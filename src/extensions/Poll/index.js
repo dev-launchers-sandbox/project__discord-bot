@@ -1,6 +1,6 @@
 module.exports = {
   name: "Poll",
-  helpCategory: "Other",
+  helpCategory: "Poll",
   commands: [require("./controllers/commands/poll.js")],
   events: [],
   extends: [require("./extends/PollChannelExtension.js")],

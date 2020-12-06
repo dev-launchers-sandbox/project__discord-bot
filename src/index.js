@@ -30,7 +30,8 @@ client.on("warn", console.warn);
 client.on("error", console.error);
 
 //client.login(process.env.DISCORD_TOKEN);
-client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.i-b_UCSNi8E73yZRwJ72MVwkWFE");
+
+client.login(process.env.DISCORD_TOKEN);
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;
@@ -56,7 +57,7 @@ function startMetricsServer(metrics) {
     res.end(metrics.register.metrics());
   });
 
-  const port = process.env.PORT;
+  const port = process.env.PORT || 3000;
   console.log(
     `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
   );

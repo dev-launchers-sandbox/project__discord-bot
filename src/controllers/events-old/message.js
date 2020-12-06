@@ -5,13 +5,14 @@ const commandUsage = require("../../utils/commandUsage.js");
 const metrics = require("../../index.js");
 
 module.exports = async (client, message) => {
+  let prefix = db.get(`prefix.${message.guild.id}`) || ".";
+
+  const args = message.content.slice(prefix.length).trim().split(" ");
+
   if (!message.guild) return;
-  if (message.content.startsWith(".key")) {
-    message.delete();
-    return halloweenCheck(message);
-  }
 
   if (message.author.id === "302050872383242240") bumpCheck(message);
+  if (message.author.id === "159985870458322944") newLevelCheck(message, args);
 
   let inviteLink = [
     "discord.gg",
@@ -33,8 +34,6 @@ module.exports = async (client, message) => {
       .then((msg) => commandUsage.deleteMsg(msg));
   }
 
-  let prefix = db.get(`prefix.${message.guild.id}`) || ".";
-
   moderateInstancedChannels(client, message);
 
   if (
@@ -45,7 +44,7 @@ module.exports = async (client, message) => {
   }
   if (message.author.bot || message.author === client.user) return;
   if (!message.content.startsWith(prefix)) return;
-  const args = message.content.slice(prefix.length).trim().split(" ");
+
   let msg = message.content.toLowerCase();
   let cmd = args.shift().toLowerCase();
   let sender = message.author;
@@ -181,114 +180,40 @@ function getEmote(guild, type) {
   return emote || type;
 }
 
-function halloweenCheck(message, args) {
-  const content = message.content.toLowerCase();
-  const answer = content.slice(1).trim().split(" ");
+async function newLevelCheck(message, args) {
+  if (!args.includes("advanced")) return;
 
-  const krisRoomRole = db.get(`halloween.kris-room.${message.guild.id}`);
-  const kitchenRoomRole = db.get(`halloween.kitchen.${message.guild.id}`);
-  const backyardRole = db.get(`halloween.backyard.${message.guild.id}`);
-  const dogParkRole = db.get(`halloween.dog-park.${message.guild.id}`);
-  const phoneRole = db.get(`halloween.phone.${message.guild.id}`);
-  const devlaunchersHqRole = db.get(
-    `halloween.devlaunchers-hq.${message.guild.id}`
+  const user = message.mentions.members.first();
+  const lvl = args[4];
+  const levels = ["1", "5", "10", "15", "20", "25", "30", "35", "40"];
+  if (!levels.includes(lvl)) return;
+
+  const index = levels.indexOf(lvl);
+  user.roles.add(getRoleLevel(message, lvl));
+
+  for (let i = index - 1; i !== -1; i--) {
+    const role = getRoleLevel(message, levels[i]);
+    if (user.roles.cache.has(role.id)) {
+      user.roles.remove(role.id);
+    }
+  }
+}
+
+function getRoleLevel(message, lvl) {
+  let wordNum;
+  if (lvl === "1") wordNum = "one";
+  else if (lvl === "5") wordNum = "five";
+  else if (lvl === "10") wordNum = "ten";
+  else if (lvl === "15") wordNum = "fifteen";
+  else if (lvl === "20") wordNum = "twenty";
+  else if (lvl === "25") wordNum = "twenty-five";
+  else if (lvl === "30") wordNum = "thirty";
+  else if (lvl === "35") wordNum = "thirty-five";
+  else wordNum = "forty";
+
+  const role = message.guild.roles.resolve(
+    db.get(`levels.${message.guild.id}.${wordNum}`)
   );
-  const vaultRole = db.get(`halloween.vault.${message.guild.id}`);
-  const conclusionRole = db.get(`halloween.conclusion.${message.guild.id}`);
 
-  if (answer[1] === "wa9g") {
-    if (message.member.roles.cache.has(kitchenRoomRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(kitchenRoomRole);
-    correct(message, answer);
-  } else if (answer[1] === "footprints") {
-    if (!message.member.roles.cache.has(kitchenRoomRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(backyardRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(backyardRole);
-    correct(message, answer);
-  } else if (answer[1] === "dog" && answer[2] === "park") {
-    if (!message.member.roles.cache.has(backyardRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(dogParkRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(dogParkRole);
-    correct(message, answer);
-  } else if (answer[1] === "090") {
-    if (!message.member.roles.cache.has(dogParkRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(phoneRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(phoneRole);
-    correct(message, answer);
-  } else if (answer[1] === "7") {
-    if (!message.member.roles.cache.has(phoneRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(devlaunchersHqRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(devlaunchersHqRole);
-    correct(message, answer);
-  } else if (answer[1] === "pass123") {
-    if (!message.member.roles.cache.has(devlaunchersHqRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(vaultRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(vaultRole);
-    correct(message, answer);
-  } else if (
-    answer[1] === "luffy" ||
-    answer[1] === "lava" ||
-    answer[1] === "red" ||
-    (answer[1] === "lava" && answer[2] === "luffy")
-  ) {
-    if (!message.member.roles.cache.has(vaultRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    if (message.member.roles.cache.has(conclusionRole)) {
-      incorrect(message, answer);
-      return;
-    }
-    message.member.roles.add(conclusionRole);
-    correct(message, answer);
-  } else incorrect(message, answer);
-
-  function correct(message, answer) {
-    message.author.send("*New Room Open*");
-    const logChannelId = db.get(`halloween.log-channel.${message.guild.id}`);
-    const logChannel = message.guild.channels.resolve(logChannelId);
-
-    logChannel.send(
-      `<@${message.author.id}> entered the room with the code ${answer[1]}`
-    );
-  }
-
-  function incorrect(message, answer) {
-    message.author.send(
-      `**Wrong key**\nYou entered ${"`"}${answer.map((x) => `${x}`)} ${"`"}`
-    );
-  }
+  return role;
 }

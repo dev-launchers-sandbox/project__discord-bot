@@ -1,4 +1,6 @@
 module.exports = {
+  name: ".common",
+  helpCategory: "Common",
   commands: [],
   events: [],
   extends: [

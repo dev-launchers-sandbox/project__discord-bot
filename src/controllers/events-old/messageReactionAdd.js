@@ -132,7 +132,7 @@ async function awardGoldenBean(client, messageReaction, user) {
   }
 }
 
-function instancedChannelAddRole(client, messageReaction, user) {
+async function instancedChannelAddRole(client, messageReaction, user) {
   let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
   if (!channelsCreated) return;
   if (user.bot) return;
@@ -141,9 +141,7 @@ function instancedChannelAddRole(client, messageReaction, user) {
     channel.id.includes(messageReaction.message.id)
   );
   if (!messageRole) return;
-  const isUserBlacklisted = messageRole.blacklist.find(
-    (blacklisted) => blacklisted === user.id
-  );
+  const isUserBlacklisted = messageRole.blacklist.includes(user.id);
   if (isUserBlacklisted) {
     return messageReaction.message.channel
       .send(
@@ -168,12 +166,15 @@ function instancedChannelAddRole(client, messageReaction, user) {
     return;
 
   let channel = client.channels.cache.get(messageRole.newChannel);
-  messageReaction.message.guild.members.cache
+  await messageReaction.message.guild.members.cache
     .get(user.id)
     .roles.add(messageRole.role)
     .then(
       channel.send("`" + `${user.username}` + "`" + " joined the channel!")
     );
+  channel.send(`<@${user.id}>`).then((msg) => {
+    if (!msg.deleted) msg.delete();
+  });
 }
 
 async function openTicket(client, messageReaction, user) {
@@ -190,30 +191,30 @@ async function openTicket(client, messageReaction, user) {
   if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
 
   if (numOfTicketsOpen(message, ticketCategory) >= 10) {
-    message.author.send(
+    user.send(
       "There are too many tickets open! If it is an emergency, please dm an admin/mod"
     );
     return removeReaction(client, message, user);
   }
 
-  const modRole = db.get(`moderator.${message.guild.id}`);
+  let modRole = db.get(`moderator.${message.guild.id}`);
   if (!modRole) modRole = "blank"; //Avoid empty message error in line 222
-  const adminRole = db.get(`admin.${message.guild.id}`);
+  let adminRole = db.get(`admin.${message.guild.id}`);
   if (!adminRole) adminRole = "blank"; //Avoid empty message error in line 222
 
   const newTicket = await message.guild.channels.create(
     `ticket-${user.username}`
   );
 
-  newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
+  await newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
     VIEW_CHANNEL: false,
   });
 
-  newTicket.updateOverwrite(user.id, {
+  await newTicket.updateOverwrite(user.id, {
     VIEW_CHANNEL: true,
   });
 
-  newTicket.updateOverwrite(modRole, {
+  await newTicket.updateOverwrite(modRole, {
     VIEW_CHANNEL: true,
   });
 

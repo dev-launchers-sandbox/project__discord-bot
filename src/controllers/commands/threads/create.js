@@ -68,6 +68,9 @@ exports.run = async (client, message, args) => {
       await channel.updateOverwrite(role.id, {
         VIEW_CHANNEL: true,
       });
+      await channel.updateOverwrite(message.author.id, {
+        MANAGE_MESSAGES: true,
+      });
       channel
         .setParent(instancedParentID)
         .then((channel) =>

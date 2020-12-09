@@ -1,0 +1,21 @@
+module.exports = {
+  name: "Moderation",
+  helpCategory: "Moderation",
+  commands: [
+    require("./controllers/commands/ban.js"),
+    require("./controllers/commands/clear.js"),
+    require("./controllers/commands/kick.js"),
+    require("./controllers/commands/levels.js"),
+    require("./controllers/commands/mute.js"),
+    require("./controllers/commands/removewarn.js"),
+    require("./controllers/commands/setnickname.js"),
+    require("./controllers/commands/settings.js"),
+    require("./controllers/commands/teamsrules.js"),
+    require("./controllers/commands/unmute.js"),
+    require("./controllers/commands/warn.js"),
+    require("./controllers/commands/warnings.js"),
+  ],
+  events: [],
+  extends: [],
+  structures: [],
+};

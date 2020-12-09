@@ -8,7 +8,7 @@ module.exports = (client) => {
   client.helps = new Discord.Collection();
 
   // Old commands
-  const commandsFolder = path.join(__dirname, "../controllers/commands/");
+  /*const commandsFolder = path.join(__dirname, "../controllers/commands/");
   fs.readdir(commandsFolder, (err, categories) => {
     if (err) console.log(err);
     console.log(`Found total ${categories.length} categories`);
@@ -47,7 +47,7 @@ module.exports = (client) => {
         });
       });
     });
-  });
+  });*/
 
   // New commands
   // TODO: Change the strategy for accessing commands from reading file names (old process) to using the index.js structures

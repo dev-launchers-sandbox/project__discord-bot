@@ -51,4 +51,4 @@ spec:
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:
-            claimName: project-discord-bot-pv-claim
+            claimName: project-discord-bot-pvc

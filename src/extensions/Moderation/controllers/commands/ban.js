@@ -15,30 +15,18 @@ exports.help = {
 exports.conf = {
   aliases: [],
   cooldown: 5,
+  permissions: ["MANAGE_ROLES"], //Moderator or higher.
+  arguments: ["User To Ban"],
 };
 
 exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 
-  if (
-    !message.member.hasPermission("BAN_MEMBERS") &&
-    !message.member.roles.cache.has(modRoleID)
-  ) {
-    return commandUsage.noPerms(message, "Ban Members");
-  }
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
-    return commandUsage.error(
-      message,
-      "ban",
-      "Make sure you specified the user to ban!"
-    );
 
-  if (!target && !args[0]) {
-    return commandUsage.missingParams(message, "Member to Ban", "ban");
-  } else if (target === undefined && args[0]) {
-    return commandUsage.error(message, "ban");
+  if (!target) {
+    return commandUsage.error(message, "ban", "I could not find that user!");
   }
 
   if (

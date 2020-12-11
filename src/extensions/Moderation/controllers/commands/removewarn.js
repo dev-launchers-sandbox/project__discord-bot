@@ -3,17 +3,21 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "removewarn",
+  description: "Removes a warning from a user",
+  usage: "removewarn <@user> <#of warn>",
+  example: "removewarn @Wumpus#0001 2",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["ADMINISTRATOR"],
+  arguments: ["User", "# Of Warn"],
+};
+
 exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
-    return commandUsage.noPerms(message, "Administrator");
-  }
-
-  if (!args[0])
-    return commandUsage.missingParams(message, "User", "removewarn");
-
-  if (!args[1])
-    return commandUsage.missingParams(message, "Warning number", "removewarn");
-
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) return commandUsage.error(message, "mute", "User not found!.");
 
@@ -43,16 +47,4 @@ exports.run = async (client, message, args) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-exports.help = {
-  name: "removewarn",
-  description: "Removes a warning from a user",
-  usage: "removewarn <@user> <#of warn>",
-  example: "removewarn @Wumpus#0001 2",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

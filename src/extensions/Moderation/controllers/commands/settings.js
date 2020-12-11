@@ -3,6 +3,19 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "settings",
+  description: "Change the settings for the server",
+  usage: "settings [type] [value]",
+  example: "settings prefix !",
+};
+
+exports.conf = {
+  aliases: ["setting"],
+  cooldown: 5,
+  permissions: ["ADMINISTRATOR"],
+};
+
 exports.run = async (client, message, args) => {
   const settings = [
     "prefix",
@@ -19,8 +32,6 @@ exports.run = async (client, message, args) => {
     "ticket-category",
     "admin",
   ];
-  if (!message.member.hasPermission("ADMINISTRATOR"))
-    return commandUsage.noPerms(message, "Administrator");
 
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")
@@ -66,16 +77,4 @@ exports.run = async (client, message, args) => {
   } catch (error) {
     return commandUsage.error(message, "settings");
   }
-};
-
-exports.help = {
-  name: "settings",
-  description: "Change the settings for the server",
-  usage: "settings [type] [value]",
-  example: "settings prefix !",
-};
-
-exports.conf = {
-  aliases: ["setting"],
-  cooldown: 5,
 };

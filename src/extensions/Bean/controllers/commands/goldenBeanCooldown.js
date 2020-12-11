@@ -4,6 +4,18 @@ const ms = require("parse-ms");
 
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "goldenbean",
+  description: "Shows someone’s Golden Bean cooldown!",
+  usage: `goldenbean [@user]`,
+  example: `goldenbean`,
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   const cooldown = 8.64e7;
 
@@ -34,16 +46,4 @@ exports.run = async (client, message, args) => {
         "**no cooldown**"
     );
   }
-};
-
-exports.help = {
-  name: "goldenbean",
-  description: "Shows someone’s Golden Bean cooldown!",
-  usage: `goldenbean [@user]`,
-  example: `goldenbean`,
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

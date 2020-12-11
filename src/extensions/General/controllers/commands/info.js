@@ -2,6 +2,18 @@ const Discord = require("discord.js");
 const moment = require("moment");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "info",
+  description: "Displays infomation about a user",
+  usage: "info [@user]",
+  example: "info @Wumpus#0001s",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) target = message.guild.members.resolve(message.author.id);
@@ -35,16 +47,4 @@ exports.run = async (client, message, args) => {
     .addField("Joined Server Date", `${joindate}`)
     .addField("Status", status, true);
   message.channel.send(infoEmbed);
-};
-
-exports.help = {
-  name: "info",
-  description: "Displays infomation about a user",
-  usage: "info [@user]",
-  example: "info @Wumpus#0001s",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

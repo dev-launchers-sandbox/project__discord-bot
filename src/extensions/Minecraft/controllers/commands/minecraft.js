@@ -1,8 +1,19 @@
 const Discord = require("discord.js");
 const { MinecraftServerListPing, MinecraftQuery } = require("minecraft-status");
 
+exports.help = {
+  name: "minecraft",
+  description: "Show information about commands",
+  usage: "help [command]",
+  example: "help info",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
-  console.log("got it");
   MinecraftServerListPing.ping(4, "72.249.104.219", 31672, 3000)
     .then((response) => {
       const embed = new Discord.MessageEmbed()
@@ -22,16 +33,4 @@ exports.run = async (client, message, args) => {
           "```"
       );
     });
-};
-
-exports.help = {
-  name: "minecraft",
-  description: "Show information about commands",
-  usage: "help [command]",
-  example: "help info",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

@@ -1,10 +1,20 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "endseason",
+  description: "Ends the current bean season",
+  usage: `endSeason`,
+  example: `endSeason`,
+};
+
+exports.conf = {
+  aliases: ["end"],
+  cooldown: 5,
+  permissions: ["ADMINISTRATOR"],
+};
+
 exports.run = async (client, message, args) => {
-  if (!message.member.permissions.has("ADMINISTRATOR")) {
-    return message.channel.send("This command is only for admins.");
-  }
   message.channel.send(
     `**${message.author.username}**, do you want to end the bean season? ` +
       "`Y`, `N`"
@@ -46,16 +56,4 @@ exports.run = async (client, message, args) => {
       );
     }
   });
-};
-
-exports.help = {
-  name: "endseason",
-  description: "Ends the current bean season",
-  usage: `endSeason`,
-  example: `endSeason`,
-};
-
-exports.conf = {
-  aliases: ["end"],
-  cooldown: 5,
 };

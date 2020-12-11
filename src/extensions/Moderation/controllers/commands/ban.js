@@ -6,6 +6,17 @@ const commandUsage = require("./../../../../utils/commandUsage.js");
 const getMessageTarget = require("./../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "ban",
+  description: "Ban a member from the server",
+  usage: `ban <@user> [reason]`,
+  example: `ban @Wumpus#0001 spamming`,
+};
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
@@ -122,14 +133,3 @@ async function addCooldown(message) {
   console.log(`Setted cooldown for ${message.author.id}`);
   await db.set(`lastBan.${message.author.id}`, Date.now());
 }
-
-exports.help = {
-  name: "ban",
-  description: "Ban a member from the server",
-  usage: `ban <@user> [reason]`,
-  example: `ban @Wumpus#0001 spamming`,
-};
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

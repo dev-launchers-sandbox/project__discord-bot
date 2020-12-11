@@ -3,6 +3,7 @@ const Discord = require("discord.js"),
 const db = require("quick.db");
 const commandUsage = require("../../utils/commandUsage.js");
 const metrics = require("../../index.js");
+const CommandHandler = require("./../../utils/CommandHandler.js");
 
 module.exports = async (client, message) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
@@ -94,6 +95,20 @@ module.exports = async (client, message) => {
 
   try {
     if (!commandFile) return;
+    let commandHandler = new CommandHandler(
+      commandFile.help.name,
+      message,
+      args
+    );
+
+    if (
+      !commandHandler.validateCommand({
+        permissions: commandFile.conf.permissions || [],
+        arguments: commandFile.conf.arguments || [],
+      })
+    )
+      return;
+
     metrics.sendEvent("message_" + commandFile.help.name);
     commandFile.run(client, message, args);
   } catch (error) {

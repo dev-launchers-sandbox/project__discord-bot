@@ -24,6 +24,8 @@ client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 
+// NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.ciVZXLTHLyIqFvH6IpcMe6H9zQs
+client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.ciVZXLTHLyIqFvH6IpcMe6H9zQs");
 client.login(process.env.DISCORD_TOKEN);
 
 function registerMetrics() {

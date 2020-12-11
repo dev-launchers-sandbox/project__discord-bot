@@ -19,28 +19,30 @@ module.exports = class CommandHandler {
     let prefix = "."; // TODO: fetch prefix from database?
 
     // Check permissions
-    for (const permission of requirements.permissions) {
-      if (!this.user.permissions.has(permission)) {
+    if (requirements.permissions)
+      for (const permission of requirements.permissions) {
+        if (!this.user.permissions.has(permission)) {
+          this.error({
+            title: "Missing Permissions!",
+            description: `You are missing: **${permission}**`,
+            footer: `For further help, type ${prefix}help ${this.name}`,
+          });
+          return false;
+        }
+      }
+
+    // Check number of arguments
+    if (requirements.arguments)
+      if (this.args.length < requirements.arguments.length) {
         this.error({
-          title: "Missing Permissions!",
-          description: `You are missing: **${permission}**`,
+          title: "Missing Parameters!",
+          description: `Required parameters: **${requirements.arguments.join(
+            " "
+          )}**`,
           footer: `For further help, type ${prefix}help ${this.name}`,
         });
         return false;
       }
-    }
-
-    // Check number of arguments
-    if (this.args.length < requirements.arguments.length) {
-      this.error({
-        title: "Missing Parameters!",
-        description: `Required parameters: **${requirements.arguments.join(
-          " "
-        )}**`,
-        footer: `For further help, type ${prefix}help ${this.name}`,
-      });
-      return false;
-    }
 
     return true;
   }

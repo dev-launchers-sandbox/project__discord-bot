@@ -11,4 +11,7 @@ module.exports = [
 
   // Poll Extension
   require("./Poll"),
+
+  // Reminder Extension
+  require("./Reminder"),
 ];

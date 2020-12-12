@@ -3,7 +3,7 @@ const Discord = require("discord.js"),
 const db = require("quick.db");
 const commandUsage = require("../../utils/commandUsage.js");
 const metrics = require("../../index.js");
-const CommandHandler = require("./../../utils/CommandHandler.js");
+const CommandHandler = require("./../../extensions/.common/CommandHandler/CommandHandler.js");
 
 module.exports = async (client, message) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";

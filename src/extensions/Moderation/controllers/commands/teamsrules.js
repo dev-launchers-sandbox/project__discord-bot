@@ -1,4 +1,4 @@
-const CommandHandler = require("../../../../utils/CommandHandler.js");
+const Discord = require("discord.js");
 
 exports.help = {
   name: "teamsrules",

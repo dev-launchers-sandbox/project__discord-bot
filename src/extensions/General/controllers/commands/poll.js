@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const CommandHandler = require("../../../../utils/CommandHandler.js");
+const CommandHandler = require("./../../../../extensions/.common/CommandHandler/CommandHandler.js");
 
 exports.help = {
   name: "poll",

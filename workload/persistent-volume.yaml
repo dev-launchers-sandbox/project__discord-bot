@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: project-discord-bot-pv-claim
+  name: project-discord-bot-hostPath-pvc
 spec:
   storageClassName: project-discord-bot-pv
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Mi
+      storage: 1G

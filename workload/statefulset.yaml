@@ -52,4 +52,4 @@ spec:
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:
-            claimName: project-discord-bot-pvc
+            claimName: project-discord-bot-hostPath-pvc

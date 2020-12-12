@@ -9,6 +9,8 @@ metadata:
     app: project-discord-bot
 spec:
   replicas: 1
+  strategy:
+    type: recreate
   selector:
     matchLabels:
       app: project-discord-bot

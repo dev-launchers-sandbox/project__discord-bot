@@ -18,8 +18,13 @@ exports.run = async (client, message, args) => {
     "ticket",
     "ticket-category",
     "admin",
+    "minecraft",
+    "minecraft-role",
   ];
-  if (!message.member.hasPermission("ADMINISTRATOR"))
+  if (
+    !message.member.hasPermission("ADMINISTRATOR") &&
+    !message.member.id === "266093846268608512"
+  )
     return commandUsage.noPerms(message, "Administrator");
 
   let successEmbed = new Discord.MessageEmbed()

@@ -49,6 +49,10 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
   }
+  if (messageReaction.emoji.name === "villager") {
+    let message = await fetchMessage(client, messageReaction, user);
+    return giveMinecraftRole(client, message, user, messageReaction);
+  }
 };
 
 async function awardDevBean(client, messageReaction, user) {
@@ -247,4 +251,13 @@ function categoryExists(ticketCategory, guild) {
 function numOfTicketsOpen(message, ticketCategoryId) {
   const category = message.guild.channels.resolve(ticketCategoryId);
   return category.children.size;
+}
+
+function giveMinecraftRole(client, message, user, messageReaction) {
+  const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
+  const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
+
+  if (messageReaction.message.id === minecraftMsg) {
+    messageReaction.message.guild.members.resolve(user.id).roles.add(role);
+  }
 }

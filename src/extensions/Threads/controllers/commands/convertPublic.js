@@ -1,6 +1,18 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "convertpublic",
+  description: "Converts a private thread to public",
+  usage: "convertpublic",
+  example: "convertpublic",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   const threads = db.get(`instanced.${message.guild.id}`);
   if (!isValid(message, threads)) return;
@@ -10,7 +22,10 @@ exports.run = async (client, message, args) => {
   );
 
   const directoryChannelId = db.get(`directory.${message.guild.id}`);
-  if (!directoryChannelId) return;
+  if (!directoryChannelId) {
+    message.channel.send("This feature has not been set up.");
+    return;
+  }
 
   const directoryChannel = message.guild.channels.resolve(directoryChannelId);
 
@@ -88,14 +103,3 @@ function updateThreads(message) {
   );
   return { threads: threads, thread: thread };
 }
-exports.help = {
-  name: "convertpublic",
-  description: "Converts a private thread to public",
-  usage: "convertpublic",
-  example: "convertpublic",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

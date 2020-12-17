@@ -1,6 +1,18 @@
 const Discord = require("quick.db");
 const db = require("quick.db");
 
+exports.help = {
+  name: "users",
+  description: `Shows the number of users in a thread`,
+  usage: "users",
+  example: "users",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   const channelsCreated = db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
@@ -38,16 +50,4 @@ exports.run = async (client, message, args) => {
       } in this thread!`,
     },
   });
-};
-
-exports.help = {
-  name: "users",
-  description: `Shows the number of users in a thread`,
-  usage: "users",
-  example: "users",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

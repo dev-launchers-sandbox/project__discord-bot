@@ -14,7 +14,7 @@ exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
-  arguments: ["User", "# Of Warn"],
+  arguments: ["User", "#Of Warn"],
 };
 
 exports.run = async (client, message, args) => {

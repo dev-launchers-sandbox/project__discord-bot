@@ -20,7 +20,7 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
-    return commandUsage.error(message, "mute", "The user was not found.");
+    return commandUsage.error(message, "warnings", "The user was not found.");
 
   let userWarns = await db.get(
     `warnings.${message.guild.id}.${target.user.id}`

@@ -1,19 +1,5 @@
 const Discord = require("discord.js");
 
-exports.run = async (client, message, args) => {
-  if (!client.config.owners.includes(message.author.id)) return;
-
-  const id = args[0];
-  const reaction = args[1];
-
-  if (!reaction || !id) return;
-
-  const msg = await message.channel.messages.fetch(id);
-  if (!msg) return;
-
-  msg.react(reaction);
-};
-
 exports.help = {
   name: "reactto",
   description: "Reacts to a message",
@@ -24,4 +10,16 @@ exports.help = {
 exports.conf = {
   aliases: ["reacto", "react"],
   cooldown: 5,
+  permissions: ["ADMINISTRATOR"],
+  arguments: ["Message To React To", "Emoji To Use"],
+};
+
+exports.run = async (client, message, args) => {
+  const id = args[0];
+  const reaction = args[1];
+
+  const msg = await message.channel.messages.fetch(id);
+  if (!msg) return;
+
+  msg.react(reaction).catch(message.channel.send("Unknown Reaction"));
 };

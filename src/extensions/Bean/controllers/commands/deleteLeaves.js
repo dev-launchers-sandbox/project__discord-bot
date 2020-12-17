@@ -17,7 +17,7 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   if (!client.config.owners.includes(message.author.id)) return;
   const accounts = db.get(`account`);
-  if (!accounts) return;
+  if (!accounts) return message.channel.send("No data");
 
   Object.keys(accounts).forEach((userId) => {
     const member = message.guild.members.resolve(userId);

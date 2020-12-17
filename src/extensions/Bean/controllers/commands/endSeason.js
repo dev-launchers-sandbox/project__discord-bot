@@ -52,7 +52,7 @@ exports.run = async (client, message, args) => {
   collector.on("end", (collected) => {
     if (collected.size === 0) {
       message.channel.send(
-        `**${message.author.username}**, you took too long to answer!`
+        `**${message.author.username}**, you took too long too answer!`
       );
     }
   });

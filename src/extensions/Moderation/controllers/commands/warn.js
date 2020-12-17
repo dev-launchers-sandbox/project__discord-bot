@@ -35,6 +35,7 @@ exports.run = async (client, message, args) => {
 };
 
 async function isValid(message, target) {
+  if (!target) return message.channel.send("I could not find that user.");
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 

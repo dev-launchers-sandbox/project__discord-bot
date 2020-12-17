@@ -2,6 +2,19 @@ const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "create",
+  description:
+    "Create an thread! Public threads will show in the directory channel!",
+  usage: "create [public] <threadName>",
+  example: "createInstanced public gamenight",
+};
+
+exports.conf = {
+  aliases: ["createthread"],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let instancedParentID = db.get(`instanced-category.${message.guild.id}`);
   let categoryExists;
@@ -79,7 +92,7 @@ exports.run = async (client, message, args) => {
           )
         );
       client.guilds.cache
-        .find((guild) => guild.id === "736715831962107924")
+        .find((guild) => guild.id === "701268417096712203")
         .channels.create(channelName)
         .then((channelForMod) => {
           channelForMod.send(
@@ -171,19 +184,6 @@ exports.run = async (client, message, args) => {
       console.error(error);
     }
   }
-};
-
-exports.help = {
-  name: "create",
-  description:
-    "Create an thread! Public threads will show in the directory channel!",
-  usage: "create [public] <threadName>",
-  example: "createInstanced public gamenight",
-};
-
-exports.conf = {
-  aliases: ["createthread"],
-  cooldown: 5,
 };
 
 //736715831962107924 FINAL

@@ -256,8 +256,18 @@ function numOfTicketsOpen(message, ticketCategoryId) {
 function giveMinecraftRole(client, message, user, messageReaction) {
   const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
   const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
-
+  const userReacted = messageReaction.message.guild.members.resolve(user.id);
+  console.log(userReacted.roles.cache.has(role));
   if (messageReaction.message.id === minecraftMsg) {
-    messageReaction.message.guild.members.resolve(user.id).roles.add(role);
+    if (!userReacted.roles.cache.has(role)) {
+      userReacted.roles.add(role);
+      const channel = messageReaction.message.guild.channels.resolve(
+        db.get(`minecraft-channel.${messageReaction.message.guild.id}`)
+      );
+
+      channel.send(
+        `Welcome <@${user.id}> to the Minecraft Area of Dev Launchers!\nIf you plan on joining the server, the IP is: **minecraft.devlaunchers.com:31672**`
+      );
+    }
   }
 }

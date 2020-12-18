@@ -20,6 +20,7 @@ exports.run = async (client, message, args) => {
     "admin",
     "minecraft",
     "minecraft-role",
+    "minecraft-channel",
   ];
   if (
     !message.member.hasPermission("ADMINISTRATOR") &&

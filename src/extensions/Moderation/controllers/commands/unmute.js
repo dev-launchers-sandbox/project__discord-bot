@@ -4,31 +4,30 @@ const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "unmute",
+  description: "Unmuted a user",
+  usage: "unmute <@user>",
+  example: "unmute @Wumpus#0001",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"],
+  arguments: ["User To Unmute"],
+};
+
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
-    return commandUsage.error(
-      message,
-      "unmute",
-      "Make sure you specified the user to unmute."
-    );
-
-  function noMuteEmbed(description) {
-    let embed = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setAuthor("You cannot unmute this user", target.user.displayAvatarURL())
-      .setDescription(description)
-      .setTimestamp();
-    return message.channel.send(embed);
-  }
-
-  if (!message.member.hasPermission("MANAGE_ROLES")) {
-    return commandUsage.noPerms(message, "Manage Roles");
+  if (!target) {
+    return commandUsage.error(message, "unmute", "I could not find the user.");
   }
 
   if (!target.roles.cache.find((r) => r.name === "Muted")) {
     return noMuteEmbed("This user is not muted!");
   }
+
   let reason = args.slice(1).join(" ");
 
   let mutedRole = message.guild.roles.cache.find((r) => r.name === "Muted");
@@ -49,14 +48,11 @@ exports.run = async (client, message, args) => {
   message.channel.send(successEmbed);
 };
 
-exports.help = {
-  name: "unmute",
-  description: "Unmuted a user",
-  usage: "unmute <@user>",
-  example: "unmute @Wumpus#0001",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};
+function noMuteEmbed(description) {
+  let embed = new Discord.MessageEmbed()
+    .setColor("RED")
+    .setAuthor("You cannot unmute this user", target.user.displayAvatarURL())
+    .setDescription(description)
+    .setTimestamp();
+  return message.channel.send(embed);
+}

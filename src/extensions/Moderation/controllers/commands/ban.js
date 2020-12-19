@@ -6,28 +6,27 @@ const commandUsage = require("./../../../../utils/commandUsage.js");
 const getMessageTarget = require("./../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "ban",
+  description: "Ban a member from the server",
+  usage: `ban <@user> [reason]`,
+  example: `ban @Wumpus#0001 spamming`,
+};
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"], //Moderator or higher.
+  arguments: ["User To Ban"],
+};
+
 exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 
-  if (
-    !message.member.hasPermission("BAN_MEMBERS") &&
-    !message.member.roles.cache.has(modRoleID)
-  ) {
-    return commandUsage.noPerms(message, "Ban Members");
-  }
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
-    return commandUsage.error(
-      message,
-      "ban",
-      "Make sure you specified the user to ban!"
-    );
 
-  if (!target && !args[0]) {
-    return commandUsage.missingParams(message, "Member to Ban", "ban");
-  } else if (target === undefined && args[0]) {
-    return commandUsage.error(message, "ban");
+  if (!target) {
+    return commandUsage.error(message, "ban", "I could not find that user!");
   }
 
   if (
@@ -122,14 +121,3 @@ async function addCooldown(message) {
   console.log(`Setted cooldown for ${message.author.id}`);
   await db.set(`lastBan.${message.author.id}`, Date.now());
 }
-
-exports.help = {
-  name: "ban",
-  description: "Ban a member from the server",
-  usage: `ban <@user> [reason]`,
-  example: `ban @Wumpus#0001 spamming`,
-};
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

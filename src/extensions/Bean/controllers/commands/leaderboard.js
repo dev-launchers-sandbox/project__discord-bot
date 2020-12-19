@@ -2,6 +2,18 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 
+exports.help = {
+  name: "leaderboard",
+  description: "Displays the bean leaderboard",
+  usage: `leaderboard`,
+  example: `leaderboard`,
+};
+
+exports.conf = {
+  aliases: ["lb"],
+  cooldown: 5,
+};
+
 const getUserAccounts = (message) => {
   let allData = db.all();
   try {
@@ -135,15 +147,3 @@ function formatLeaderboard(
 
   return { devBeans, goldenBeans, maxSize };
 }
-
-exports.help = {
-  name: "leaderboard",
-  description: "Displays the bean leaderboard",
-  usage: `leaderboard`,
-  example: `leaderboard`,
-};
-
-exports.conf = {
-  aliases: ["lb"],
-  cooldown: 5,
-};

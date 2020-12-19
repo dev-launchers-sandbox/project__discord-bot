@@ -1,6 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "keepthread",
+  description: `Removes a channel from the "thread" list`,
+  usage: "keepthread",
+  example: "keepthread",
+};
+
+exports.conf = {
+  aliases: ["keep"],
+  cooldown: 5,
+  permissions: ["MANAGE_CHANNELS"],
+};
+
 exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
@@ -8,14 +21,7 @@ exports.run = async (client, message, args) => {
       `"` + message.author.username + "`" + "this channel is not a thread!"
     );
   }
-  if (!message.member.permissions.has("ADMINISTRATOR" || "MANAGE_CHANNELS")) {
-    return message.channel.send(
-      `"` +
-        message.author.username +
-        "`" +
-        "you do not have the perms to do this!"
-    );
-  }
+
   const channelToKeep = channelsCreated.find(
     (channel) => channel.newChannel === message.channel.id
   );
@@ -28,16 +34,4 @@ exports.run = async (client, message, args) => {
   channelsCreated.splice(indexOfChannelToKeep, 1);
   await db.set(`instanced.${message.guild.id}`, channelsCreated);
   message.channel.send("Thread removed!");
-};
-
-exports.help = {
-  name: "keepthread",
-  description: `Removes a channel from the "thread" list`,
-  usage: "keepthread",
-  example: "keepthread",
-};
-
-exports.conf = {
-  aliases: ["keep"],
-  cooldown: 5,
 };

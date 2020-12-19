@@ -1,6 +1,18 @@
 const Discord = require("discord.js");
 const dateformat = require("dateformat");
 
+exports.help = {
+  name: "serverinfo",
+  description: "Displays information about the server",
+  usage: "serverinfo",
+  example: "serverinfo",
+};
+
+exports.conf = {
+  aliases: ["server", "si"],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let icon = message.guild.iconURL({ size: 2048, dynamic: true });
   let region = {
@@ -58,16 +70,4 @@ exports.run = async (client, message, args) => {
       `Text: ${text} \nVoice: ${vc} \nCategory: ${category}`
     );
   message.channel.send(serverInfoEmbed);
-};
-
-exports.help = {
-  name: "serverinfo",
-  description: "Displays information about the server",
-  usage: "serverinfo",
-  example: "serverinfo",
-};
-
-exports.conf = {
-  aliases: ["server", "si"],
-  cooldown: 5,
 };

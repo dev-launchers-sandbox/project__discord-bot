@@ -5,6 +5,20 @@ const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "warn",
+  description: "Warns a user",
+  usage: "warn <@user> [reason]",
+  example: "warn @Wumpus#0001 spamming",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"],
+  argument: ["User To Warn"],
+};
+
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!(await isValid(message, target))) return;
@@ -21,25 +35,9 @@ exports.run = async (client, message, args) => {
 };
 
 async function isValid(message, target) {
+  if (!target) return message.channel.send("I could not find that user.");
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
-
-  if (
-    !message.member.hasPermission("ADMINISTRATOR") &&
-    !message.member.roles.cache.has(modRoleID)
-  ) {
-    commandUsage.noPerms(message, "Moderator or Administrator");
-    return;
-  }
-
-  if (!target) {
-    commandUsage.error(
-      message,
-      "warn",
-      "Make sure you specified the user to warn."
-    );
-    return;
-  }
 
   if (
     target.hasPermission("ADMINISTRATOR") ||
@@ -100,15 +98,3 @@ function sendConfirmation(channel, target, reason) {
 
   channel.send(embed);
 }
-
-exports.help = {
-  name: "warn",
-  description: "Warns a user",
-  usage: "warn <@user> [reason]",
-  example: "warn @Wumpus#0001 spamming",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

@@ -6,30 +6,26 @@ const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "kick",
+  description: "Kicks a member",
+  usage: `kick <@user> [reason]`,
+  example: `kick @Wumpus#0001 being rude`,
+};
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"],
+  arguments: ["User To Kick"],
+};
+
 exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 
-  if (
-    !message.member.hasPermission("KICK_MEMBERS") &&
-    !message.member.roles.cache.has(modRoleID)
-  ) {
-    return commandUsage.noPerms(message, "Kick Members");
-  }
-
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
-    return commandUsage.error(
-      message,
-      "kick",
-      "Make sure you specified the user to kick!"
-    );
-
-  if (!target && !args[0]) {
-    return commandUsage.missingParams(message, "Member to Kick", "kick");
-  } else if (target === undefined && args[0]) {
-    console.log(target);
-    return commandUsage.error(message, "kick");
+  if (!target) {
+    return commandUsage.error(message, "kick", "I could not find that user!");
   }
 
   if (
@@ -116,13 +112,3 @@ async function updateAndDMUser(msg, message, target, reason) {
     console.log();
   }
 }
-exports.help = {
-  name: "kick",
-  description: "Kicks a member",
-  usage: `kick <@user> [reason]`,
-  example: `kick @Wumpus#0001 being rude`,
-};
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

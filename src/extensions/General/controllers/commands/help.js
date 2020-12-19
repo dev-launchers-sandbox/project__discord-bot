@@ -1,6 +1,18 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "help",
+  description: "Show information about commands",
+  usage: "help [command]",
+  example: "help info",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
   if (!args[0]) {
@@ -61,16 +73,4 @@ exports.run = async (client, message, args) => {
       });
     }
   }
-};
-
-exports.help = {
-  name: "help",
-  description: "Show information about commands",
-  usage: "help [command]",
-  example: "help info",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

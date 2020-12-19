@@ -1,6 +1,20 @@
 const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 
+exports.help = {
+  name: "clear",
+  description: "Clears an amount of messages",
+  usage: "clear <amount> [@user]",
+  example: "clear 15",
+};
+
+exports.conf = {
+  aliases: ["delete", "purge", "clean"],
+  cooldown: 5,
+  permissions: ["MANAGE_MESSAGES"],
+  arguments: ["# Of Messages To Delete"],
+};
+
 exports.run = async (client, message, args) => {
   if (!(await isValid(message, args))) return;
 
@@ -39,13 +53,6 @@ exports.run = async (client, message, args) => {
 };
 
 function isValid(message, args) {
-  if (!message.member.permissions.has("ADMINISTRATOR")) {
-    return commandUsage.noPerms(message, "Administrator");
-  }
-  if (!args[0]) {
-    return commandUsage.missingParams(message, "# of messages", "clear");
-  }
-
   if (isNaN(args[0])) {
     return message.channel
       .send("Please input a number")
@@ -95,15 +102,3 @@ async function getConfirmation(message, msg) {
 
   return didConfirm;
 }
-
-exports.help = {
-  name: "clear",
-  description: "Clears an amount of messages",
-  usage: "clear <amount> [@user]",
-  example: "clear 15",
-};
-
-exports.conf = {
-  aliases: ["delete", "purge", "clean"],
-  cooldown: 5,
-};

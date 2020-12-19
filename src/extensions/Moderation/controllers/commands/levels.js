@@ -14,11 +14,19 @@ const lvls = [
   "forty",
 ];
 
-exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
-    return utils.noPerms(message, "Administrator");
-  }
+exports.help = {
+  name: "levels",
+  description: "Set the level roles values",
+  usage: `levels [level #] [new value]`,
+  example: `levels five 712064133259853848`,
+};
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["ADMINISTRATOR"],
+};
 
+exports.run = async (client, message, args) => {
   if (!args[0] || !lvls.includes(args[0])) {
     return sendBasicEmbed(message);
   }
@@ -77,14 +85,3 @@ function sendNewValueConfirmationEmbed(message, args) {
     );
   message.channel.send(embed);
 }
-
-exports.help = {
-  name: "levels",
-  description: "Set the level roles values",
-  usage: `levels [level #] [new value]`,
-  example: `levels five 712064133259853848`,
-};
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
-};

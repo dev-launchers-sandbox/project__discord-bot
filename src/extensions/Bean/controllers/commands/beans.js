@@ -2,6 +2,18 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const getMessageTarget = require("../../../../utils/getMessageTarget");
 
+exports.help = {
+  name: "beans",
+  description: "Shows your beans",
+  usage: `beans [@user]`,
+  example: `beans`,
+};
+
+exports.conf = {
+  aliases: ["getbeans", "bal", "balance"],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) target = message.guild.members.resolve(message.author.id);
@@ -56,14 +68,3 @@ function getUserData(target) {
     foreverGoldenBeans: foreverGoldenBeans,
   };
 }
-exports.help = {
-  name: "beans",
-  description: "Shows your beans",
-  usage: `beans [@user]`,
-  example: `beans`,
-};
-
-exports.conf = {
-  aliases: ["getbeans", "bal", "balance"],
-  cooldown: 5,
-};

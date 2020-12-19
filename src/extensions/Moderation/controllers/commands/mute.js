@@ -3,17 +3,27 @@ const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 const directMessage = require("../../../../utils/directMessage.js");
 
+exports.help = {
+  name: "mute",
+  description: "Mutes a user",
+  usage: "mute <@user> [reason]",
+  example: "mute @Wumpus#0001 being too cool",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"],
+  arguments: ["User To Mute"],
+};
+
 exports.run = async (client, message, args) => {
   if (!message.member.hasPermission("MANAGE_ROLES")) {
     return commandUsage.noPerms(message, "Manage Roles");
   }
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
-    return commandUsage.error(
-      message,
-      "mute",
-      "Make sure you specified the user to mute!"
-    );
+    return commandUsage.error(message, "mute", "I could not find that user!");
 
   function noMuteEmbed(description) {
     let embed = new Discord.MessageEmbed()
@@ -50,16 +60,4 @@ exports.run = async (client, message, args) => {
     .setDescription(`Reason: ${reason}`)
     .setTimestamp();
   message.channel.send(successEmbed);
-};
-
-exports.help = {
-  name: "mute",
-  description: "Mutes a user",
-  usage: "mute <@user> [reason]",
-  example: "mute @Wumpus#0001 being too cool",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

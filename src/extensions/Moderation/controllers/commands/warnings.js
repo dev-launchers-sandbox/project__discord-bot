@@ -3,22 +3,24 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "warnings",
+  description: "Displays the warnings of a user",
+  usage: "warnings <@user>",
+  example: "warnings @Wumpus#0001",
+};
+
+exports.conf = {
+  aliases: ["warning, warns"],
+  cooldown: 5,
+  permissions: ["MANAGE_ROLES"],
+  arguments: ["User To See Warnings"],
+};
+
 exports.run = async (client, message, args) => {
-  if (
-    !(
-      message.member.hasPermission("ADMINISTRATOR") ||
-      message.member.roles.cache.find((r) => r.name === "Moderator")
-    )
-  ) {
-    return commandUsage.noPerms(message, "Moderator or Administrator");
-  }
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
-    return commandUsage.error(
-      message,
-      "mute",
-      "Either the user was not found, or there was an error while running the mute command."
-    );
+    return commandUsage.error(message, "warnings", "The user was not found.");
 
   let userWarns = await db.get(
     `warnings.${message.guild.id}.${target.user.id}`
@@ -87,16 +89,4 @@ exports.run = async (client, message, args) => {
   });
   await warnEmbed.setDescription(allWarnings);
   message.channel.send(warnEmbed);
-};
-
-exports.help = {
-  name: "warnings",
-  description: "Displays the warnings of a user",
-  usage: "warnings <@user>",
-  example: "warnings @Wumpus#0001",
-};
-
-exports.conf = {
-  aliases: ["warning, warns"],
-  cooldown: 5,
 };

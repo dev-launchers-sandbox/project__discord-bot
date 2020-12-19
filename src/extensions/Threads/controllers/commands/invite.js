@@ -1,6 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "invite",
+  description: "Creates an invite to a thread",
+  usage: "invite <#channel>",
+  example: "invite #secret-chat",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldowns: 10,
+  arguments: ["Thread To Invite To"],
+};
+
 exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated || !Array.isArray(channelsCreated)) {
@@ -12,7 +25,7 @@ exports.run = async (client, message, args) => {
   channelToInviteUserTo = message.mentions.channels.first();
   if (!channelToInviteUserTo) {
     return message.channel.send(
-      "`" + message.author.username + "`" + "  you need to specify a channel!"
+      "`" + message.author.username + "`" + ", I could not find that channel!"
     );
   }
   let channelIn = channelsCreated.find(
@@ -37,16 +50,4 @@ exports.run = async (client, message, args) => {
     });
   channelsCreated.splice(index, 1, channelIn);
   db.set(`instanced.${message.guild.id}`, channelsCreated);
-};
-
-exports.help = {
-  name: "invite",
-  description: "Creates an invite to a thread",
-  usage: "invite <#channel>",
-  example: "invite #secret-chat",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldowns: 10,
 };

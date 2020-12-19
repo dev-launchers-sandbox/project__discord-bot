@@ -4,10 +4,22 @@ const ms = require("parse-ms");
 
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
+exports.help = {
+  name: "devbean",
+  description: "Shows someone’s Dev Bean cooldown!",
+  usage: `devbean [@user]`,
+  example: `devbean`,
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   const cooldown = 60000;
 
-  // I think this adds a 0 at the beggining to that 4 changes to 04
+  // Changes the number to a string and adds a 0 at the beggining of numbers lower than 0.
   let pad_zero = (num) => (num < 10 ? "0" : "") + num;
   let timeObj;
 
@@ -33,16 +45,4 @@ exports.run = async (client, message, args) => {
         "**no cooldown**"
     );
   }
-};
-
-exports.help = {
-  name: "devbean",
-  description: "Shows someone’s Dev Bean cooldown!",
-  usage: `devbean [@user]`,
-  example: `devbean`,
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

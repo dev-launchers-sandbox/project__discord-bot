@@ -1,6 +1,18 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
+exports.help = {
+  name: "blacklist",
+  description: "Blacklists a member from an thread",
+  usage: "blacklist <@user>",
+  example: "blacklist @Wumpus#0001",
+};
+
+exports.conf = {
+  aliases: [],
+  cooldown: 5,
+};
+
 exports.run = async (client, message, args) => {
   let channelsCreated = db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
@@ -86,16 +98,4 @@ exports.run = async (client, message, args) => {
         "You have been blacklisted from " + "`" + channel.name + "`"
       )
     );
-};
-
-exports.help = {
-  name: "blacklist",
-  description: "Blacklists a member from an thread",
-  usage: "blacklist <@user>",
-  example: "blacklist @Wumpus#0001",
-};
-
-exports.conf = {
-  aliases: [],
-  cooldown: 5,
 };

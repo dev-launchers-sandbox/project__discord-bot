@@ -60,11 +60,14 @@ module.exports = (client) => {
     let moduleConf = {
       name: extension.helpCategory,
       hide: false,
-      path: `./extensions/${extension.name}/controllers/commands`,
+      path: `../extensions/${extension.name}/controllers/commands`,
       cmds: [],
     };
 
-    const categoryFolder = `./src/extensions/${extension.name}/controllers/commands`;
+    const categoryFolder = path.join(
+      __dirname,
+      `../extensions/${extension.name}/controllers/commands`
+    );
     console.log("CATEGORY_FOLDER: " + categoryFolder);
     fs.readdir(categoryFolder, (err, files) => {
       console.log(err);

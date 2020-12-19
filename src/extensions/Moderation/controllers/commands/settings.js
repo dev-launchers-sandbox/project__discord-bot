@@ -31,7 +31,11 @@ exports.run = async (client, message, args) => {
     "ticket",
     "ticket-category",
     "admin",
+    "minecraft",
+    "minecraft-role",
+    "minecraft-channel",
   ];
+
 
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")

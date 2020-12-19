@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   namespace: project-discord-bot
   name: project-discord-bot
@@ -9,6 +9,7 @@ metadata:
     app: project-discord-bot
 spec:
   replicas: 1
+  serviceName: project-discord-bot
   selector:
     matchLabels:
       app: project-discord-bot
@@ -51,4 +52,4 @@ spec:
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:
-            claimName: project-discord-bot-pv-claim
+            claimName: project-discord-bot-hostpath-pvc

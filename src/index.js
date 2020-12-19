@@ -3,11 +3,6 @@ const express = require("express");
 
 // Run extensions after initializing client, before doing any other work
 const extensions = require("./extensions");
-/*
-for (const extension of extensions) {
-
-}
-*/
 
 const devlaunchersBot = require("./handler/ClientBuilder.js");
 const client = new devlaunchersBot({

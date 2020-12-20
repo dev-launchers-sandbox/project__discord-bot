@@ -38,7 +38,7 @@ exports.run = async (client, message, args) => {
 
     return message.channel.send(embed);
   } else {
-    let cmd = args[0];
+    let cmd = args[0].toLowerCase();
     if (
       client.commands.has(cmd) ||
       client.commands.get(client.aliases.get(cmd))

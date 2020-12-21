@@ -37,14 +37,15 @@ exports.run = async (client, message, args) => {
   let status = target.user.presence.status;
   let avatar = target.user.avatarURL({ size: 2048 });
 
-  const infoEmbed = new Discord.MessageEmbed()
-    .setAuthor(target.user.tag, avatar)
-    .setThumbnail(avatar)
-    .setTimestamp()
-    .setColor(0xff9f01)
-    .addField("ID", target.id, true)
-    .addField("Created Account Date", `${createdate}`, true)
-    .addField("Joined Server Date", `${joindate}`)
-    .addField("Status", status, true);
-  message.channel.send(infoEmbed);
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    thumbnail: avatar,
+    author: { name: target.user.tag, image: avatar },
+    fields: [
+      { name: "ID", value: target.id, inline: true },
+      { name: "Account Creation Date", value: createdate, inline: true },
+      { name: "Server Join Date", value: joindate, inline: false },
+      { name: "Status", value: status, inline: true },
+    ],
+  });
 };

@@ -15,6 +15,7 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   try {
     const m = await message.channel.send("Pinging...");
+
     const embed = new Discord.MessageEmbed()
       .setColor("0xff9f01")
       .addField(

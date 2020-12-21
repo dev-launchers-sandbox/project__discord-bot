@@ -21,22 +21,21 @@ exports.run = async (client, message, args) => {
     if (!client.config.owners.includes(message.author.id)) {
       module = client.helps.array().filter((x) => !x.hide);
     }
-    const embed = new Discord.MessageEmbed()
-      .setColor("0xff9f01")
-      .setTimestamp(new Date())
-      .setDescription(
-        `Type \`${prefix}help [command]\` to get a more specific information about a command!`
-      )
-      .setTitle("DevLaunchers Bot");
 
+    let fields = [];
     for (const mod of module) {
-      embed.addField(
-        `${mod.name}`,
-        mod.cmds.map((x) => `\`${x}\``).join(" | ")
-      );
+      fields.push({
+        name: mod.name,
+        value: mod.cmds.map((x) => `\`${x}\``).join(" | "),
+      });
     }
 
-    return message.channel.send(embed);
+    return message.channel.sendEmbed({
+      color: 0xff9f01,
+      timestamp: true,
+      description: `Type \`${prefix}help [command]\` to get a more specific information about a command!`,
+      fields: fields,
+    });
   } else {
     let cmd = args[0].toLowerCase();
     if (
@@ -55,21 +54,22 @@ exports.run = async (client, message, args) => {
       let usage = command.help.usage ? command.help.usage : "None";
       let example = command.help.example ? command.help.example : "None";
 
-      let embed = new Discord.MessageEmbed()
-        .setColor("0xff9f01")
-        .setTitle(name)
-        .setDescription(description)
-        .setThumbnail(client.user.displayAvatarURL())
-        .setFooter("DevLaunchers Bot | https://devlaunchers.com")
-        .addField("Cooldown", cooldown, true)
-        .addField("Aliases", aliases, true)
-        .addField("Usage", usage, true)
-        .addField("Example", prefix + example, true);
-
-      return message.channel.send(embed);
+      return message.channel.sendEmbed({
+        color: 0xff9f01,
+        thumbnail: client.user.displayAvatarURL(),
+        title: name,
+        description: description,
+        fields: [
+          { name: "Cooldown", value: cooldown, inline: true },
+          { name: "Aliases", value: aliases, inline: true },
+          { name: "Usage", value: usage, inline: true },
+          { name: "Example", value: prefix + example, inline: true },
+        ],
+      });
     } else {
-      return message.channel.send({
-        embed: { color: "RED", description: "Unknown Command" },
+      return message.channel.sendEmbed({
+        color: "RED",
+        description: "Unknown Command",
       });
     }
   }

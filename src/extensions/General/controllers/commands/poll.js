@@ -17,6 +17,7 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   let channel = message.channel;
   let user = message.author;
+
   channel.sendPoll({
     subject: args.slice(0).join(" "),
     author: user.username,

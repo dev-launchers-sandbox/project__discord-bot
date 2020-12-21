@@ -10,9 +10,23 @@ Structures.extend("TextChannel", (TextChannel) => {
     sendEmbed(args) {
       const embed = new Discord.MessageEmbed();
       if (args.color) embed.setColor(args.color);
-      if (args.author) embed.setAuthor(args.author);
+      if (args.thumbnail) embed.setThumbnail(args.thumbnail);
+      if (args.url) embed.setURL(args.url);
+
       if (args.title) embed.setTitle(args.title);
+      if (args.author)
+        embed.setAuthor(
+          args.author.name,
+          args.author.image && args.author.image
+        );
+
       if (args.description) embed.setDescription(args.description);
+      if (args.fields) {
+        args.fields.map((field) =>
+          embed.addField(field.name, field.value, field.inline)
+        );
+      }
+
       if (args.footer) embed.setFooter(args.footer);
       if (args.timestamp) embed.setTimestamp(args.timestamp);
 

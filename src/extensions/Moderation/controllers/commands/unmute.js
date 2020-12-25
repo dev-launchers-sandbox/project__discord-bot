@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
-const directMessage = require("../../../../utils/directMessage.js");
 
 exports.help = {
   name: "unmute",
@@ -21,11 +20,20 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) {
-    return commandUsage.error(message, "unmute", "I could not find the user.");
+    return commandUsage.error(message, "unmute", "I could not find that user.");
   }
 
   if (!target.roles.cache.find((r) => r.name === "Muted")) {
-    return noMuteEmbed("This user is not muted!");
+    message.channel.sendEmbed({
+      color: "RED",
+      author: {
+        name: "You cannot unmute this member",
+        image: target.user.displayAvatarURL(),
+      },
+      description: "This user is not muted!",
+      timestamp: true,
+    });
+    return;
   }
 
   let reason = args.slice(1).join(" ");
@@ -33,26 +41,15 @@ exports.run = async (client, message, args) => {
   let mutedRole = message.guild.roles.cache.find((r) => r.name === "Muted");
   target.roles.remove(mutedRole);
 
-  directMessage.sendPunishment(message.guild.name, target, reason, "unmuted");
+  target.user.sendAction(message.guild.name, reason, "unmuted");
 
-  let successEmbed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setAuthor(
-      `${target.user.username} has been unmuted!`,
-      target.user.displayAvatarURL()
-    )
-    .setDescription(
-      `**${target.user.username}** has been unmuted by **${message.author.username}**`
-    )
-    .setTimestamp();
-  message.channel.send(successEmbed);
+  message.channel.sendEmbed({
+    color: "GREEN",
+    author: {
+      name: `${target.user.username} has been unmuted!`,
+      image: target.user.displayAvatarURL(),
+    },
+    description: `**${target.user.username}** has been unmuted by **${message.author.username}**`,
+    timestamp: true,
+  });
 };
-
-function noMuteEmbed(description) {
-  let embed = new Discord.MessageEmbed()
-    .setColor("RED")
-    .setAuthor("You cannot unmute this user", target.user.displayAvatarURL())
-    .setDescription(description)
-    .setTimestamp();
-  return message.channel.send(embed);
-}

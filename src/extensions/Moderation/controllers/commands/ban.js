@@ -4,7 +4,6 @@ const ms = require("parse-ms");
 
 const commandUsage = require("./../../../../utils/commandUsage.js");
 const getMessageTarget = require("./../../../../utils/getMessageTarget.js");
-const directMessage = require("../../../../utils/directMessage.js");
 
 exports.help = {
   name: "ban",
@@ -57,15 +56,7 @@ exports.run = async (client, message, args) => {
   }
 
   let reason = args.slice(1).join(" ");
-  let successEmbed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setTitle("Success!")
-    .setDescription(
-      `I successfully banned ${target.user.username} from the server \n
-      Reason: ${reason || "No Reason Provided"}
-    `
-    )
-    .setTimestamp();
+
   message.channel
     .send("Banning Member...")
     .then((msg) => updateAndDMUser(msg))
@@ -75,19 +66,24 @@ exports.run = async (client, message, args) => {
 
   const updateAndDMUser = async (msg) => {
     try {
-      await directMessage.sendPunishment(
-        message.guild.name,
-        target,
-        reason,
-        "banned"
-      );
+      await target.user.sendAction(message.guild.name, reason, "banned");
       await target.ban({
         reason: `Banned By: ${message.author.username}  Reason: ${
           reason || "No reason provided"
         }`,
       });
       await msg.delete();
-      message.channel.send(successEmbed);
+
+      message.channel.sendEmbed({
+        color: "GREEN",
+        title: "Success!",
+        description: `I successfully banned ${
+          target.user.username
+        } from the server \n
+      Reason: ${reason || "No Reason Provided"}
+    `,
+        timestamp: true,
+      });
     } catch (error) {
       console.log("Error in ban");
     }
@@ -118,6 +114,5 @@ async function canModeratorBan(message) {
 }
 
 async function addCooldown(message) {
-  console.log(`Setted cooldown for ${message.author.id}`);
   await db.set(`lastBan.${message.author.id}`, Date.now());
 }

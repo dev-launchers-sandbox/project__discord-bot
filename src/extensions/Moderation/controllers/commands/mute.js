@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
-const directMessage = require("../../../../utils/directMessage.js");
 
 exports.help = {
   name: "mute",
@@ -18,46 +17,68 @@ exports.conf = {
 };
 
 exports.run = async (client, message, args) => {
-  if (!message.member.hasPermission("MANAGE_ROLES")) {
-    return commandUsage.noPerms(message, "Manage Roles");
-  }
   let target = getMessageTarget.getMessageTarget(message, args);
-  if (!target)
+  if (!target) {
     return commandUsage.error(message, "mute", "I could not find that user!");
-
-  function noMuteEmbed(description) {
-    let embed = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setAuthor("You cannot mute this user", target.user.displayAvatarURL())
-      .setDescription(description)
-      .setTimestamp();
-    return message.channel.send(embed);
   }
+
   if (target.hasPermission("MANAGE_ROLES")) {
-    return noMuteEmbed("This user has the manage_roles permission!");
+    sendCannotMuteEmbed(
+      message.channel,
+      "This user has the manage_roles permission!",
+      target.user.displayAvatarURL()
+    );
+    return;
   }
 
   if (!message.guild.roles.cache.find((r) => r.name === "Muted")) {
-    return noMuteEmbed("I cannot find the muted role!");
+    sendCannotMuteEmbed(
+      message.channel,
+      "I cannot find the muted role!",
+      target.user.displayAvatarURL()
+    );
+    return;
   }
 
   if (target.roles.cache.find((r) => r.name === "Muted")) {
-    return noMuteEmbed("This user is already muted!");
+    sendCannotMuteEmbed(
+      message.channel,
+      "This user is already muted!",
+      target.user.displayAvatarURL()
+    );
+    return;
   }
-  let reason = args.slice(1).join(" ");
-  if (!reason) reason = "Not Provided";
+
+  let reason = args.slice(1).join(" ") || "Not Provided";
+
   let mutedRole = message.guild.roles.cache.find((r) => r.name === "Muted");
   target.roles.add(mutedRole);
 
-  directMessage.sendPunishment(message.guild.name, target, reason, "muted");
+  target.user.sendAction(message.guild.name, reason, "muted");
 
-  let successEmbed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setAuthor(
-      `${target.user.username} has been muted!`,
-      target.user.displayAvatarURL()
-    )
-    .setDescription(`Reason: ${reason}`)
-    .setTimestamp();
-  message.channel.send(successEmbed);
+  sendSuccessEmbed(message.channel, reason, target.user);
 };
+
+function sendCannotMuteEmbed(channel, description, avatar) {
+  channel.send({
+    color: "RED",
+    author: {
+      name: "You cannot mute this user",
+      image: avatar,
+    },
+    description: description,
+    timestamp: true,
+  });
+}
+
+function sendSuccessEmbed(channel, reason, user) {
+  channel.send({
+    color: "GREEN",
+    author: {
+      name: `${user.username} has been muted!`,
+      image: user.displayAvatarURL(),
+    },
+    description: `Reason: ${reason}`,
+    timestamp: true,
+  });
+}

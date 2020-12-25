@@ -3,7 +3,6 @@ const db = require("quick.db");
 
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
-const directMessage = require("../../../../utils/directMessage.js");
 
 exports.help = {
   name: "warn",
@@ -27,7 +26,7 @@ exports.run = async (client, message, args) => {
     const reason = buildReason(args);
     const warning = buildWarning(target.user.id, message.author.id, reason);
     addWarningToDb(message.guild.id, target.user.id, warning);
-    directMessage.sendPunishment(message.guild.name, target, reason, "warned");
+    target.user.sendAction(message.guild.name, reason, "warned");
     sendConfirmation(message.channel, target, reason);
   } catch (error) {
     console.log(error);
@@ -43,12 +42,15 @@ async function isValid(message, target) {
     target.hasPermission("ADMINISTRATOR") ||
     target.roles.cache.has(modRoleID)
   ) {
-    let embed = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setAuthor("You cannot warn this user", target.user.displayAvatarURL())
-      .setDescription("This user is an Administrator or a Moderator!")
-      .setTimestamp();
-    message.channel.send(embed);
+    message.channel.sendEmbed({
+      color: "RED",
+      author: {
+        name: "This user cannot be warned",
+        image: target.user.displayAvatarURL(),
+      },
+      description: "This user is an Administrator or a Moderator!",
+      timestamp: true,
+    });
     return;
   }
   return true;
@@ -87,14 +89,13 @@ async function addWarningToDb(guildId, userId, warning) {
 }
 
 function sendConfirmation(channel, target, reason) {
-  const embed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setAuthor(
-      `${target.user.username} has been warned`,
-      target.user.displayAvatarURL()
-    )
-    .setDescription(`Reason: ${reason}`)
-    .setTimestamp();
-
-  channel.send(embed);
+  channel.sendEmbed({
+    color: "GREEN",
+    author: {
+      name: `${target.user.username} has been warned`,
+      image: target.user.displayAvatarURL(),
+    },
+    description: `Reason: ${reason}`,
+    timestamp: true,
+  });
 }

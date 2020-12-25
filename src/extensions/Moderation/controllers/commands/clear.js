@@ -34,15 +34,13 @@ exports.run = async (client, message, args) => {
   let lastMessage = messages
     .sort(({ createdTimestamp: a }, { createdTimestamp: b }) => a - b)
     .first();
-  let didConfirm;
 
   if (!lastMessage) return message.channel.send("No messages were found!");
 
-  await message.channel
-    .send(
-      `The last message that will get deleted is:\n${lastMessage.url}\nIf you want to continue, type **y**, if not type **n**`
-    )
-    .then((msg) => (didConfirm = getConfirmation(message, msg)));
+  let msg = await message.channel.send(
+    `The last message that will get deleted is:\n${lastMessage.url}\nIf you want to continue, type **y**, if not type **n**`
+  );
+  let didConfirm = getConfirmation(message, msg);
 
   if ((await didConfirm) && didConfirm !== "ranOut") {
     messages.forEach(async (msg) => {

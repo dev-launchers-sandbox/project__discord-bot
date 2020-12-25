@@ -24,27 +24,41 @@ exports.run = async (client, message, args) => {
   let userWarns = await db.get(
     `warnings.${message.guild.id}.${target.user.id}`
   );
-  let successEmbed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setAuthor(
-      `Warning #${args[1]} has been removed`,
-      target.user.displayAvatarURL()
-    )
-    .setTimestamp();
-  let warnNotFoundEmbed = new Discord.MessageEmbed()
-    .setTitle(`Warning #${args[1]} not found!`)
-    .setColor("RED")
-    .setDescription(`Make sure the user has at least ${args[1]} warnings!`)
-    .setTimestamp();
 
   let index = parseInt(args[1], 10) - 1;
   let warnObj = userWarns[index];
-  if (!warnObj) return message.channel.send(warnNotFoundEmbed);
+
+  if (!warnObj) {
+    sendWarningNotFoundEmbed(message.channel, args);
+    return;
+  }
+
   userWarns.splice(index, 1);
+
   try {
     await db.set(`warnings.${message.guild.id}.${target.user.id}`, userWarns);
-    message.channel.send(successEmbed);
+    sendSuccessEmbed(message.channel, args);
   } catch (error) {
     console.error(error);
   }
 };
+
+function sendSuccessEmbed(channel, args) {
+  channel.send({
+    color: "GREEN",
+    author: {
+      name: `Warning #${args[1]} has been removed`,
+      image: target.user.displayAvatarURL(),
+    },
+    timestamp: true,
+  });
+}
+
+function sendWarningNotFoundEmbed(channel, args) {
+  channel.send({
+    color: "RED",
+    title: `Warning #${args[1]} not found!`,
+    description: `Make sure the user has at least ${args[1]} warnings!`,
+    timestamp: true,
+  });
+}

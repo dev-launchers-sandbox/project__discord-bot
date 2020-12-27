@@ -16,60 +16,49 @@ exports.conf = {
   permissions: ["ADMINISTRATOR"],
 };
 
+const settings = [
+  "prefix",
+  "welcome",
+  "audit",
+  "total",
+  "instanced-category",
+  "invite",
+  "moderator",
+  "mod-cooldown",
+  "directory",
+  "teams",
+  "ticket",
+  "ticket-category",
+  "admin",
+  "minecraft",
+  "minecraft-role",
+  "minecraft-channel",
+];
+
 exports.run = async (client, message, args) => {
-  const settings = [
-    "prefix",
-    "welcome",
-    "audit",
-    "total",
-    "instanced-category",
-    "invite",
-    "moderator",
-    "mod-cooldown",
-    "directory",
-    "teams",
-    "ticket",
-    "ticket-category",
-    "admin",
-    "minecraft",
-    "minecraft-role",
-    "minecraft-channel",
-  ];
-
-
   let successEmbed = new Discord.MessageEmbed()
     .setColor("GREEN")
     .setAuthor(`There has been a change in ${args[0]}`)
     .setDescription(`It got deleted or changed to: ${args[1]} `)
     .setTimestamp();
 
-  let allSettingsEmbed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setTitle(`Settings for ${message.guild.name}`)
-    .setFooter(
-      "Use settings [name] [value] to set a value | Use delete to delete it"
-    );
-
-  allSettingsEmbed.addField(
-    `Settings`,
-    settings.map((x) => `\`${x}\``).join(" | ")
-  );
-
-  if (!args[0]) return message.channel.send(allSettingsEmbed);
-  if (!settings.includes(args[0])) {
-    return message.channel.send(allSettingsEmbed);
+  if (!args[0] || !settings.includes(args[0])) {
+    sendBasicEmbed(message.channel, message.guild.name);
+    return;
   }
+
   if (!args[1]) {
-    const currentValue = await db.get(`${args[0]}.${message.guild.id}`);
-    return message.channel.send(
+    const currentValue = db.get(`${args[0]}.${message.guild.id}`);
+    message.channel.send(
       `The current value of **${args[0]}** is **${currentValue || "null!"} **`
     );
+    return;
   }
 
   if (args[1] === "delete" || args[1] === "disable" || args[1] === "default") {
     try {
       await db.delete(`${args[0]}.${message.guild.id}`);
-      return message.channel.send(successEmbed);
+      sendSuccessEmbed();
     } catch (error) {
       console.log(error);
       return await commandUsage.error(message, "settings");
@@ -77,8 +66,29 @@ exports.run = async (client, message, args) => {
   }
   try {
     db.set(`${args[0]}.${message.guild.id}`, args[1]);
-    message.channel.send(successEmbed);
+    sendSuccessEmbed(message.channel, args);
   } catch (error) {
     return commandUsage.error(message, "settings");
   }
 };
+
+function sendBasicEmbed(channel, guildName) {
+  channel.sendEmbed({
+    color: 0xff9f01,
+    title: `Settings for ${guildName}`,
+    footer:
+      "Use settings [name] [value] to set a value | Use delete to delete it",
+    fields: [
+      { name: "Settings", value: settings.map((x) => `\`${x}\``).join(" | ") },
+    ],
+  });
+}
+
+function sendSuccessEmbed(channel, args) {
+  channel.sendEmbed({
+    embed: "GREEN",
+    author: { name: `There has been a change in ${args[0]}` },
+    description: `It got deleted or changed to: ${args[1]}`,
+    timestamp: true,
+  });
+}

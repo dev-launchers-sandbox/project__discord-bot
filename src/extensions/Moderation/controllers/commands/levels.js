@@ -28,7 +28,7 @@ exports.conf = {
 
 exports.run = async (client, message, args) => {
   if (!args[0] || !lvls.includes(args[0])) {
-    return sendBasicEmbed(message);
+    return sendOptionsEmbed(message);
   }
 
   if (!args[1]) {
@@ -37,51 +37,48 @@ exports.run = async (client, message, args) => {
 
   if (["delete", "remove"].includes(args[1])) {
     db.delete(`levels.${message.guild.id}.${args[0]}`);
-    return sendDeleteConfirmationEmbed(message, args);
+    return sendDeletedValueEmbed(message, args);
   }
 
   db.set(`levels.${message.guild.id}.${args[0]}`, args[1]);
-  sendNewValueConfirmationEmbed(message, args);
+  sendUpdatedValueEmbed(message, args);
 };
 
-function sendBasicEmbed(message) {
-  const embed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setTitle(`Level-Roles for ${message.guild.name}`)
-    .setFooter(
-      "Use levels [name] [value] to set a value | Use delete to delete it"
-    );
-  embed.addField(`Level-roles`, lvls.map((x) => `\`${x}\``).join(" | "));
-  message.channel.send(embed);
+function sendOptionsEmbed(message) {
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    title: `Level-Roles for ${message.guild.name}`,
+    footer:
+      "Use levels [name] [value] to set a value | Use delete to delete it",
+    fields: [
+      { name: "Level-Roles", value: lvls.map((x) => `\`${x}\``).join(" | ") },
+    ],
+  });
 }
 
 function sendLevelValueEmbed(message, args) {
   const value = db.get(`levels.${message.guild.id}.${args[0]}`);
   const role = message.guild.roles.resolve(value || "");
 
-  const embed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setDescription(
-      `The value for the level ${args[0]} is ${
-        role ? role : value ? `${value}` : "**Not defined**"
-      }`
-    );
-  message.channel.send(embed);
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    description: `The value for the level ${args[0]} is ${
+      role ? role : value ? `${value}` : "**Not defined**"
+    }`,
+  });
 }
 
-function sendDeleteConfirmationEmbed(message, args) {
-  const embed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setDescription(`✅ | The value of ${args[0]} has been deleted.`)
-    .setFooter(`You can set it back by doing .levels ${args[0]} <value>`);
-  message.channel.send(embed);
+function sendDeletedValueEmbed(message, args) {
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    description: `✅ | The value of ${args[0]} has been deleted.`,
+    footer: `You can set it back by doing .levels ${args[0]} <value>`,
+  });
 }
 
-function sendNewValueConfirmationEmbed(message, args) {
-  const embed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setDescription(
-      `✅ | The value of ${args[0]} has been updated. The new value is ${args[1]}.`
-    );
-  message.channel.send(embed);
+function sendUpdatedValueEmbed(message, args) {
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    description: `✅ | The value of ${args[0]} has been updated. The new value is ${args[1]}.`,
+  });
 }

@@ -4,7 +4,6 @@ const ms = require("parse-ms");
 
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
-const directMessage = require("../../../../utils/directMessage.js");
 
 exports.help = {
   name: "kick",
@@ -32,14 +31,13 @@ exports.run = async (client, message, args) => {
     target.hasPermission("ADMINISTRATOR" || "KICK_MEMBERS") ||
     target.roles.cache.has(modRoleID)
   ) {
-    let embed = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setTitle("You cannot kick this user!")
-      .setDescription(
-        "The user you are trying to kick cannot be kicked by the bot"
-      )
-      .setTimestamp();
-    return message.channel.send(embed);
+    return message.channel.sendEmbed({
+      color: "RED",
+      title: "You cannot kick this user",
+      description:
+        "The user you are trying to kick cannot be kicked by the bot",
+      timestamp: true,
+    });
   }
 
   let canModKick;
@@ -94,20 +92,20 @@ function addCooldown(message) {
 }
 
 async function updateAndDMUser(msg, message, target, reason) {
-  let successEmbed = new Discord.MessageEmbed()
-    .setColor("GREEN")
-    .setTitle("Success!")
-    .setDescription(
-      `I successfully kicked ${target.user.username} from the server \n
-      Reason: ${reason || "No Reason Provided"}
-    `
-    )
-    .setTimestamp();
   try {
-    await directMessage.sendPunishment(message, target, reason, "kicked");
+    await target.user.sendAction(message, reason, "kicked");
     await target.kick();
     await msg.delete();
-    message.channel.send(successEmbed);
+    message.channel.sendEmbed({
+      color: "GREEN",
+      title: "Success!",
+      description: `I successfully kicked ${
+        target.user.username
+      } from the server \n
+    Reason: ${reason || "No Reason Provided"}
+  `,
+      timestamp: true,
+    });
   } catch (error) {
     console.log();
   }

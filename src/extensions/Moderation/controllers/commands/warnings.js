@@ -25,68 +25,82 @@ exports.run = async (client, message, args) => {
   let userWarns = await db.get(
     `warnings.${message.guild.id}.${target.user.id}`
   );
-  let warnNotFoundEmbed = new Discord.MessageEmbed()
-    .setTitle(`Warning #${args[1]} not found!`)
-    .setColor("RED")
-    .setDescription(`Make sure the user has at least ${args[1]} warnings!`)
-    .setTimestamp();
+
   if (args[1]) {
     let index = parseInt(args[1], 10) - 1;
     let warnObj = userWarns[index];
-    if (!warnObj) return message.channel.send(warnNotFoundEmbed);
 
-    let userWarned = await message.guild.members.cache.get(warnObj.userWarned);
-    let staffMember = await message.guild.members.cache.get(warnObj.staffUser);
-    let notHere = new Discord.MessageEmbed()
-      .setColor("RED")
-      .setTitle(`${target.user.username} is not in the server!`)
-      .setDescription(
-        `I could not find this user! This is most likely because this user has left the server`
-      )
-      .setTimestamp();
+    if (!warnObj) {
+      message.channel.sendEmbed({
+        color: "RED",
+        title: `Warning #${args[1]} not found!`,
+        description: `Make sure the user has at least ${args[1]} warnings!`,
+        timestamp: true,
+      });
+      return;
+    }
 
-    if (!userWarned) return message.channel.send(notHere);
-    let warnEmbed = new Discord.MessageEmbed()
-      .setColor(0xff9f01)
-      .setTitle(`Warning number ${args[1]} for ${userWarned.user.username}`)
-      .addField(
-        `Warned By`,
-        `${staffMember.user.tag || "Moderator not found"}(${
-          staffMember.user.id || "Not found"
-        })`
-      )
-      .addField(`Reason`, warnObj.reason)
-      .addField(`Full Time`, `${warnObj.time.fullDate} UTC`);
-    return message.channel.send(warnEmbed);
+    let userWarned = await message.guild.resolve(warnObj.userWarned);
+    let staffMember = await message.guild.members.resolve(warnObj.staffUser);
+
+    if (!userWarned) {
+      message.channel.sendEmbed({
+        color: "RED",
+        title: `${target.user.username} is not in the server!`,
+        description: `I could not find this user! This is most likely because this user has left the server`,
+        timestamp: true,
+      });
+      return;
+    }
+
+    message.channel.sendEmbed({
+      color: 0xff9f01,
+      title: `Warning number ${args[1]} for ${userWarned.user.username}`,
+      fields: [
+        {
+          name: `Warned By`,
+          value: `${staffMember.user.tag || "Moderator not found"}(${
+            staffMember.user.id || "Not found"
+          })`,
+        },
+        { name: "Reason", value: warnObj.reason },
+        { name: "Full Time", value: `${warnObj.time.fullDate} UTC` },
+      ],
+    });
+    return;
   }
   if (!userWarns || userWarns.length === 0) {
-    let noWarns = new Discord.MessageEmbed()
-      .setColor(0xff9f01)
-      .setAuthor(
-        `${target.user.tag} has 0 warnings`,
-        target.user.displayAvatarURL()
-      )
-      .setDescription(`This user does not have any warnings`)
-      .setTimestamp();
-    return message.channel.send(noWarns);
+    message.channel.sendEmbed({
+      color: 0xff9f01,
+      author: {
+        name: `${target.user.tag} has 0 warnings`,
+        image: target.user.displayAvatarURL(),
+      },
+      description: "This user does not have any warnings",
+      timestamp: true,
+    });
+    return;
   }
+
   let allWarnings = "";
   const numOfWarns = userWarns.length;
-  let warnEmbed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setAuthor(`${target.user.tag} has ${numOfWarns} warning(s)`)
-    .setTimestamp();
 
-  userWarns.forEach((warn) => {
+  for (let warn of userWarns) {
     let warnReason = warn.reason;
+
     if (warnReason.length > 35 && !warnReason.length < 40) {
       warnReason = warnReason.slice(0, 35);
       warnReason = warnReason.concat("...");
-    } else warnReason = warn.reason;
+    }
+
     let indWarn = `**${warn.time.cleanDate}**: ${warnReason}`;
-    console.log(indWarn);
     allWarnings = allWarnings.concat("\n", indWarn);
+  }
+
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    author: { name: `${target.user.tag} has ${numOfWarns} warning(s)` },
+    description: allWarnings,
+    timestamp: true,
   });
-  await warnEmbed.setDescription(allWarnings);
-  message.channel.send(warnEmbed);
 };

@@ -13,36 +13,30 @@ exports.conf = {
   aliases: ["nickname", "nick", "setnick"],
   cooldown: 5,
   permissions: ["MANAGE_NICKNAMES"],
-  arguments: ["User To Change Nickname"],
+  arguments: ["User", "New Nickname"],
 };
 
 exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
-    return message.channel.send({
-      embed: { color: "RED", description: "User not found" },
+    return message.channel.sendEmbed({
+      color: "RED",
+      description: "User not found",
     });
 
   let nick = args.slice(1).join(" ");
-  if (!nick)
-    return message.channel.send({
-      embed: { color: "RED", description: "You need to provide a nickname" },
-    });
 
-  let member = message.guild.members.cache.get(target.id);
+  let member = message.guild.members.resolve(target.id);
+
   if (member.hasPermission("ADMINISTRATOR") && member.user !== client.user) {
-    return message.channel.send({
-      embed: {
-        color: "RED",
-        description: "I cannot change admininstrator’s nicknames!",
-      },
+    return message.channel.sendEmbed({
+      color: "RED",
+      description: "I cannot change admininstrator’s nicknames!",
     });
   }
   await member.setNickname(nick);
-  return message.channel.send({
-    embed: {
-      color: "GREEN",
-      description: `Successfully changed **${target.user.tag}**’s nickname to **${nick}**`,
-    },
+  return message.channel.sendEmbed({
+    color: "GREEN",
+    description: `Successfully changed **${target.user.tag}**’s nickname to **${nick}**`,
   });
 };

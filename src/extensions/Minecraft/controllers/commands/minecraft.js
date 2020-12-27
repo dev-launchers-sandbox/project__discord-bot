@@ -14,6 +14,7 @@ exports.conf = {
 };
 
 exports.run = async (client, message, args) => {
+  message.delete();
   MinecraftServerListPing.ping(4, "72.249.104.219", 31672, 3000)
     .then((response) => {
       const embed = new Discord.MessageEmbed()

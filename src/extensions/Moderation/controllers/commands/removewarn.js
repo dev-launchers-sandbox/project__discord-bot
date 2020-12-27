@@ -37,25 +37,25 @@ exports.run = async (client, message, args) => {
 
   try {
     await db.set(`warnings.${message.guild.id}.${target.user.id}`, userWarns);
-    sendSuccessEmbed(message.channel, args);
+    sendSuccessEmbed(message.channel, args, target.user.displayAvatarURL());
   } catch (error) {
     console.error(error);
   }
 };
 
-function sendSuccessEmbed(channel, args) {
-  channel.send({
+function sendSuccessEmbed(channel, args, avatar) {
+  channel.sendEmbed({
     color: "GREEN",
     author: {
       name: `Warning #${args[1]} has been removed`,
-      image: target.user.displayAvatarURL(),
+      image: avatar,
     },
     timestamp: true,
   });
 }
 
 function sendWarningNotFoundEmbed(channel, args) {
-  channel.send({
+  channel.sendEmbed({
     color: "RED",
     title: `Warning #${args[1]} not found!`,
     description: `Make sure the user has at least ${args[1]} warnings!`,

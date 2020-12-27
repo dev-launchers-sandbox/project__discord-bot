@@ -60,7 +60,7 @@ exports.run = async (client, message, args) => {
 };
 
 function sendCannotMuteEmbed(channel, description, avatar) {
-  channel.send({
+  channel.sendEmbed({
     color: "RED",
     author: {
       name: "You cannot mute this user",
@@ -72,7 +72,7 @@ function sendCannotMuteEmbed(channel, description, avatar) {
 }
 
 function sendSuccessEmbed(channel, reason, user) {
-  channel.send({
+  channel.sendEmbed({
     color: "GREEN",
     author: {
       name: `${user.username} has been muted!`,

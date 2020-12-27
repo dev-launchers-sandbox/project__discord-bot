@@ -99,7 +99,7 @@ exports.run = async (client, message, args) => {
 
   message.channel.sendEmbed({
     color: 0xff9f01,
-    author: `${target.user.tag} has ${numOfWarns} warning(s)`,
+    author: { name: `${target.user.tag} has ${numOfWarns} warning(s)` },
     description: allWarnings,
     timestamp: true,
   });

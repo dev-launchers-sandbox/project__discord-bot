@@ -13,7 +13,7 @@ Structures.extend("User", (User) => {
 
     ban() {}
 
-    sendEmbed(args) {
+    async sendEmbed(args) {
       const embed = new Discord.MessageEmbed();
       if (args.color) embed.setColor(args.color);
       if (args.thumbnail) embed.setThumbnail(args.thumbnail);
@@ -37,14 +37,14 @@ Structures.extend("User", (User) => {
       if (args.timestamp) embed.setTimestamp(args.timestamp);
 
       try {
-        return this.send(embed);
+        return await this.send(embed);
       } catch (err) {
         console.log("User's DMs are off");
       }
     }
 
-    sendAction(guildName, reason, action) {
-      this.sendEmbed({
+    async sendAction(guildName, reason, action) {
+      await this.sendEmbed({
         color: 0xff9f01,
         author: {
           name: `You have been ${action} from: ${guildName}`,

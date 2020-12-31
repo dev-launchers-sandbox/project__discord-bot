@@ -1,10 +1,15 @@
 class Reminder {
-  constructor(client, channel, userId, body, date) {
+  constructor(dbh, client, channel, userId, body, date) {
+    this._dbh = dbh;
     this._client = client;
     this._channel = channel;
     this._userId = userId;
     this._body = body;
     this._date = date;
+  }
+
+  getBody() {
+    return this._body;
   }
 
   isOverdue() {
@@ -23,24 +28,28 @@ class Reminder {
   }
 
   async send() {
-    console.log("sending!");
-    console.log(this._channel);
-
     let channel = await this._client.channels
       .fetch(this._channel.id)
-      .then((channel) => channel);
+      .then(channel => channel);
     console.log(channel);
 
+    let user = this._client.users.cache.get(this._userId); // Getting the user by ID.
+
+    channel.send(user.toString());
     channel.sendEmbed({
-      author: this._userId,
+      //author: this._userId,
+      author: "📜 Reminder",
       title: this._body,
-      description: this._date,
-      footer: this._channel,
+      //description: this._date,
+      footer: "Set by " + user.username,
+      color: "#f7d7c4"
     });
     this.destroy();
   }
 
   destroy() {
-    dbh.reminder.removeReminder(this);
+    this._dbh.reminder.removeReminder(this);
   }
 }
+
+module.exports = Reminder;

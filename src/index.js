@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
 const express = require("express");
 
+// Bring in polyfills (running old version of node)
+require("./utils/polyfills.js");
+
 // Run extensions after initializing client, before doing any other work
 const extensions = require("./extensions");
 /*
@@ -11,7 +14,7 @@ for (const extension of extensions) {
 
 const devlaunchersBot = require("./handler/ClientBuilder.js");
 const client = new devlaunchersBot({
-  partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"],
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"]
 });
 
 const promClient = require("prom-client");
@@ -29,8 +32,8 @@ client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 
-client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.qSsXAz2PuIg98o-LfLkHaH3c44w");
-//client.login(process.env.DISCORD_TOKEN);
+// client.login(process.env.DISCORD_TOKEN);
+client.login("Nzk0MDUyMDQ4NzgxNTc0MTY0.X-1MmQ.Q9dDg8szFgeraexKVu49BK_9rvU");
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;
@@ -40,12 +43,12 @@ function registerMetrics() {
   const events = new promClient.Counter({
     name: "events_count",
     help: "Count of discrod events",
-    labelNames: ["event"],
+    labelNames: ["event"]
   });
   register.registerMetric(events);
   return {
     register: register,
-    events: events,
+    events: events
   };
 }
 

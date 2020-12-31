@@ -1,3 +1,5 @@
+const Task = require("./Task.js");
+
 const unixTime = () => {
   return new Date().getTime();
 };
@@ -31,3 +33,5 @@ class TaskManager {
     }
   }
 }
+
+module.exports = TaskManager;

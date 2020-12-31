@@ -17,3 +17,5 @@ class Task {
     this._executionTime = new Date().getTime();
   }
 }
+
+module.exports = Task;

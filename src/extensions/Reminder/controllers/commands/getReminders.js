@@ -6,16 +6,15 @@ exports.help = {
   name: "getreminders",
   description: "Get all accountability reminders",
   usage: "getreminders",
-  example: "getreminders"
+  example: "getreminders",
 };
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
 };
 
 exports.run = async (client, message, args) => {
-  console.log("entered");
   let channel = message.channel;
   let user = message.author;
 
@@ -24,12 +23,32 @@ exports.run = async (client, message, args) => {
     channel.send("Fetching entries...");
     for (let i = 0; i < reminderEntries.length; i++) {
       const entry = reminderEntries[i];
+      let date = new Date(Date.parse(entry.date));
+
+      //If the date is invalid (none specified), it will go off as soon as the taskManager ticks.
+      if (!Date.parse(entry.date)) {
+        date = new Date();
+      }
+
+      const parsedDate = getParsedDate(date);
       channel.sendEmbed({
-        title: entry.body
+        color: 0xff9f01,
+        description: `⏰ **When:** ${parsedDate}\n\n💼 **What:** ${entry.body}`,
       });
     }
   } else
     channel.sendEmbed({
-      title: "No reminders found"
+      color: 0xff9f01,
+      title: "No reminders found",
     });
 };
+
+function getParsedDate(date) {
+  return `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()} at ${date
+    .toLocaleTimeString()
+    .split(":")
+    .slice(0, -1)
+    .join(":")}${date.getHours() + 1 >= 12 ? " PM" : " AM"} CDT`;
+}

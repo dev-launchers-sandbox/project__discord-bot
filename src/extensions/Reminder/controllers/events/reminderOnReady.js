@@ -7,7 +7,7 @@ const Reminder = require("../../structures/Reminder.js");
 const TaskManager = require("../../../.common/structures/Tasks/TaskManager.js");
 
 exports.eventHandle = "ready";
-exports.event = async client => {
+exports.event = async (client) => {
   metrics.sendEvent("ready");
   console.log("reminder ready");
 
@@ -16,7 +16,7 @@ exports.event = async client => {
   const checkReminders = () => {
     let reminders = dbh.reminder.getReminders();
     if (!reminders) return;
-    reminders.forEach(entry => {
+    reminders.forEach((entry) => {
       let reminder = new Reminder(
         dbh,
         client,

@@ -27,6 +27,10 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return leaveChannel(client, message, user);
   }
+  if (messageReaction.emoji.name === "villager") {
+    let message = await fetchMessage(client, messageReaction, user);
+    return removeMinecraftRole(client, message, user, messageReaction);
+  }
 };
 
 async function removeDevBean(client, messageReaction, user) {
@@ -138,4 +142,13 @@ async function isReactionIgnored(client, messageReaction, user) {
   ignoreReactions.splice(index, 1);
   await db.set(`ignore_reactions`, ignoreReactions);
   return true;
+}
+
+function removeMinecraftRole(client, message, user, messageReaction) {
+  const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
+  const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
+
+  if (messageReaction.message.id === minecraftMsg) {
+    messageReaction.message.guild.members.resolve(user.id).roles.remove(role);
+  }
 }

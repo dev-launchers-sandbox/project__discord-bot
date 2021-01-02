@@ -3,6 +3,7 @@ const Discord = require("discord.js"),
 const db = require("quick.db");
 const commandUsage = require("../../utils/commandUsage.js");
 const metrics = require("../../index.js");
+const CommandHandler = require("./../../extensions/.common/structures/CommandHandler/CommandHandler.js");
 
 module.exports = async (client, message) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
@@ -65,6 +66,17 @@ module.exports = async (client, message) => {
     timestamps = cooldowns.get(commandFile.help.name),
     cooldownAmount = (commandFile.conf.cooldown || 3) * 1000;
 
+  if (!commandFile) return;
+  let commandHandler = new CommandHandler(commandFile.help.name, message, args);
+
+  if (
+    !commandHandler.validateCommand({
+      permissions: commandFile.conf.permissions || [],
+      arguments: commandFile.conf.arguments || [],
+    })
+  )
+    return;
+
   if (!timestamps.has(member.id)) {
     if (!client.config.owners.includes(message.author.id)) {
       timestamps.set(member.id, now);
@@ -93,7 +105,6 @@ module.exports = async (client, message) => {
   }
 
   try {
-    if (!commandFile) return;
     metrics.sendEvent("message_" + commandFile.help.name);
     commandFile.run(client, message, args);
   } catch (error) {

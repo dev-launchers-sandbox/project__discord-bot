@@ -49,6 +49,10 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
   }
+  if (messageReaction.emoji.name === "villager") {
+    let message = await fetchMessage(client, messageReaction, user);
+    return giveMinecraftRole(client, message, user, messageReaction);
+  }
 };
 
 async function awardDevBean(client, messageReaction, user) {
@@ -247,4 +251,23 @@ function categoryExists(ticketCategory, guild) {
 function numOfTicketsOpen(message, ticketCategoryId) {
   const category = message.guild.channels.resolve(ticketCategoryId);
   return category.children.size;
+}
+
+function giveMinecraftRole(client, message, user, messageReaction) {
+  const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
+  const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
+  const userReacted = messageReaction.message.guild.members.resolve(user.id);
+  console.log(userReacted.roles.cache.has(role));
+  if (messageReaction.message.id === minecraftMsg) {
+    if (!userReacted.roles.cache.has(role)) {
+      userReacted.roles.add(role);
+      const channel = messageReaction.message.guild.channels.resolve(
+        db.get(`minecraft-channel.${messageReaction.message.guild.id}`)
+      );
+
+      channel.send(
+        `Welcome <@${user.id}> to the Minecraft Area of Dev Launchers!\nIf you plan on joining the server, the IP is: **minecraft.devlaunchers.com:31672**`
+      );
+    }
+  }
 }

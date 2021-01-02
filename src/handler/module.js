@@ -8,7 +8,7 @@ module.exports = (client) => {
   client.helps = new Discord.Collection();
 
   // Old commands
-  const commandsFolder = path.join(__dirname, "../controllers/commands/");
+  /*const commandsFolder = path.join(__dirname, "../controllers/commands/");
   fs.readdir(commandsFolder, (err, categories) => {
     if (err) console.log(err);
     console.log(`Found total ${categories.length} categories`);
@@ -47,7 +47,7 @@ module.exports = (client) => {
         });
       });
     });
-  });
+  });*/
 
   // New commands
   // TODO: Change the strategy for accessing commands from reading file names (old process) to using the index.js structures
@@ -60,11 +60,14 @@ module.exports = (client) => {
     let moduleConf = {
       name: extension.helpCategory,
       hide: false,
-      path: `./extensions/${extension.name}/controllers/commands`,
+      path: `../extensions/${extension.name}/controllers/commands`,
       cmds: [],
     };
 
-    const categoryFolder = `./src/extensions/${extension.name}/controllers/commands`;
+    const categoryFolder = path.join(
+      __dirname,
+      `../extensions/${extension.name}/controllers/commands`
+    );
     console.log("CATEGORY_FOLDER: " + categoryFolder);
     fs.readdir(categoryFolder, (err, files) => {
       console.log(err);
@@ -82,10 +85,13 @@ module.exports = (client) => {
           let prop = require(`../extensions/${extension.name}/controllers/commands/${file}`);
           let cmdName = file.split(".")[0];
 
-          client.commands.set(prop.help.name, prop);
+          client.commands.set(prop.help.name.toLowerCase(), prop);
 
           prop.conf.aliases.forEach((alias) => {
-            client.aliases.set(alias, prop.help.name);
+            client.aliases.set(
+              alias.toLowerCase(),
+              prop.help.name.toLowerCase()
+            );
           });
           client.helps.get(category).cmds.push(prop.help.name);
         });

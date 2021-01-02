@@ -9,9 +9,21 @@ module.exports = [
   // Bean Extension
   require("./Bean"),
 
-  // Poll Extension
-  require("./Poll"),
+  //Reminder Extension
 
-  // Reminder Extension
   require("./Reminder"),
+  // General Extension
+  require("./General"),
+
+  // Minecraft Extension
+  require("./Minecraft"),
+
+  // Moderation Extension
+  require("./Moderation"),
+
+  // Minecraft Extension
+  require("./Threads"),
+
+  // UtilCommands Extension
+  require("./UtilCommands"),
 ];

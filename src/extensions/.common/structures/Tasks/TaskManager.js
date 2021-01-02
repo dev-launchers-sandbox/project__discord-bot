@@ -26,7 +26,6 @@ class TaskManager {
   }
 
   tick() {
-    console.log("tick");
     for (let i = 0; i < this._tasks.length; i++) {
       let task = this._tasks[i];
       task.checkExecution();

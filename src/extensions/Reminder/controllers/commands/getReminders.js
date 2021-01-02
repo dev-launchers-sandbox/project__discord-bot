@@ -19,13 +19,17 @@ exports.run = async (client, message, args) => {
   let channel = message.channel;
   let user = message.author;
 
-  channel.send("Fetching entries...");
-
   const reminderEntries = dbh.reminder.getUserReminders(user);
-  for (let i = 0; i < reminderEntries.length; i++) {
-    const entry = reminderEntries[i];
+  if (reminderEntries.length) {
+    channel.send("Fetching entries...");
+    for (let i = 0; i < reminderEntries.length; i++) {
+      const entry = reminderEntries[i];
+      channel.sendEmbed({
+        title: entry.body
+      });
+    }
+  } else
     channel.sendEmbed({
-      title: entry.body
+      title: "No reminders found"
     });
-  }
 };

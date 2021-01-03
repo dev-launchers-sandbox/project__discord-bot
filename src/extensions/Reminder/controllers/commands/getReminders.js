@@ -50,5 +50,5 @@ function getParsedDate(date) {
     .toLocaleTimeString()
     .split(":")
     .slice(0, -1)
-    .join(":")}${date.getHours() + 1 >= 12 ? " PM" : " AM"} CDT`;
+    .join(":")}${date.getHours() + 1 >= 12 ? " PM" : " AM"} UTC`;
 }

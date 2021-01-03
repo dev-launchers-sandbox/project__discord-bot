@@ -1,9 +1,10 @@
 const Discord = require("discord.js");
-const dbh = require("../../../.common/structures/DatabaseHandler.js");
+const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 const ms = require("parse-ms");
 const metrics = require("../../../../index.js");
 
-require();
+const Reminder = require("../../structures/Reminder.js");
+const TaskManager = require("../../../.common/structures/Tasks/TaskManager.js");
 
 exports.eventHandle = "ready";
 exports.event = async (client) => {
@@ -14,8 +15,10 @@ exports.event = async (client) => {
 
   const checkReminders = () => {
     let reminders = dbh.reminder.getReminders();
+    if (!reminders) return;
     reminders.forEach((entry) => {
       let reminder = new Reminder(
+        dbh,
         client,
         entry.channel,
         entry.userId,

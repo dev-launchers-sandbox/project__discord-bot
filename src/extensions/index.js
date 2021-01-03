@@ -9,6 +9,9 @@ module.exports = [
   // Bean Extension
   require("./Bean"),
 
+  //Reminder Extension
+
+  require("./Reminder"),
   // General Extension
   require("./General"),
 

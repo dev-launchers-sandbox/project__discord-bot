@@ -8,6 +8,7 @@
     "prod-start": "cd data && node ../src/index.js"
   },
   "dependencies": {
+    "chrono-node": "2.1.10",
     "dateformat": "^3.0.3",
     "discord.js": "^12.2.0",
     "express": "^4.17.1",

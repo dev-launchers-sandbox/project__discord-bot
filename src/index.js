@@ -1,6 +1,9 @@
 const Discord = require("discord.js");
 const express = require("express");
 
+// Bring in polyfills (running old version of node)
+require("./utils/polyfills.js");
+
 // Run extensions after initializing client, before doing any other work
 const extensions = require("./extensions");
 

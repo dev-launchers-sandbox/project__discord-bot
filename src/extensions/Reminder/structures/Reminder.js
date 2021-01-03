@@ -30,7 +30,7 @@ class Reminder {
   async send() {
     let channel = await this._client.channels
       .fetch(this._channel.id)
-      .then(channel => channel);
+      .then((channel) => channel);
     console.log(channel);
 
     let user = this._client.users.cache.get(this._userId); // Getting the user by ID.
@@ -38,11 +38,11 @@ class Reminder {
     channel.send(user.toString());
     channel.sendEmbed({
       //author: this._userId,
-      author: "📜 Reminder",
+      author: { name: "📜 Reminder" },
       title: this._body,
       //description: this._date,
       footer: "Set by " + user.username,
-      color: "#f7d7c4"
+      color: "#f7d7c4",
     });
     this.destroy();
   }

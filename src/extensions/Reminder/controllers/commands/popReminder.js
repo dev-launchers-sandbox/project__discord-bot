@@ -1,18 +1,18 @@
 const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
-const CommandHandler = require("../../../../utils/CommandHandler.js");
+const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 
 exports.help = {
   name: "popreminder",
   description:
     "Pop the most recently added reminder from a user's reminder stack",
   usage: "popReminder",
-  example: "popReminder"
+  example: "popReminder",
 };
 
 exports.conf = {
   aliases: [],
-  cooldown: 5
+  cooldown: 5,
 };
 
 exports.run = async (client, message, args) => {
@@ -26,13 +26,15 @@ exports.run = async (client, message, args) => {
     if (reminderData)
       channel.sendEmbed({
         //author: user.id,
+        color: 0xff9f01,
         title: "Reminder popped",
-        description: reminderData.body
+        description: reminderData.body,
         //footer: channel
       });
     else
       channel.sendEmbed({
-        title: "No reminder found on stack"
+        color: 0xff9f01,
+        title: "No reminder found on stack",
       });
   }
 };

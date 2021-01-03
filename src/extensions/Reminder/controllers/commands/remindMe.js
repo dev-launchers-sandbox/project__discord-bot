@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
-const CommandHandler = require("../../../../utils/CommandHandler.js");
+const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 const chrono = require("chrono-node");
 
 exports.help = {

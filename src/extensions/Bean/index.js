@@ -9,7 +9,7 @@ module.exports = {
     require("./controllers/commands/goldenBeanCooldown.js"),
     require("./controllers/commands/leaderboard.js"),
   ],
-  events: [require("./controllers/events/beanReactionAdd.js")],
+  events: [require("./controllers/events/beanOnReactionAdd.js")],
   extends: [require("./structures/BeanMessageReaction.js")],
   structures: [],
 };

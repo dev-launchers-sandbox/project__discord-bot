@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const CommandHandler = require("../../../../utils/CommandHandler.js");
+const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
 exports.help = {

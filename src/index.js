@@ -9,7 +9,7 @@ const extensions = require("./extensions");
 
 const devlaunchersBot = require("./handler/ClientBuilder.js");
 const client = new devlaunchersBot({
-  partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"]
+  partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"],
 });
 
 const promClient = require("prom-client");
@@ -27,7 +27,7 @@ client.package = require("../package.json");
 client.on("warn", console.warn);
 client.on("error", console.error);
 
-client.login(process.env.DISCORD_TOKEN);
+client.login("NzE3MTI0NTA4MTg3NjIzNTIw.XtVwPg.d8NtgHPgD5SVU3WfvCdXoZDqPUE");
 
 function registerMetrics() {
   const collectDefaultMetrics = promClient.collectDefaultMetrics;
@@ -37,12 +37,12 @@ function registerMetrics() {
   const events = new promClient.Counter({
     name: "events_count",
     help: "Count of discrod events",
-    labelNames: ["event"]
+    labelNames: ["event"],
   });
   register.registerMetric(events);
   return {
     register: register,
-    events: events
+    events: events,
   };
 }
 

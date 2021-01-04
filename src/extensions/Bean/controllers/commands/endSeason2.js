@@ -21,10 +21,11 @@ exports.run = async (client, message, args) => {
 
   try {
     await members.forEach(async (member) => {
-      await db.delete(`account.${member.id}.devBeans`);
-      await db.delete(`account.${member.id}.goldenBeans`);
-      await db.delete(`lastGoldenBean.${member.id}`);
-      await db.delete(`lastGoldenBeanAwarded.${member.id}`);
+      try {
+        await db.delete(`account.${member.id}.goldenBeans`);
+      } catch (e) {
+        console.log(e);
+      }
     });
   } catch (e) {
     console.log(e);

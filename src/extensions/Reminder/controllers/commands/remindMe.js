@@ -42,6 +42,7 @@ exports.run = async (client, message, args) => {
       userId: user.id,
       body: reminderText,
       date: reminderDate,
+      sentAt: Date.now(),
     });
 
     channel.sendEmbed({

@@ -23,7 +23,8 @@ exports.event = async (client) => {
         entry.channel,
         entry.userId,
         entry.body,
-        entry.date
+        entry.date,
+        entry.sentAt
       );
       reminder.checkReminderDate();
     });

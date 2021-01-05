@@ -1,11 +1,12 @@
 class Reminder {
-  constructor(dbh, client, channel, userId, body, date) {
+  constructor(dbh, client, channel, userId, body, date, sentAt) {
     this._dbh = dbh;
     this._client = client;
     this._channel = channel;
     this._userId = userId;
     this._body = body;
     this._date = date;
+    this._sentAt = sentAt;
   }
 
   getBody() {

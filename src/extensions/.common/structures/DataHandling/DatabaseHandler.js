@@ -40,8 +40,10 @@ class ReminderHandler {
 
   removeReminder(reminder) {
     let reminders = this.getReminders();
-    let filtered = reminders.filter(entry => {
-      return entry.id != reminder.id;
+    let filtered = reminders.filter((entry) => {
+      return !(
+        entry.sentAt === reminder._sentAt && entry.userId === reminder._userId
+      );
     });
     this.setReminders(filtered);
   }
@@ -52,7 +54,7 @@ class ReminderHandler {
   }
 
   getUserReminders(user) {
-    return quickDB.get(`reminders`).filter(entry => {
+    return quickDB.get(`reminders`).filter((entry) => {
       return entry.userId == user.id;
     });
   }

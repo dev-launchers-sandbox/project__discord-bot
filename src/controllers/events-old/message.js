@@ -177,9 +177,9 @@ function bumpCheck(message) {
 function getRandomBeans() {
   const num = Math.random();
 
-  if (num <= 0.31) return { type: "devBeans", value: 1 };
-  else if (num < 0.61) return { type: "devBeans", value: 2 };
-  else if (num < 0.92) return { type: "devBeans", value: 3 };
+  if (num <= 0.9) return { type: "devBeans", value: 1 };
+  else if (num <= 0.95) return { type: "devBeans", value: 2 };
+  else if (num <= 0.98) return { type: "devBeans", value: 3 };
   else return { type: "goldenBeans", value: 1 };
 }
 

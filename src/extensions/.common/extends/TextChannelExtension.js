@@ -29,7 +29,7 @@ Structures.extend("TextChannel", (TextChannel) => {
 
       if (args.footer) embed.setFooter(args.footer);
       if (args.timestamp) embed.setTimestamp(args.timestamp);
-
+      if (args.image) embed.setImage(args.image);
       return this.send(embed);
     }
 

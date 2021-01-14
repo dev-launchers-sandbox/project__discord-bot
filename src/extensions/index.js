@@ -26,4 +26,7 @@ module.exports = [
 
   // UtilCommands Extension
   require("./UtilCommands"),
+
+  // UtilCommands Extension
+  require("./Invites"),
 ];

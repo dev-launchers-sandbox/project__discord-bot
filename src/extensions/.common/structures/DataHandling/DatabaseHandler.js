@@ -4,6 +4,7 @@ class DatabaseHandler {
   constructor() {
     this.bean = new BeanHandler();
     this.reminder = new ReminderHandler();
+    this.invite = new InviteHandler();
   }
 }
 
@@ -76,6 +77,30 @@ class ReminderHandler {
 
   clearReminders() {
     quickDB.set(`reminders`, []);
+  }
+}
+
+class InviteHandler {
+  constructor() {}
+
+  setInvite(guildId, name, code) {
+    quickDB.set(`invites.${guildId}.${name}`, code);
+  }
+
+  getInvites(guildId) {
+    return quickDB.get(`invites.${guildId}`);
+  }
+
+  getInvite(guildId, name) {
+    return quickDB.get(`invites.${guildId}.${name}`);
+  }
+
+  removeInvite(guildId, name) {
+    quickDB.delete(`invites.${guildId}.${name}`);
+  }
+
+  getInviteChannel(guildId) {
+    return quickDB.get(`invite.${guildId}`);
   }
 }
 

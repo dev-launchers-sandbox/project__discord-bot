@@ -15,4 +15,5 @@ module.exports = {
   events: [],
   extends: [],
   structures: [],
+  permissions: [],
 };

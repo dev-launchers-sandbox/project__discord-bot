@@ -13,4 +13,5 @@ module.exports = {
   ],
   extends: [],
   structures: [require("./structures/InviteHandler.js")],
+  permissions: ["ADMINISTRATOR"],
 };

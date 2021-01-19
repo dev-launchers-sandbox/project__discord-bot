@@ -17,6 +17,7 @@ module.exports = (client) => {
         hide: false,
         path: `../extensions/${category}/controllers/commands`,
         cmds: [],
+        permissions: extension.permissions,
       };
 
       client.helps.set(category, moduleConf);

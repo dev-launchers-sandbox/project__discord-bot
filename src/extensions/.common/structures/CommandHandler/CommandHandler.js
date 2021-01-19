@@ -15,6 +15,17 @@ module.exports = class CommandHandler {
     return this.args.length;
   }
 
+  validateCategory(permissions) {
+    if (permissions.length > 0) {
+      for (const permission of permissions) {
+        if (!this.user.permissions.has(permission)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   validateCommand(requirements) {
     let prefix = "."; // TODO: fetch prefix from database?
 

@@ -12,4 +12,5 @@ module.exports = {
   events: [require("./controllers/events/beanOnReactionAdd.js")],
   extends: [require("./structures/BeanMessageReaction.js")],
   structures: [],
+  permissions: [],
 };

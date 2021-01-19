@@ -24,4 +24,11 @@ function sendWelcomeEmbed(client, member) {
     .setFooter(`DevLaunchers`, icon)
     .setColor(0xff9f01);
   welcomeChannel.send(welcomeEmbed);
+  welcomeChannel.send(member.user.toString()).then((m) => m.delete());
+
+  let controlCenterID = db.get(`control-center.${member.guild.id}`) || "null";
+  let controlChannel = member.guild.channels.resolve(controlCenterID);
+  if (!controlChannel) return;
+
+  controlChannel.send(member.user.toString()).then((m) => m.delete());
 }

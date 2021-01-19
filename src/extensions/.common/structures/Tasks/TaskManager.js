@@ -6,7 +6,6 @@ const unixTime = () => {
 
 class TaskManager {
   constructor() {
-    console.log("TaskManager created");
     this._tasks = [];
 
     this._intervalFunc = setInterval(() => {

@@ -7,7 +7,6 @@ module.exports = (client) => {
   for (let extension of extensions) {
     for (let event of extension.events) {
       let eventHandle = event.eventHandle;
-      console.log("Hooking into " + eventHandle);
       client.on(eventHandle, (...args) => event.event(client, ...args));
     }
   }

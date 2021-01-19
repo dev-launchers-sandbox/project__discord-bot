@@ -9,7 +9,6 @@ const TaskManager = require("../../../.common/structures/Tasks/TaskManager.js");
 exports.eventHandle = "ready";
 exports.event = async (client) => {
   metrics.sendEvent("ready");
-  console.log("reminder ready");
 
   let taskManager = new TaskManager();
 

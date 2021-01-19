@@ -4,7 +4,6 @@ class InviteHandler {
   }
 
   fetchInvites(client) {
-    console.log("\n\n\nFETCH INVITES CALLED\n\n\n");
     client.guilds.cache.forEach((guild) => {
       guild
         .fetchInvites()

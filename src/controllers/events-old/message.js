@@ -56,7 +56,7 @@ module.exports = async (client, message) => {
   }
   let commandFile =
     client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
-  if (!commandFile) return;
+  if (!commandFile) return console.log("command not found");
 
   if (!cooldowns.has(commandFile.help.name))
     cooldowns.set(commandFile.help.name, new Discord.Collection());

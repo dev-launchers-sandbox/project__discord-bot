@@ -32,7 +32,6 @@ class Reminder {
     let channel = await this._client.channels
       .fetch(this._channel.id)
       .then((channel) => channel);
-    console.log(channel);
 
     let user = this._client.users.cache.get(this._userId); // Getting the user by ID.
 

@@ -9,7 +9,7 @@ exports.help = {
 };
 
 exports.conf = {
-  aliases: [],
+  aliases: ["mc"],
   cooldown: 5,
 };
 

@@ -18,4 +18,5 @@ module.exports = {
   events: [],
   extends: [],
   structures: [],
+  permissions: ["MANAGE_ROLES"],
 };

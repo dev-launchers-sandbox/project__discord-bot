@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
+const CommandHandler = require("./../../../.common/structures/CommandHandler/CommandHandler.js");
 
 exports.help = {
   name: "help",
@@ -21,6 +22,11 @@ exports.run = async (client, message, args) => {
     if (!client.config.owners.includes(message.author.id)) {
       module = client.helps.array().filter((x) => !x.hide);
     }
+
+    module = client.helps.array().filter((cat) => {
+      let cmdHandler = new CommandHandler(null, message, args);
+      return cmdHandler.validateCategory(cat.permissions);
+    });
 
     let fields = [];
     for (const mod of module) {

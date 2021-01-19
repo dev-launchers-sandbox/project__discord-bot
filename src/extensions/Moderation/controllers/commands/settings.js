@@ -33,6 +33,7 @@ const settings = [
   "minecraft",
   "minecraft-role",
   "minecraft-channel",
+  "control-center",
 ];
 
 exports.run = async (client, message, args) => {

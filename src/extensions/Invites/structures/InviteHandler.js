@@ -29,6 +29,12 @@ class InviteHandler {
   async fetchNewInvite(invite) {
     this.guildInvites.set(invite.guild.id, await invite.guild.fetchInvites());
   }
+
+  getInvite(guildId, code) {
+    let inviteGuild = this.guildInvites.get(guildId);
+    if (!inviteGuild) return;
+    return inviteGuild.get(code);
+  }
 }
 
 module.exports = new InviteHandler();

@@ -16,12 +16,12 @@ function sendWelcomeEmbed(client, member) {
   if (!welcomeChannel) return;
   let icon = member.guild.iconURL({ size: 2048, dynamic: true });
   let avatar = member.user.displayAvatarURL({ size: 2048 });
-  // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
+
   const welcomeEmbed = new Discord.MessageEmbed()
     .setAuthor(`${member.user.tag}`, avatar)
-    .setDescription(`Welcome **${member.user.username}**, thanks for joining!`)
-    .setFooter(`DevLaunchers`, icon)
+    .setDescription(`Welcome to DevLaunchers **${member.user.username}**`)
+    .setFooter(` | ${member.id}`, icon)
     .setColor(0xff9f01);
   welcomeChannel.send(welcomeEmbed);
   welcomeChannel.send(member.user.toString()).then((m) => m.delete());

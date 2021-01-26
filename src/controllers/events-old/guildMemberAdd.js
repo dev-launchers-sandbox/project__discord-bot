@@ -16,8 +16,8 @@ function sendWelcomeEmbed(client, member) {
   if (!welcomeChannel) return;
   let icon = member.guild.iconURL({ size: 2048, dynamic: true });
   let avatar = member.user.displayAvatarURL({ size: 2048 });
-  // If a channel with the name "welcome", we just want to return.
   if (!welcomeChannel) return;
+
   const welcomeEmbed = new Discord.MessageEmbed()
     .setAuthor(`${member.user.tag}`, avatar)
     .setDescription(`Welcome to DevLaunchers **${member.user.username}**`)

@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
+const inviteHandler = require("./../../structures/InviteHandler.js");
 
 exports.help = {
   name: "getInvites",
@@ -23,7 +24,13 @@ exports.run = async (client, message, args) => {
   Object.keys(invites).forEach((name) => {
     if (description === "None found") description = "";
     let code = dbh.invite.getInvite(message.guild.id, name);
-    description = description.concat(`\nInvite **${code}** --> **${name}**`);
+    let invite = inviteHandler.getInvite(message.guild.id, code);
+    if (!invite) return;
+    let uses = invite.uses;
+
+    description = description.concat(
+      `\ Name: **${name}** | Code: **${code}** | Uses: **${uses}**`
+    );
   });
 
   if (description.length > 2048) {

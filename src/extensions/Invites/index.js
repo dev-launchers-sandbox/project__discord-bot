@@ -1,6 +1,7 @@
 module.exports = {
   name: "Invites",
   helpCategory: "Invites",
+  helpPage: 2,
   commands: [
     require("./controllers/commands/addInvite.js"),
     require("./controllers/commands/getInvites.js"),

@@ -14,6 +14,7 @@ module.exports = (client) => {
     if (extension.commands.length > 0) {
       let moduleConf = {
         name: extension.helpCategory,
+        helpPage: extension.helpPage,
         hide: false,
         path: `../extensions/${category}/controllers/commands`,
         cmds: [],

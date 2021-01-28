@@ -1,6 +1,7 @@
 module.exports = {
   name: "General",
   helpCategory: "General",
+  helpPage: 1,
   commands: [
     require("./controllers/commands/help.js"),
     require("./controllers/commands/info.js"),

@@ -1,6 +1,7 @@
 module.exports = {
   name: "Threads",
   helpCategory: "Threads",
+  helpPage: 3,
   commands: [
     require("./controllers/commands/blacklist.js"),
     require("./controllers/commands/convertPublic.js"),

@@ -1,6 +1,7 @@
 module.exports = {
   name: "Bean",
   helpCategory: "Beans",
+  helpPage: 3,
   commands: [
     require("./controllers/commands/beans.js"),
     require("./controllers/commands/deleteLeaves.js"),

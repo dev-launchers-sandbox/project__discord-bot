@@ -1,6 +1,7 @@
 module.exports = {
   name: "Moderation",
   helpCategory: "Moderation",
+  helpPage: 2,
   commands: [
     require("./controllers/commands/ban.js"),
     require("./controllers/commands/clear.js"),

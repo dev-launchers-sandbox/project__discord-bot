@@ -28,6 +28,7 @@ exports.run = async (client, message, args) => {
       return cmdHandler.validateCategory(cat.permissions);
     });
 
+    module.sort((a, b) => a.helpPage - b.helpPage);
     let fields = [];
     for (const mod of module) {
       fields.push({

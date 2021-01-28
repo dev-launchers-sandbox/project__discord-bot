@@ -1,6 +1,7 @@
 module.exports = {
   name: "Reminder",
   helpCategory: "Reminders",
+  helpPage: 3,
   commands: [
     require("./controllers/commands/remindMe.js"),
     require("./controllers/commands/popReminder.js"),

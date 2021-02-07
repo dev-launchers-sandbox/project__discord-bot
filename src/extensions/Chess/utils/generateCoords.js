@@ -1,3 +1,4 @@
+// A simple helper script to save me a few hours of work ;)
 let coords = [],
     rows = 8,
     cols = 8,

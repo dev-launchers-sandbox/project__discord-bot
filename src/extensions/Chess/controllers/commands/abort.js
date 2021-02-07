@@ -11,7 +11,7 @@ exports.conf = {
 };
 
 exports.run = async(client, message) => {
-    const ChessManager = require('../../helpers/NewChessManager');
+    const ChessManager = require('../../structures/ChessManager');
     let chessManager = new ChessManager();
 
     chessManager.abort(message);

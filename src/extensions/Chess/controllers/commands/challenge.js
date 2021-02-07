@@ -18,7 +18,7 @@ exports.run = async(client, message, args) => {
     if (target.user.bot) {
         return message.channel.send("Hey, you can't challenge a bot! They're honestly just too good, I think they're using an engine...");
     } else if (target.user) {
-        const ChessManager = require('../../helpers/NewChessManager');
+        const ChessManager = require('../../structures/ChessManager');
         let chessManager = new ChessManager();
 
         chessManager.challenge(client, message, [message.author.id, target.user.id]);

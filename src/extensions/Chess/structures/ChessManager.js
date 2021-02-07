@@ -50,7 +50,7 @@ module.exports = class {
 
     getBoardImage(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
         const { createCanvas, Image } = require("canvas");
-        const coords = require("./coords.json");
+        const coords = require("../assets/coords.json");
         const fs = require('fs');
 
         const { Chess } = require('chess.js');
@@ -83,7 +83,7 @@ module.exports = class {
             if (!board[i]) {
                 continue;
             } else {
-                let data = fs.readFileSync(`./src/extensions/Chess/pieces/${board[i].color}${board[i].type.toUpperCase()}.png`);
+                let data = fs.readFileSync(`./src/extensions/Chess/assets/pieces/${board[i].color}${board[i].type.toUpperCase()}.png`);
                 let img = new Image;
                 img.src = data;
 
@@ -91,6 +91,7 @@ module.exports = class {
             }
         }
 
+        // TODO: Clean up this section of the code, it's very messy
         // Add grid letters and numbers a-h, 1-8
         for (let i = 0; i < coords.length; i++) {
             ctx.font = '600 20pt Menlo';

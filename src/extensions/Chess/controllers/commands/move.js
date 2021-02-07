@@ -13,7 +13,7 @@ exports.conf = {
 exports.run = async(client, message, args) => {
     if (!args[0]) return message.reply("please provide a move.")
 
-    const ChessManager = require('../../helpers/NewChessManager');
+    const ChessManager = require('../../structures/ChessManager');
     let chessManager = new ChessManager();
 
     chessManager.move(client, message, args[0])

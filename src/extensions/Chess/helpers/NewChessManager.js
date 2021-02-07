@@ -16,7 +16,6 @@ module.exports = class {
         let players = [args[0], args[1]];
         return {
             players: players,
-            id: require("sha.js")("sha256").update(players).digest("hex"), // I don't want to interact with the database with these methods, so I use a hash instead
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             turns: {
                 'w': players[0],

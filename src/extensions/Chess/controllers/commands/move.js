@@ -1,0 +1,20 @@
+exports.help = {
+    name: "move",
+    description: "Makes a move on the chessboard.",
+    usage: `move [AN formatted move]`,
+    example: `move e4`,
+};
+
+exports.conf = {
+    aliases: ["m"],
+    cooldown: 0,
+};
+
+exports.run = async(client, message, args) => {
+    if (!args[0]) return message.reply("please provide a move.")
+
+    const ChessManager = require('../../helpers/NewChessManager');
+    let chessManager = new ChessManager();
+
+    chessManager.move(client, message, args[0])
+};

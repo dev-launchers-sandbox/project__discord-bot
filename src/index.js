@@ -14,8 +14,8 @@ const client = new devlaunchersBot({
 
 const promClient = require("prom-client");
 
-// const metrics = registerMetrics();
-// startMetricsServer(metrics);
+const metrics = registerMetrics();
+startMetricsServer(metrics);
 
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
@@ -61,7 +61,7 @@ function startMetricsServer(metrics) {
 }
 
 function sendEvent(metric) {
-    // metrics.events.inc({ event: metric });
+    metrics.events.inc({ event: metric });
 }
 
 exports.sendEvent = sendEvent;

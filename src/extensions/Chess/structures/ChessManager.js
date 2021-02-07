@@ -26,11 +26,18 @@ module.exports = class {
     }
 
     createGameChannel(client, message, players) {
-        let guild = message.guild;
-        guild.channels.create(`chess-${client.users.cache.get(players[0]).username.toLowerCase()}-vs-${client.users.cache.get(players[1]).username.toLowerCase()}`).then(c => {
-            c.setTopic('!move <move>');
-            this.tempChannel = c;
-        });
+        let category = message.guild.channels.cache.find(chnl => chnl.name == "Chess" && chnl.type == "category");
+        if (!category) {
+            return false;
+        } else {
+            let guild = message.guild;
+            guild.channels.create(`chess-${client.users.cache.get(players[0]).username.toLowerCase()}-vs-${client.users.cache.get(players[1]).username.toLowerCase()}`).then(c => {
+                c.setTopic('!move <move>');
+                c.setParent(category);
+                this.tempChannel = c;
+            });
+            return true;
+        }
     }
 
     getChannel(message, id) {
@@ -41,11 +48,17 @@ module.exports = class {
         if (indexOfPlayerID === -1) return false;
 
         let channel = message.guild.channels.cache.find(c => {
-            // console.log(c.id, c.name, games[indexOfPlayerID].channel)
             return c.id == games[indexOfPlayerID].channel;
         });
 
         return channel;
+    }
+
+    createSettingObject(guild, category = null) {
+        return {
+            guild: guild,
+            category: category
+        }
     }
 
     getBoardImage(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
@@ -127,7 +140,31 @@ module.exports = class {
         }, []);
     }
 
-    // The following methods are just wrappers around database functionality.
+    getGames() {
+        return this.db.get("games") || []; // Implementing null-safety
+    }
+
+    getGame(id) {
+        const games = this.getGames();
+        const playerID = id;
+        const indexOfPlayerID = games.findIndex(game => { return game.players.includes(playerID); });
+
+        if (indexOfPlayerID === -1) return false;
+
+        return games[indexOfPlayerID];
+    }
+
+    setGame(id, fen, c) {
+        const games = this.getGames();
+        const indexOfPlayerID = games.findIndex(game => { return game.players.includes(id); });
+
+        if (indexOfPlayerID === -1) return false;
+
+        fen ? games[indexOfPlayerID].fen = fen : '';
+
+        this.db.set("games", games);
+    }
+
     createGame(players, channelID) {
         let games = this.getGames();
         games.push(this.createGameObject(players, channelID));
@@ -152,40 +189,18 @@ module.exports = class {
         this.db.set("games", games);
     }
 
-    getGame(id) {
-        const games = this.getGames();
-        const playerID = id;
-        const indexOfPlayerID = games.findIndex(game => { return game.players.includes(playerID); });
-
-        if (indexOfPlayerID === -1) return false;
-
-        return games[indexOfPlayerID];
-    }
-
-    setGame(id, fen, c) {
-        const games = this.getGames();
-        const indexOfPlayerID = games.findIndex(game => { return game.players.includes(id); });
-
-        if (indexOfPlayerID === -1) return false;
-
-        fen ? games[indexOfPlayerID].fen = fen : '';
-
-        this.db.set("games", games);
-    }
-
-    getGames() {
-        return this.db.get("games") || []; // Implementing null-safety
-    }
-
     // The following functions are higher level functions used in commands.
     challenge(client, message, players) {
         if (!this.getGame(message.author.id)) {
-            this.createGameChannel(client, message, players);
+            if (!this.createGameChannel(client, message, players)) {
+                return message.reply("please run create a category named \"Chess\" before using `.challenge`.");
+            }
+
             setTimeout(() => {
                 const { MessageEmbed } = require('discord.js');
                 const fs = require('fs');
 
-                this.createGame(players, this.tempChannel.id);
+                this.createGame(players, this.tempChannel.id)
 
                 fs.writeFileSync('./board.png', this.getBoardImage(this.getGame(message.author.id).fen));
 

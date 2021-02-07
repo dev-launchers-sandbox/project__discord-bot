@@ -4,7 +4,7 @@ exports.help = {
     name: "challenge",
     description: "challenges a user",
     usage: `challenge [@user]`,
-    example: `challenge`,
+    example: `challenge @Hextanium#5890`,
 };
 
 exports.conf = {

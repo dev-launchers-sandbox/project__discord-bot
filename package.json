@@ -1,31 +1,35 @@
 {
-  "name": "discord-bot-07-20-2020",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/index.js",
-  "scripts": {
-    "start": "npm install discord.js && ./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
-    "prod-start": "cd data && node ../src/index.js"
-  },
-  "dependencies": {
-    "chrono-node": "2.1.10",
-    "dateformat": "^3.0.3",
-    "discord.js": "^12.2.0",
-    "express": "^4.17.1",
-    "minecraft-status": "^1.1.0",
-    "moment": "^2.26.0",
-    "node": "12.16.3",
-    "node-superfetch": "0.1.10",
-    "parse-ms": "2.1.0",
-    "prom-client": "^12.0.0",
-    "quick.db": "7.1.1"
-  },
-  "devDependencies": {
-    "nodemon": "1.18.4",
-    "node": "12.16.3",
-    "axios": "^0.19.2",
-    "js-yaml": "^3.13.1",
-    "winston": "^3.2.1"
-  },
-  "keywords": []
+    "name": "discord-bot-07-20-2020",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
+        "prod-start": "cd data && node ../src/index.js"
+    },
+    "dependencies": {
+        "canvas": "^2.6.1",
+        "chess.js": "^0.11.0",
+        "chrono-node": "2.1.10",
+        "dateformat": "^3.0.3",
+        "discord.js": "^12.2.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "minecraft-status": "^1.1.0",
+        "moment": "^2.26.0",
+        "node": "12.16.3",
+        "node-superfetch": "0.1.10",
+        "parse-ms": "2.1.0",
+        "prom-client": "^12.0.0",
+        "quick.db": "7.1.1",
+        "sha.js": "^2.4.11"
+    },
+    "devDependencies": {
+        "nodemon": "1.18.4",
+        "node": "12.16.3",
+        "axios": "^0.19.2",
+        "js-yaml": "^3.13.1",
+        "winston": "^3.2.1"
+    },
+    "keywords": []
 }

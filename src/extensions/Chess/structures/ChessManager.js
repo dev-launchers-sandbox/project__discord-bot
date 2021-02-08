@@ -26,12 +26,28 @@ module.exports = class {
     }
 
     createGameChannel(client, message, players) {
+        let guild = message.guild;
         let category = message.guild.channels.cache.find(chnl => chnl.name == "Chess" && chnl.type == "category");
-        if (!category) {
+        let chessRole = guild.roles.cache.find(role => role.name === "Chess");
+
+        if (!category || !chessRole) {
             return false;
         } else {
-            let guild = message.guild;
-            guild.channels.create(`chess-${client.users.cache.get(players[0]).username.toLowerCase()}-vs-${client.users.cache.get(players[1]).username.toLowerCase()}`).then(c => {
+
+            guild.channels.create(`chess-${client.users.cache.get(players[0]).username.toLowerCase()}-vs-${client.users.cache.get(players[1]).username.toLowerCase()}`, {
+                type: 'text',
+                permissionOverwrites: [{
+                        type: 'role',
+                        id: message.guild.id, // This is the ID for the @everyone role apparently 
+                        deny: ['VIEW_CHANNEL'],
+                    },
+                    {
+                        type: 'role',
+                        id: chessRole.id,
+                        allow: ['VIEW_CHANNEL'],
+                    },
+                ],
+            }).then(c => {
                 c.setTopic('!move <move>');
                 c.setParent(category);
                 this.tempChannel = c;
@@ -193,13 +209,13 @@ module.exports = class {
     challenge(client, message, players) {
         if (!this.getGame(message.author.id)) {
             if (!this.createGameChannel(client, message, players)) {
-                return message.reply("please run create a category named \"Chess\" before using `.challenge`.");
+                return message.reply("please run create a category named \"Chess\" and a role named \"Chess\" before using `.challenge`.");
             }
 
             setTimeout(() => {
                 const fs = require('fs');
 
-                this.createGame(players, this.tempChannel.id)
+                this.createGame(players, this.tempChannel.id);
 
                 fs.writeFileSync('./board.png', this.getBoardImage(this.getGame(message.author.id).fen));
 

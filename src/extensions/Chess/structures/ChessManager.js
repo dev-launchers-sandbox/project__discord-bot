@@ -267,8 +267,9 @@ module.exports = class {
                     fs.writeFileSync('./board.png', this.getBoardImage(this.getGame(message.author.id).fen));
 
                     let channel = this.getChannel(message, message.author.id);
+                    channel.bulkDelete(100);
 
-                    this.tempChannel.sendEmbed({
+                    channel.sendEmbed({
                         title: `**${client.users.cache.get(this.getGame(message.author.id).players[0]).username} vs. ${client.users.cache.get(this.getGame(message.author.id).players[1]).username}**`,
                         color: 0xff9f01,
                         fields: [{
@@ -280,10 +281,6 @@ module.exports = class {
                         image: 'attachment://board.png',
                         footer: 'Rook: R, King: K, Knight: N, Bishop: B\nQueen: Q, Capture: x, Check: +, Example: Qxe7+'
                     });
-
-                    channel.bulkDelete(100);
-
-                    channel.send(boardEmbed);
                 }
             }
         }

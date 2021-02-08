@@ -197,21 +197,19 @@ module.exports = class {
             }
 
             setTimeout(() => {
-                const { MessageEmbed } = require('discord.js');
                 const fs = require('fs');
 
                 this.createGame(players, this.tempChannel.id)
 
                 fs.writeFileSync('./board.png', this.getBoardImage(this.getGame(message.author.id).fen));
 
-                let boardEmbed = new MessageEmbed()
-                    .setTitle(`**${client.users.cache.get(this.getGame(message.author.id).players[0]).username} vs. ${client.users.cache.get(this.getGame(message.author.id).players[1]).username}**`)
-                    .setColor(0xff9f01)
-                    .attachFiles(['./board.png'])
-                    .setImage('attachment://board.png')
-                    .setFooter('Rook: R, King: K, Knight: N, Bishop: B\nQueen: Q, Capture: x, Check: +, Example: Qxe7+');
-
-                this.tempChannel.send(boardEmbed);
+                this.tempChannel.sendEmbed({
+                    title: `**${client.users.cache.get(this.getGame(message.author.id).players[0]).username} vs. ${client.users.cache.get(this.getGame(message.author.id).players[1]).username}**`,
+                    color: 0xff9f01,
+                    attachments: ['./board.png'],
+                    image: 'attachment://board.png',
+                    footer: 'Rook: R, King: K, Knight: N, Bishop: B\nQueen: Q, Capture: x, Check: +, Example: Qxe7+'
+                });
 
                 message.reply(`I have created a game channel in <#${this.tempChannel.id}>`);
             }, this.asyncBugDelay);
@@ -245,7 +243,6 @@ module.exports = class {
                         msg.delete({ timeout: 5000 });
                     });
                 } else {
-                    const { MessageEmbed } = require('discord.js');
                     const fs = require('fs');
 
                     chessGame.move(move);
@@ -270,14 +267,19 @@ module.exports = class {
                     fs.writeFileSync('./board.png', this.getBoardImage(this.getGame(message.author.id).fen));
 
                     let channel = this.getChannel(message, message.author.id);
-                    let boardEmbed = new MessageEmbed()
-                        .setTitle(`**${client.users.cache.get(this.getGame(message.author.id).players[0]).username} vs. ${client.users.cache.get(this.getGame(message.author.id).players[1]).username}**`)
-                        .addField("**Game Log:**", this.event)
-                        .setColor(0xff9f01)
-                        .attachFiles(['./board.png'])
-                        .setImage('attachment://board.png')
-                        // .setFooter('<:wR:807077835675402261>: R, <:wK:807077836023791656>: K, <:wN:807077835910283295>: N, <:wB:807077836011470868>: B, <:wQ:807077836040044584>: Q');
-                        .setFooter('Rook: R, King: K, Knight: N, Bishop: B\nQueen: Q, Capture: x, Check: +, Example: Qxe7+');
+
+                    this.tempChannel.sendEmbed({
+                        title: `**${client.users.cache.get(this.getGame(message.author.id).players[0]).username} vs. ${client.users.cache.get(this.getGame(message.author.id).players[1]).username}**`,
+                        color: 0xff9f01,
+                        fields: [{
+                            name: "**Game Log:**",
+                            value: this.event,
+                            inline: false
+                        }],
+                        attachments: ['./board.png'],
+                        image: 'attachment://board.png',
+                        footer: 'Rook: R, King: K, Knight: N, Bishop: B\nQueen: Q, Capture: x, Check: +, Example: Qxe7+'
+                    });
 
                     channel.bulkDelete(100);
 
@@ -290,16 +292,21 @@ module.exports = class {
     resign(message) {}
 
     listGames(message) {
-        const { MessageEmbed } = require('discord.js');
         let games = this.getGames();
-        let embed = new MessageEmbed()
-            .setColor(0xff9f01)
-            .setTitle("Current Games");
+        let fields = []
 
         for (let i = 0; i < games.length || 0; i++) {
-            embed.addField(`**Game ${i + 1}**`, `<@${games[i].players[0]}> vs. <@${games[i].players[1]}> (${games[i].winner || "In Progress"})`);
+            fields.push({
+                name: `**Game ${i + 1}**`,
+                value: `<@${games[i].players[0]}> vs. <@${games[i].players[1]}> (${games[i].winner || "In Progress"})`,
+                inline: false
+            })
         }
 
-        message.channel.send(embed);
+        message.channel.sendEmbed({
+            title: "Current Games",
+            color: 0xff9f01,
+            fields: fields
+        });
     }
 };

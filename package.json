@@ -5,6 +5,7 @@
     "main": "src/index.js",
     "scripts": {
         "start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
+        "dev-start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js speedyBuilds",
         "prod-start": "cd data && node ../src/index.js"
     },
     "dependencies": {

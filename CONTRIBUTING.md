@@ -3,7 +3,7 @@
 ## Requirements:
 Before you start contributing, you're going to need a few things:
 - **Code Editor:**
-    - Either [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) (personally, I like VSCode more, but Atom is just as capable)
+    - Either [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/)
     - Why? These are code editors that are 100% guarenteed to support the extensions we use.
 - **Communication:**
     - While it may be obvious, you're going to need a GitHub account.

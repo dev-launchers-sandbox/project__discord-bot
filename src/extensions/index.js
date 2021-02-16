@@ -10,8 +10,8 @@ module.exports = [
     require("./Bean"),
 
     //Reminder Extension
-
     require("./Reminder"),
+
     // General Extension
     require("./General"),
 
@@ -21,15 +21,18 @@ module.exports = [
     // Moderation Extension
     require("./Moderation"),
 
-    // Minecraft Extension
+    // Threads Extension
     require("./Threads"),
 
     // Chess Extension
     require("./Chess"),
 
+    // Leveling Extension
+    require("./Leveling"),
+
     // UtilCommands Extension
     require("./UtilCommands"),
 
-    // UtilCommands Extension
+    // Invites Extension
     require("./Invites"),
 ];

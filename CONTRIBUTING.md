@@ -20,9 +20,11 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
 - Use 4 space indentation (4 space tabs are fine too)
 - Remove **all** unused variables, and make sure you do before every commit
     - This helps make sure the code runs as smooth as possible, as JavaScripts garbage collector has to do **much** less work.
-- Make sure to annotate your code with [JSDoc comments](https://jsdoc.app/about-getting-started.html#adding-documentation-comments-to-your-code)
-    - This helps *all* developers understand what your code does
-    - **BONUS:** Atom and VSCode both use JSDoc comments for their autocomplete and inline function argument shower thing (don't know the offical name of it)
+- ~~Make sure to annotate your code with [JSDoc comments](https://jsdoc.app/about-getting-started.html#adding-documentation-comments-to-your-code)~~
+    - ~~This helps *all* developers understand what your code does~~
+    - ~~**BONUS:** Atom and VSCode both use JSDoc comments for their autocomplete and inline function argument shower thing (don't know the offical name of it)~~
+- Make sure to use descriptive variable names, and comments to explain when things are not clear.
+    - A novice at programming should be able to read your code in 1 or 2 passes.
 - Preferably use double quotes (`" "`) for strings
     - This rule isn't really that strict, so don't worry if you use single quotes (`' '`) from time to time.
 - Always use ES6's Template Literals for string interpolation, and **never** concatenate strings.

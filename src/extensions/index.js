@@ -21,15 +21,17 @@ module.exports = [
     // Moderation Extension
     require("./Moderation"),
 
-    // Minecraft Extension
-    require("./Threads"),
+    // Thread Extension
+    require("./Thread"),
+
 
     // Chess Extension
-    require("./Chess"),
+    //require("./Chess"),
 
     // UtilCommands Extension
     require("./UtilCommands"),
 
-    // UtilCommands Extension
+    // Invites Extension
     require("./Invites"),
 ];
+

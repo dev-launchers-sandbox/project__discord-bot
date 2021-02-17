@@ -23,10 +23,6 @@ module.exports = async (client, messageReaction, user) => {
     const doIgnore = await isReactionIgnored(client, messageReaction, user);
     if (!doIgnore) return removeGoldenBean(client, message, user);
   }
-  if (messageReaction.emoji.name === "✔️") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return leaveChannel(client, message, user);
-  }
   if (messageReaction.emoji.name === "villager") {
     let message = await fetchMessage(client, messageReaction, user);
     return removeMinecraftRole(client, message, user, messageReaction);
@@ -88,40 +84,6 @@ async function removeGoldenBean(client, messageReaction, user) {
   }
 }
 
-function leaveChannel(client, messageReaction, user) {
-  let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
-  if (!Array.isArray(channelsCreated)) return;
-
-  if (channelsCreated.length === 0) return;
-
-  const messageRole = channelsCreated.find((channel) =>
-    channel.id.includes(messageReaction.message.id)
-  );
-  if (!messageRole) return;
-
-  const isRoleActive = messageReaction.message.guild.roles.cache.find(
-    (role) => role.id === messageRole.role
-  );
-  if (!isRoleActive) {
-    return messageReaction.message.channel.send(
-      "`" + user.username + "`" + " that channel does not exist anymore"
-    );
-  }
-
-  if (
-    !messageReaction.message.guild.members.cache
-      .get(user.id)
-      .roles.cache.some((role) => role.id === messageRole.role)
-  )
-    return;
-
-  let channel = client.channels.cache.get(messageRole.newChannel);
-
-  messageReaction.message.guild.members.cache
-    .get(user.id)
-    .roles.remove(messageRole.role)
-    .then(channel.send("`" + `${user.username}` + "`" + " left the channel!"));
-}
 
 async function isReactionIgnored(client, messageReaction, user) {
   let ignoreReactions = await db.get(`ignore_reactions`);

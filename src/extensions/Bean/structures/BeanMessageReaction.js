@@ -10,7 +10,6 @@ Structures.extend("MessageReaction", (MessageReaction) => {
     }
 
     isBeanReaction() {
-      console.log(this.emoji.name);
       if (BEAN_EMOJIS.includes(this.emoji.name)) return true;
       return false;
     }

@@ -5,6 +5,7 @@ class DatabaseHandler {
     this.bean = new BeanHandler();
     this.reminder = new ReminderHandler();
     this.invite = new InviteHandler();
+    this.thread = new ThreadHandler();
   }
 }
 
@@ -104,4 +105,55 @@ class InviteHandler {
   }
 }
 
+class ThreadHandler {
+  constructor() {}
+
+  getThreadCategory(guildId) {
+    return quickDB.get(`threads-category.${guildId}`);
+  }
+
+  async addThread(guildId, thread) {
+    let threads = this.getThreads(guildId)
+
+    //Makes sure that the entry has been created to avoid error on the push.
+    if (!Array.isArray(threads)) await this.setThreads([]);
+
+    quickDB.push("threads", thread);
+  }
+
+  getDirectoryChannelId(guildId) {
+    return quickDB.get(`directory-channel.${guildId}`);
+  }
+
+  async setThreads(threads) {
+    await quickDB.set("threads", threads);
+  }
+
+  getThreads(guildId) {
+    return quickDB.get("threads");
+  }
+
+  updateThread(threadId, updatedThread) {
+    let threads = this.getThreads(updatedThread.guildId);
+    let index = threads.findIndex(t => t.id === updatedThread.id);
+    if (index !== -1) {
+      threads.splice(index, 1, updatedThread);
+      this.setThreads(threads);
+    }
+  }
+
+  getMaxInactivityTime(guildId) {
+    return quickDB.get(`thread-inactivity-time.${guildId}`);
+  }
+
+  removeThread(threadId) {
+    let threads = this.getThreads();
+    let updatedThreads = threads.filter(thread => thread.id !== threadId);
+    this.setThreads(updatedThreads);
+  }
+
+  getModerationServer(guildId) {
+    return quickDB.get(`moderation-server.${guildId}`);
+  }
+}
 module.exports = new DatabaseHandler();

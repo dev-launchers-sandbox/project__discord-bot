@@ -21,11 +21,11 @@ const settings = [
   "welcome",
   "audit",
   "total",
-  "instanced-category",
+  "threads-category",
   "invite",
   "moderator",
   "mod-cooldown",
-  "directory",
+  "directory-channel",
   "teams",
   "ticket",
   "ticket-category",
@@ -34,6 +34,8 @@ const settings = [
   "minecraft-role",
   "minecraft-channel",
   "control-center",
+  "thread-inactivity-time",
+  "moderation-server",
 ];
 
 exports.run = async (client, message, args) => {
@@ -59,7 +61,8 @@ exports.run = async (client, message, args) => {
   if (args[1] === "delete" || args[1] === "disable" || args[1] === "default") {
     try {
       await db.delete(`${args[0]}.${message.guild.id}`);
-      sendSuccessEmbed();
+      sendSuccessEmbed(message.channel, args);
+      return;
     } catch (error) {
       console.log(error);
       return await commandUsage.error(message, "settings");

@@ -25,8 +25,7 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
     - ~~**BONUS:** Atom and VSCode both use JSDoc comments for their autocomplete and inline function argument shower thing (don't know the offical name of it)~~
 - Make sure to use descriptive variable names, and comments to explain when things are not clear.
     - A novice at programming should be able to read your code in 1 or 2 passes.
-- Preferably use double quotes (`" "`) for strings
-    - This rule isn't really that strict, so don't worry if you use single quotes (`' '`) from time to time.
+- Use double quotes (`" "`) for strings
 - Always use ES6's Template Literals for string interpolation, and **never** concatenate strings.
     - Example:
       ```js
@@ -37,7 +36,6 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
       console.log(`${user} has ${xp} xp.`);
       ```
 - End statements and expressions with semicolons (`;`). 
-    - This rule is semi-strict, and enforceable
     - Why? There are two reasons:
         - JavaScripts **Automatic Semicolon Insertion (ASI)** spends time on automatically inserting semicolons, but it's not always perfect.
         - There are a few common cases where ASI fails to correctly guess where to end statements.

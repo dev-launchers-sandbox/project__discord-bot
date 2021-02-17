@@ -30,6 +30,8 @@ Structures.extend("TextChannel", (TextChannel) => {
             }
 
             if (args.footer) embed.setFooter(args.footer);
+            // Will remove this once I refactor the code.
+            if (args.footer.text) embed.setFooter(args.footer.text, args.footer.image);
             if (args.timestamp) embed.setTimestamp(args.timestamp);
             if (args.image) embed.setImage(args.image);
             return this.send(embed);

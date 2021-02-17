@@ -19,8 +19,8 @@ exports.run = async(client, message, args) => {
         return message.channel.send("Bot's don't have profiles.");
     } else if (target.user) {
         const LevelManager = require('../../structures/LevelManager');
-        let levelingManager = new LevelManager();
-        levelingManager.sendProfileOf(target.user.id, message);
+        let levelingManager = new LevelManager(message.guild);
+        levelingManager.sendProfileOf(target, message);
     } else {
         return message.channel.send("That does not appear to be a user.");
     }

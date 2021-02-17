@@ -10,13 +10,44 @@ module.exports = class LevelManager {
         }
     }
 
-    // These methods are helper methods used in the class
+    // These methods are helper methods used in the class.
     random(a = 1, b = 0) {
         const lower = Math.ceil(Math.min(a, b));
         const upper = Math.floor(Math.max(a, b));
         return Math.floor(lower + Math.random() * (upper - lower + 1))
     }
 
+    levelToXp(level, expOffset = 2) {
+        return Math.round(0.5 * (level ** 2)) + (level ** expOffset);
+    }
+
+    /**
+     * MATH:
+     * (0.5 * (x ** 2)) + (x ** 2)
+     * reversed is
+     * (root of x) - (0.5 * (root of x))
+     * Test: (0.5* root of x) - (0.5 * (root of x))
+     * Input: i give up i've made 40 of these now
+     * Output: ^^
+     */
+
+    xpToLevel(xp) {
+        const levelTable = require('../assets/levelTable');
+        let highest = 0;
+        for (let i = 0; i < levelTable.length; i++) {
+            if (xp > levelTable[i]) {
+                highest = i;
+                continue;
+            } else {
+                return highest;
+            }
+        }
+    }
+
+    /**
+     * Generates a clean user object.
+     * @param {String} user The UserID to create an object for.
+     */
     createUserObject(user) {
         return {
             id: user,
@@ -44,7 +75,7 @@ module.exports = class LevelManager {
     rewardQueuedUsers() {
         let queued = this.getQueue();
         queued.forEach(userID => {
-            this.addUserExperience(userID, this.random(this.config.minXP, this.config.maxXP));
+            this.addUserExperience(userID, this.random(this.config.minXP, this.config.maxXP) / 2);
             console.log(`${userID} now has ${this.getUserData(userID).xp} XP now.`)
         });
     }
@@ -75,9 +106,19 @@ module.exports = class LevelManager {
         this.db.set('queue', [...new Set(queue)])
     }
 
-    // The following are high level methods that are called directly by commands
-    sendProfileOf(user, message) {
-        message.reply(JSON.stringify(this.getUserData(user)))
+    sendProfileOf(target, message) {
+        let avatar = target.user.avatarURL({ size: 1024 });
+
+        message.channel.sendEmbed({
+            title: `${target.user.username}'s Profile`,
+            color: 0xff9f01,
+            thumbnail: avatar,
+            footer: { text: target.user.tag, image: avatar },
+            fields: [
+                { name: "Level", value: this.xpToLevel(this.getUserData(target.user.id).xp), inline: true },
+                { name: "XP", value: this.getUserData(target.user.id).xp, inline: true },
+            ],
+        });
     }
 
     onCycle(message) { return message.reply(`Current Cycle: ${this.db.get('cycle')}`) }

@@ -13,9 +13,12 @@ module.exports = class DevLaunchersBot extends Client {
 
     startup() {
         const LevelManager = require('../extensions/Leveling/structures/LevelManager');
+        const sleep = require('../extensions/.common/utils/sleep');
         let levelManager = new LevelManager();
-        setInterval(() => {
+        setInterval(async() => {
             levelManager.resetQueueCycle();
+            // Prevents double-queueing
+            await sleep(5000);
         }, levelManager.config.interval);
     }
 };

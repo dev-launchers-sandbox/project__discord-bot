@@ -46,6 +46,7 @@ exports.run = async (client, message, args) => {
       color: 0xff9f01,
       description: `Descriptions have a max of **50** characters. Please make your name ${description.length- 30} smaller`,
     })
+    return;
   }
 
   channel.setTopic(description);

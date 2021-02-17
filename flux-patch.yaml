@@ -2,13 +2,13 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: project-discord-bot
-  namespace: project-discord-bot
+    name: project-discord-bot
+    namespace: project-discord-bot
 spec:
-  template:
-    spec:
-      $setElementOrder/containers:
-      - name: project-discord-bot
-      containers:
-      - image: devlaunchers/project_discord-bot:sha-ae49697
-        name: project-discord-bot
+    template:
+        spec:
+            $setElementOrder/containers:
+                - name: project-discord-bot
+            containers:
+                - image: devlaunchers/project_discord-bot:sha-ae49697
+                  name: project-discord-bot

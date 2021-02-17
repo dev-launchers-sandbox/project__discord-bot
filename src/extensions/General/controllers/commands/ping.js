@@ -1,30 +1,30 @@
 const Discord = require("discord.js");
 
 module.exports.help = {
-  name: "ping",
-  description: "Check how fast the bot is and why",
-  usage: "ping",
-  example: "ping",
+	name: "ping",
+	description: "Check how fast the bot is and why",
+	usage: "ping",
+	example: "ping",
 };
 
 module.exports.conf = {
-  aliases: ["latency", "api", "response"],
-  cooldown: 5,
+	aliases: ["latency", "api", "response"],
+	cooldown: 5,
 };
 
 module.exports.run = async (client, message, args) => {
-  try {
-    const m = await message.channel.send("Pinging...");
+	try {
+		const m = await message.channel.send("Pinging...");
 
-    const embed = new Discord.MessageEmbed()
-      .setColor("0xff9f01")
-      .addField(
-        `⌛ Latency`,
-        `**${m.createdTimestamp - message.createdTimestamp} ms**`
-      )
-      .addField("💓 API", `**${Math.floor(client.ws.ping)}ms**`);
-    return m.edit("🏓 Pong", embed);
-  } catch (error) {
-    return message.channel.send(`Something went wrong: ${error.message}`);
-  }
+		const embed = new Discord.MessageEmbed()
+			.setColor("0xff9f01")
+			.addField(
+				`⌛ Latency`,
+				`**${m.createdTimestamp - message.createdTimestamp} ms**`
+			)
+			.addField("💓 API", `**${Math.floor(client.ws.ping)}ms**`);
+		return m.edit("🏓 Pong", embed);
+	} catch (error) {
+		return message.channel.send(`Something went wrong: ${error.message}`);
+	}
 };

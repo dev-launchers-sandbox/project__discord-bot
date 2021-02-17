@@ -1,55 +1,55 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  namespace: project-discord-bot
-  name: project-discord-bot
-  annotations:
-    fluxcd.io/automated: "true"
-  labels:
-    app: project-discord-bot
-spec:
-  replicas: 1
-  serviceName: project-discord-bot
-  selector:
-    matchLabels:
-      app: project-discord-bot
-  template:
-    metadata:
-      labels:
+    namespace: project-discord-bot
+    name: project-discord-bot
+    annotations:
+        fluxcd.io/automated: "true"
+    labels:
         app: project-discord-bot
-    spec:
-      containers:
-        - name: project-discord-bot
-          image: devlaunchers/project_discord-bot:latest
-          ports:
-            - containerPort: 3000
-          env:
-            - name: DISCORD_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: project-discord-bot
-                  key: discord-token
-            - name: PORT
-              value: "3000"
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-            requests:
-              cpu: 25m
-              memory: 32Mi
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: 3000
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 5
-          volumeMounts:
-            - name: project-discord-bot-storage
-              mountPath: /usr/src/app/data
-      volumes:
-        - name: project-discord-bot-storage
-          persistentVolumeClaim:
-            claimName: project-discord-bot-hostpath-pvc
+spec:
+    replicas: 1
+    serviceName: project-discord-bot
+    selector:
+        matchLabels:
+            app: project-discord-bot
+    template:
+        metadata:
+            labels:
+                app: project-discord-bot
+        spec:
+            containers:
+                - name: project-discord-bot
+                  image: devlaunchers/project_discord-bot:latest
+                  ports:
+                      - containerPort: 3000
+                  env:
+                      - name: DISCORD_TOKEN
+                        valueFrom:
+                            secretKeyRef:
+                                name: project-discord-bot
+                                key: discord-token
+                      - name: PORT
+                        value: "3000"
+                  resources:
+                      limits:
+                          cpu: 50m
+                          memory: 64Mi
+                      requests:
+                          cpu: 25m
+                          memory: 32Mi
+                  livenessProbe:
+                      httpGet:
+                          path: /metrics
+                          port: 3000
+                      initialDelaySeconds: 60
+                      periodSeconds: 10
+                      timeoutSeconds: 10
+                      failureThreshold: 5
+                  volumeMounts:
+                      - name: project-discord-bot-storage
+                        mountPath: /usr/src/app/data
+            volumes:
+                - name: project-discord-bot-storage
+                  persistentVolumeClaim:
+                      claimName: project-discord-bot-hostpath-pvc

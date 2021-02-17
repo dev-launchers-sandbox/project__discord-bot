@@ -3,36 +3,36 @@
  */
 
 module.exports = [
-    // Common, shared extensions
-    require("./.common"),
+	// Common, shared extensions
+	require("./.common"),
 
-    // Bean Extension
-    require("./Bean"),
+	// Bean Extension
+	require("./Bean"),
 
-    //Reminder Extension
-    require("./Reminder"),
+	//Reminder Extension
+	require("./Reminder"),
 
-    // General Extension
-    require("./General"),
+	// General Extension
+	require("./General"),
 
-    // Minecraft Extension
-    require("./Minecraft"),
+	// Minecraft Extension
+	require("./Minecraft"),
 
-    // Moderation Extension
-    require("./Moderation"),
+	// Moderation Extension
+	require("./Moderation"),
 
-    // Threads Extension
-    require("./Threads"),
+	// Threads Extension
+	require("./Threads"),
 
-    // Chess Extension
-    require("./Chess"),
+	// Chess Extension
+	require("./Chess"),
 
-    // Leveling Extension
-    require("./Leveling"),
+	// Leveling Extension
+	require("./Leveling"),
 
-    // UtilCommands Extension
-    require("./UtilCommands"),
+	// UtilCommands Extension
+	require("./UtilCommands"),
 
-    // Invites Extension
-    require("./Invites"),
+	// Invites Extension
+	require("./Invites"),
 ];

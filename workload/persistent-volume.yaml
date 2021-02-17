@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: project-discord-bot-hostpath-pvc
+    name: project-discord-bot-hostpath-pvc
 spec:
-  storageClassName: microk8s-hostpath
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1G
+    storageClassName: microk8s-hostpath
+    accessModes:
+        - ReadWriteOnce
+    resources:
+        requests:
+            storage: 1G

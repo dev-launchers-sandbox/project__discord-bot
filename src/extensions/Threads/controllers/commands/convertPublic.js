@@ -2,104 +2,107 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 
 module.exports.help = {
-  name: "convertpublic",
-  description: "Converts a private thread to public",
-  usage: "convertpublic",
-  example: "convertpublic",
+	name: "convertpublic",
+	description: "Converts a private thread to public",
+	usage: "convertpublic",
+	example: "convertpublic",
 };
 
 module.exports.conf = {
-  aliases: [],
-  cooldown: 5,
+	aliases: [],
+	cooldown: 5,
 };
 
 module.exports.run = async (client, message, args) => {
-  const threads = db.get(`instanced.${message.guild.id}`);
-  if (!isValid(message, threads)) return;
+	const threads = db.get(`instanced.${message.guild.id}`);
+	if (!isValid(message, threads)) return;
 
-  const threadObject = threads.find(
-    (thread) => thread.newChannel === message.channel.id
-  );
+	const threadObject = threads.find(
+		(thread) => thread.newChannel === message.channel.id
+	);
 
-  const directoryChannelId = db.get(`directory.${message.guild.id}`);
-  if (!directoryChannelId) {
-    message.channel.send("This feature has not been set up.");
-    return;
-  }
+	const directoryChannelId = db.get(`directory.${message.guild.id}`);
+	if (!directoryChannelId) {
+		message.channel.send("This feature has not been set up.");
+		return;
+	}
 
-  const directoryChannel = message.guild.channels.resolve(directoryChannelId);
+	const directoryChannel = message.guild.channels.resolve(directoryChannelId);
 
-  const newChannelEmbed = new Discord.MessageEmbed()
-    .setColor(0xff9f01)
-    .setAuthor(
-      `${message.channel.name} thread`,
-      message.guild.iconURL({ dynamic: true })
-    )
-    .setDescription("*No description*")
-    .setFooter("React to this message to join the thread!");
+	const newChannelEmbed = new Discord.MessageEmbed()
+		.setColor(0xff9f01)
+		.setAuthor(
+			`${message.channel.name} thread`,
+			message.guild.iconURL({ dynamic: true })
+		)
+		.setDescription("*No description*")
+		.setFooter("React to this message to join the thread!");
 
-  const directoryMsg = await directoryChannel.send(newChannelEmbed);
-  directoryMsg.react("✔️");
+	const directoryMsg = await directoryChannel.send(newChannelEmbed);
+	directoryMsg.react("✔️");
 
-  //I update them because I am awaiting when I send the message, and I want to make sure that I have all the most recent values
-  const updatedThreads = updateThreads(message);
-  const pastIds = updatedThreads.thread.id;
+	//I update them because I am awaiting when I send the message, and I want to make sure that I have all the most recent values
+	const updatedThreads = updateThreads(message);
+	const pastIds = updatedThreads.thread.id;
 
-  updatedThreads.thread.directoryEntry = directoryMsg.id;
-  updatedThreads.thread.id = [...pastIds, directoryMsg.id];
+	updatedThreads.thread.directoryEntry = directoryMsg.id;
+	updatedThreads.thread.id = [...pastIds, directoryMsg.id];
 
-  const index = updatedThreads.threads.indexOf(updatedThreads.thread);
+	const index = updatedThreads.threads.indexOf(updatedThreads.thread);
 
-  await db.set(`instanced.${message.guild.id}`, updatedThreads.threads);
+	await db.set(`instanced.${message.guild.id}`, updatedThreads.threads);
 
-  message.channel.send({
-    embed: {
-      color: 0xff9f01,
-      description: "I successfully made this thread public!",
-    },
-  });
+	message.channel.send({
+		embed: {
+			color: 0xff9f01,
+			description: "I successfully made this thread public!",
+		},
+	});
 };
 
 function isValid(message, threads) {
-  if (!threads) {
-    message.channel.send({
-      embed: {
-        color: 0xff9f01,
-        description: "You can only use this command in a private thread",
-      },
-    });
-    return;
-  }
-  const threadObject = threads.find(
-    (thread) => thread.newChannel === message.channel.id
-  );
+	if (!threads) {
+		message.channel.send({
+			embed: {
+				color: 0xff9f01,
+				description:
+					"You can only use this command in a private thread",
+			},
+		});
+		return;
+	}
+	const threadObject = threads.find(
+		(thread) => thread.newChannel === message.channel.id
+	);
 
-  if (!threadObject) {
-    message.channel.send({
-      embed: {
-        color: 0xff9f01,
-        description: "You can only use this command in a private thread",
-      },
-    });
-    return;
-  }
-  if (threadObject.directoryMsg) {
-    message.channel.send({
-      embed: {
-        color: 0xff9f01,
-        description: "You can only use this command in a private thread",
-      },
-    });
-    return;
-  }
+	if (!threadObject) {
+		message.channel.send({
+			embed: {
+				color: 0xff9f01,
+				description:
+					"You can only use this command in a private thread",
+			},
+		});
+		return;
+	}
+	if (threadObject.directoryMsg) {
+		message.channel.send({
+			embed: {
+				color: 0xff9f01,
+				description:
+					"You can only use this command in a private thread",
+			},
+		});
+		return;
+	}
 
-  return true;
+	return true;
 }
 
 function updateThreads(message) {
-  const threads = db.get(`instanced.${message.guild.id}`);
-  const thread = threads.find(
-    (thread) => thread.newChannel === message.channel.id
-  );
-  return { threads: threads, thread: thread };
+	const threads = db.get(`instanced.${message.guild.id}`);
+	const thread = threads.find(
+		(thread) => thread.newChannel === message.channel.id
+	);
+	return { threads: threads, thread: thread };
 }

@@ -81,3 +81,17 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
         - It doesn't comply with the standards we've set forth
         - It would be wise to add a new feature 
         - Or, something is missing or confusing
+- Git Commit Messages:
+    - We don't ask for anything really fancy, just generally follow these guidelines:
+        - Prefix your commit messages with:
+            - **feat:** The new feature you're adding to a particular application
+            - **fix:** A bug fix
+            - **style:** Feature and updates related to styling
+            - **refactor:** Refactoring a specific section of the codebase
+            - **test:** Everything related to testing
+            - **docs:** Everything related to documentation
+            - **chore:** Regular code maintenance. 
+            - [You can also use emojis to represent commit types]
+            - [Source](https://www.freecodecamp.org/news/writing-good-commit-messages-a-practical-guide/)
+        - Write your message in the imperative tense, as per GitHub convention (i.e: "fix" rather than "fixed", "fixes")
+        - If this commit solves an issue, make sure you say so in the message.

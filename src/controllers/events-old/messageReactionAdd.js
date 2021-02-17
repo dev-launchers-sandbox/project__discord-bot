@@ -41,10 +41,6 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return awardGoldenBean(client, message, user);
   }
-  if (messageReaction.emoji.name === "✔️") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return instancedChannelAddRole(client, message, user);
-  }
   if (messageReaction.emoji.name === "🎟️") {
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
@@ -136,50 +132,6 @@ async function awardGoldenBean(client, messageReaction, user) {
   }
 }
 
-async function instancedChannelAddRole(client, messageReaction, user) {
-  let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
-  if (!channelsCreated) return;
-  if (user.bot) return;
-  if (channelsCreated.length === 0) return;
-  const messageRole = channelsCreated.find((channel) =>
-    channel.id.includes(messageReaction.message.id)
-  );
-  if (!messageRole) return;
-  const isUserBlacklisted = messageRole.blacklist.includes(user.id);
-  if (isUserBlacklisted) {
-    return messageReaction.message.channel
-      .send(
-        "`" + user.username + "`" + " you are blacklisted from this channel"
-      )
-      .then((m) => m.delete({ timeout: 10000 }));
-  }
-
-  const isRoleActive = messageReaction.message.guild.roles.cache.find(
-    (role) => role.id === messageRole.role
-  );
-  if (!isRoleActive) {
-    return messageReaction.message.channel
-      .send("`" + user.username + "`" + " that channel does not exist anymore")
-      .then((m) => m.delete({ timeout: 10000 }));
-  }
-  if (
-    messageReaction.message.guild.members.cache
-      .get(user.id)
-      .roles.cache.some((role) => role.id === messageRole.role)
-  )
-    return;
-
-  let channel = client.channels.cache.get(messageRole.newChannel);
-  await messageReaction.message.guild.members.cache
-    .get(user.id)
-    .roles.add(messageRole.role)
-    .then(
-      channel.send("`" + `${user.username}` + "`" + " joined the channel!")
-    );
-  channel.send(`<@${user.id}>`).then((msg) => {
-    if (!msg.deleted) msg.delete();
-  });
-}
 
 async function openTicket(client, messageReaction, user) {
   if (user.bot) return;
@@ -257,7 +209,6 @@ function giveMinecraftRole(client, message, user, messageReaction) {
   const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
   const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
   const userReacted = messageReaction.message.guild.members.resolve(user.id);
-  console.log(userReacted.roles.cache.has(role));
   if (messageReaction.message.id === minecraftMsg) {
     if (!userReacted.roles.cache.has(role)) {
       userReacted.roles.add(role);

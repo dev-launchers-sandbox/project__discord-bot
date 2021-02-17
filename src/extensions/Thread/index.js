@@ -10,11 +10,20 @@ module.exports = {
     require("./controllers/commands/invite.js"),
     require("./controllers/commands/keepThread.js"),
     require("./controllers/commands/leave.js"),
+    require("./controllers/commands/rename.js"),
     require("./controllers/commands/users.js"),
     require("./controllers/commands/whitelist.js"),
   ],
-  events: [],
+  events: [
+    require("./controllers/events/threadOnMessage.js"),
+    require("./controllers/events/threadOnReady.js"),
+    require("./controllers/events/threadOnReactionRemove.js"),
+    require("./controllers/events/threadOnReactionAdd.js"),
+  ],
   extends: [],
-  structures: [],
+  structures: [
+    require("./structures/Thread.js"),
+    require("./structures/ThreadManager.js"),
+  ],
   permissions: [],
 };

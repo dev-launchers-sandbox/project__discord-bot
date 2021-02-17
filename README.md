@@ -9,6 +9,7 @@ This repository hosts the code for our *open-source, community-driven* Discord B
 - Create a [Discord](https://discord.com) account if you haven't already.
 - Make sure you have a **Git Client**.
 
+<<<<<<< HEAD
 Once you have setup pre-requisites, follow these 6 simple steps in order:
 
 1. Install all the packages for the bot with `npm install` in a terminal.
@@ -48,3 +49,6 @@ Please refer to [our contributors guide](CONTRIBUTING.md).
 
 ## License
 This repository is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
+=======
+
+>>>>>>> 69681ac7f971543d7da07da4542c59abdbc236ed

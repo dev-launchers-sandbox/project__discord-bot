@@ -79,7 +79,7 @@ module.exports = async(client, message) => {
         return;
 
     if (!timestamps.has(member.id)) {
-        if (!client.config.owners.includes(message.author.id)) {
+        if (!client.config.contributors.includes(message.author.id)) {
             timestamps.set(member.id, now);
         }
     } else {

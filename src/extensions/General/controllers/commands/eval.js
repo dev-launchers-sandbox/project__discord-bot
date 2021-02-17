@@ -12,7 +12,7 @@ exports.conf = {
 };
 
 exports.run = async(client, message, args) => {
-    if (!config.owners.includes(message.author.id)) return;
+    if (!config.contributors.includes(message.author.id)) return;
     if (!message.guild.id === "711687367081328752") return;
 
     try {

@@ -2,21 +2,21 @@ const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "setnickname",
   description: "Set a user’s nickname",
   usage: "setnickname <@user> <nickname>",
   example: "setnickname @Wumpus#0001 Wompas",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["nickname", "nick", "setnick"],
   cooldown: 5,
   permissions: ["MANAGE_NICKNAMES"],
   arguments: ["User", "New Nickname"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
     return message.channel.sendEmbed({

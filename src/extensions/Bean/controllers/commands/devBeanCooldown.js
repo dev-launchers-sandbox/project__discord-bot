@@ -4,19 +4,19 @@ const ms = require("parse-ms");
 
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "devbean",
   description: "Shows someone’s Dev Bean cooldown!",
   usage: `devbean [@user]`,
   example: `devbean`,
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const cooldown = 60000;
 
   // Changes the number to a string and adds a 0 at the beggining of numbers lower than 0.

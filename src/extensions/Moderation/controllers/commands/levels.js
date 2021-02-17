@@ -14,19 +14,19 @@ const lvls = [
   "forty",
 ];
 
-exports.help = {
+module.exports.help = {
   name: "levels",
   description: "Set the level roles values",
   usage: `levels [level #] [new value]`,
   example: `levels five 712064133259853848`,
 };
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   if (!args[0] || !lvls.includes(args[0])) {
     return sendOptionsEmbed(message);
   }

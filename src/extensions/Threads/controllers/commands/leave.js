@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "leave",
   description: `Use this command to leave a thread`,
   usage: "leave",
   example: "leave",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channelsCreated = db.get(`instanced.${message.guild.id}`);
 
   const messageRole = channelsCreated.find(

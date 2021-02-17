@@ -1,18 +1,18 @@
 const { getMessageTarget } = require("../../../../utils/getMessageTarget");
 
-exports.help = {
+module.exports.help = {
     name: "profile",
     description: "Shows the profile of a user.",
     usage: `profile [user]`,
     example: `profile @Hextanium#5890`,
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["p", "prof"],
     cooldown: 10,
 };
 
-exports.run = async(client, message, args) => {
+module.exports.run = async(client, message, args) => {
     let target = getMessageTarget(message, args);
     if (!target) target = message.guild.members.resolve(message.author.id);
     if (target.user.bot) {

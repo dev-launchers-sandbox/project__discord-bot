@@ -1,21 +1,21 @@
 const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 
-exports.help = {
+module.exports.help = {
   name: "clear",
   description: "Clears an amount of messages",
   usage: "clear <amount> [@user]",
   example: "clear 15",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["delete", "purge", "clean"],
   cooldown: 5,
   permissions: ["MANAGE_MESSAGES"],
   arguments: ["# Of Messages To Delete"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   if (!(await isValid(message, args))) return;
 
   const messagesToDelete = parseInt(args[0], 10) + 1;

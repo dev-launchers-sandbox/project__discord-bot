@@ -8,7 +8,7 @@ const LevelManager = require("./../../extensions/Leveling/structures/LevelManage
 let levelManager = new LevelManager();
 
 module.exports = async(client, message) => {
-    let prefix = db.get(`prefix.${message.guild.id}`) || ".";
+    let prefix = db.get(`prefix.${message.guild ? message.guild.id : "make-this-not-work"}`) || ".";
 
     const args = message.content.slice(prefix.length).trim().split(" ");
 

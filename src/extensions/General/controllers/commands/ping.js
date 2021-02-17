@@ -1,18 +1,18 @@
 const Discord = require("discord.js");
 
-exports.help = {
+module.exports.help = {
   name: "ping",
   description: "Check how fast the bot is and why",
   usage: "ping",
   example: "ping",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["latency", "api", "response"],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   try {
     const m = await message.channel.send("Pinging...");
 

@@ -11,4 +11,4 @@ const updateCounters = async (server, client) => {
     .catch((err) => console.err());
 };
 
-exports.updateCounters = updateCounters;
+module.exports.updateCounters = updateCounters;

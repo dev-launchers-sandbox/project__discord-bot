@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "blacklist",
   description: "Blacklists a member from an thread",
   usage: "blacklist <@user>",
   example: "blacklist @Wumpus#0001",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channelsCreated = db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
     return message.channel.send(

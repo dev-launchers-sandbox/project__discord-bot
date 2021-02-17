@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const instancedChannels = db.get(`instanced.${message.guild.id}`);
 
   if (!instancedChannels)
@@ -94,14 +94,14 @@ function workedConfirmation(message, newDescription) {
     );
   }
 }
-exports.help = {
+module.exports.help = {
   name: "description",
   description: "Sets the description for a thread",
   usage: `description <content>`,
   example: `description we love potatoes!`,
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 25,
 };

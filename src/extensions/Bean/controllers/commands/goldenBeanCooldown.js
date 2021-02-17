@@ -4,19 +4,19 @@ const ms = require("parse-ms");
 
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "goldenbean",
   description: "Shows someone’s Golden Bean cooldown!",
   usage: `goldenbean [@user]`,
   example: `goldenbean`,
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const cooldown = 8.64e7;
 
   // I think this adds a 0 at the beggining to that 4 changes to 04

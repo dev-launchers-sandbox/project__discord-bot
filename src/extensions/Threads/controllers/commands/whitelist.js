@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "whitelist",
   description: "Whitelists a member from a thread",
   usage: "whitelist <@user>",
   example: "whitelist @Wumpus#0001",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated || !Array.isArray(channelsCreated)) {
     return message.channel.send(

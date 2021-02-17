@@ -1,20 +1,20 @@
 const Discord = require("discord.js");
 
-exports.help = {
+module.exports.help = {
   name: "reactto",
   description: "Reacts to a message",
   usage: "reactto <id> <emoji>",
   example: "reactto 773752620930039819 😄",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["reacto", "react"],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
   arguments: ["Message To React To", "Emoji To Use"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const id = args[0];
   const reaction = args[1];
 

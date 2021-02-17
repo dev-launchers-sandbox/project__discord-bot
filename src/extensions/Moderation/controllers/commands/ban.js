@@ -5,20 +5,20 @@ const ms = require("parse-ms");
 const commandUsage = require("./../../../../utils/commandUsage.js");
 const getMessageTarget = require("./../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "ban",
   description: "Ban a member from the server",
   usage: `ban <@user> [reason]`,
   example: `ban @Wumpus#0001 spamming`,
 };
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["MANAGE_ROLES"], //Moderator or higher.
   arguments: ["User To Ban"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 

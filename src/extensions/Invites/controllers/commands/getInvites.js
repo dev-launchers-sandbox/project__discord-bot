@@ -2,21 +2,21 @@ const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 const inviteHandler = require("./../../structures/InviteHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "getInvites",
   description: "Shows you a list of all the invites associated with a keyword.",
   usage: "getInvites",
   example: "getInvites",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
   arguments: [],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channel = message.channel;
   let invites = dbh.invite.getInvites(message.guild.id);
 

@@ -3,20 +3,20 @@ const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js
 const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 const chrono = require("chrono-node");
 
-exports.help = {
+module.exports.help = {
   name: "remindme",
   description: "Schedule a reminder",
   usage: "remind <content>",
   example: "remind Work on my game next Saturday",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["promise", "ipromise", "i", "makepromise", "remind"],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
-  let commandHandler = new CommandHandler(exports.help.name, message, args);
+module.exports.run = async (client, message, args) => {
+  let commandHandler = new CommandHandler(module.exports.help.name, message, args);
   if (
     commandHandler.validateCommand({
       arguments: ["Content"],

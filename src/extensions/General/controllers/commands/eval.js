@@ -1,17 +1,17 @@
 const config = require('../../../../config.json');
-exports.help = {
+module.exports.help = {
     name: "",
     description: "",
     usage: "",
     example: "",
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["e"],
     cooldown: 0,
 };
 
-exports.run = async(client, message, args) => {
+module.exports.run = async(client, message, args) => {
     if (!config.contributors.includes(message.author.id)) return;
     if (!message.guild.id === "711687367081328752") return;
 

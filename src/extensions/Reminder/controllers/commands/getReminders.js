@@ -2,19 +2,19 @@ const Discord = require("discord.js");
 const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "getreminders",
   description: "Get all accountability reminders",
   usage: "getreminders",
   example: "getreminders",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channel = message.channel;
   let user = message.author;
 

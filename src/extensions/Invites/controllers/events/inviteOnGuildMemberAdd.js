@@ -1,8 +1,8 @@
 const inviteHandler = require("./../../structures/InviteHandler.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
-exports.eventHandle = "guildMemberAdd";
-exports.event = async (client, member) => {
+module.exports.eventHandle = "guildMemberAdd";
+module.exports.event = async (client, member) => {
   const invite = await inviteHandler.findInviteUsed(member);
 
   let inviteChannelID = dbh.invite.getInviteChannel(member.guild.id);

@@ -1,20 +1,20 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "endseason",
   description: "Ends the current bean season",
   usage: `endSeason`,
   example: `endSeason`,
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["end"],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   message.channel.send(
     `**${message.author.username}**, do you want to end the bean season? ` +
       "`Y`, `N`"

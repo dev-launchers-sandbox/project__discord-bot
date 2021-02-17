@@ -3,21 +3,21 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "warnings",
   description: "Displays the warnings of a user",
   usage: "warnings <@user>",
   example: "warnings @Wumpus#0001",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["warning, warns"],
   cooldown: 5,
   permissions: ["MANAGE_ROLES"],
   arguments: ["User To See Warnings"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target)
     return commandUsage.error(message, "warnings", "The user was not found.");

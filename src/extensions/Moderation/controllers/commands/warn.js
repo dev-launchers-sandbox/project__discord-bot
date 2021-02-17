@@ -4,21 +4,21 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "warn",
   description: "Warns a user",
   usage: "warn <@user> [reason]",
   example: "warn @Wumpus#0001 spamming",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["MANAGE_ROLES"],
   arguments: ["User To Warn"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!(await isValid(message, target))) return;
 

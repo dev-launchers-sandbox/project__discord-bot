@@ -1,21 +1,21 @@
 const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "removeInvite",
   description: "Removes an invite from the db.",
   usage: "removeInvite [name OR code]",
   example: "removeInvite website OR .removeInvite EAZfGWvN83",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
   arguments: ["Name OR Code"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let toRemove = args[0];
   let invites = dbh.invite.getInvites(message.guild.id);
 

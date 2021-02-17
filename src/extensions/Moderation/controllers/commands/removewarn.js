@@ -3,21 +3,21 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "removewarn",
   description: "Removes a warning from a user",
   usage: "removewarn <@user> <#of warn>",
   example: "removewarn @Wumpus#0001 2",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
   arguments: ["User", "#Of Warn"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) return commandUsage.error(message, "mute", "User not found!.");
 

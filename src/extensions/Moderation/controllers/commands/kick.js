@@ -5,20 +5,20 @@ const ms = require("parse-ms");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "kick",
   description: "Kicks a member",
   usage: `kick <@user> [reason]`,
   example: `kick @Wumpus#0001 being rude`,
 };
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["MANAGE_ROLES"],
   arguments: ["User To Kick"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let modRoleID = await db.get(`moderator.${message.guild.id}`);
   if (!modRoleID) modRoleID = "notSet"; //Prevents error from happening on line 12
 

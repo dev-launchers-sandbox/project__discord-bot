@@ -2,14 +2,14 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 
-exports.help = {
+module.exports.help = {
   name: "leaderboard",
   description: "Displays the bean leaderboard",
   usage: `leaderboard`,
   example: `leaderboard`,
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["lb"],
   cooldown: 5,
 };
@@ -52,7 +52,7 @@ const getSortedDevBeansArray = (message, accounts) => {
   return { devBeansArray, goldenBeansArray };
 };
 
-exports.run = async (bot, message, args) => {
+module.exports.run = async (bot, message, args) => {
   /*message.channel.send(
     "We are trying to fix an error with the leaderboard! It will be back soon!"
   );*/

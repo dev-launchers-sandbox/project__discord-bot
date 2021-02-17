@@ -2,21 +2,21 @@ const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "mute",
   description: "Mutes a user",
   usage: "mute <@user> [reason]",
   example: "mute @Wumpus#0001 being too cool",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["MANAGE_ROLES"],
   arguments: ["User To Mute"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) {
     return commandUsage.error(message, "mute", "I could not find that user!");

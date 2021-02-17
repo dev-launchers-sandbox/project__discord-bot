@@ -1,21 +1,21 @@
 const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "addInvite",
   description: "Adds a keyword to an invite.",
   usage: "addInvite [name] [code]",
   example: "addInvite website EAZfGWvN83",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
   permissions: ["ADMINISTRATOR"],
   arguments: ["Name", "Code"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let name = args[0].toLowerCase();
   let code = args[1];
 

@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "create",
   description:
     "Create an thread! Public threads will show in the directory channel!",
@@ -10,12 +10,12 @@ exports.help = {
   example: "createInstanced public gamenight",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["createthread"],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let instancedParentID = db.get(`instanced-category.${message.guild.id}`);
   let categoryExists;
   if (!instancedParentID) {

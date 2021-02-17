@@ -41,7 +41,7 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
         - There are a few common cases where ASI fails to correctly guess where to end statements.
             - This causes very uninformative error messages, and can take **hours** to diagnose if you're not very experienced.
 - Use `module.exports = value` rather than `exports = value`
-    - Why? [Because `exports` has inconsistent behavior](https://stackoverflow.com/questions/16383795/difference-between-module-exports-and-exports-in-the-commonjs-module-system)
+    - Why? [Because `module.exports` has inconsistent behavior](https://stackoverflow.com/questions/16383795/difference-between-module-module.exports-and-module.exports-in-the-commonjs-module-system)
 
 ## Plugins
 - ### What are plugins?

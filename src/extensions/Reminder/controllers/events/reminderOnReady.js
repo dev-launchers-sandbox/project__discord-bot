@@ -6,8 +6,8 @@ const metrics = require("../../../../index.js");
 const Reminder = require("../../structures/Reminder.js");
 const TaskManager = require("../../../.common/structures/Tasks/TaskManager.js");
 
-exports.eventHandle = "ready";
-exports.event = async (client) => {
+module.exports.eventHandle = "ready";
+module.exports.event = async (client) => {
   metrics.sendEvent("ready");
 
   let taskManager = new TaskManager();

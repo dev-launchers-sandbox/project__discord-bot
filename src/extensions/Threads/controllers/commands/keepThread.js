@@ -1,20 +1,20 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "keepthread",
   description: `Removes a channel from the "thread" list`,
   usage: "keepthread",
   example: "keepthread",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["keep"],
   cooldown: 5,
   permissions: ["MANAGE_CHANNELS"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channelsCreated = await db.get(`instanced.${message.guild.id}`);
   if (!channelsCreated) {
     return message.channel.send(

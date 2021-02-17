@@ -1,16 +1,16 @@
-exports.help = {
+module.exports.help = {
     name: "mcip",
     description: "Sends the IP for the DevLaunchers Minecraft Server!",
     usage: "mcip",
     example: "mcip",
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["minecraftip", "ip"],
     cooldown: 5,
 };
 
-exports.run = async(client, message) => {
+module.exports.run = async(client, message) => {
     message.channel.sendEmbed({
         title: "**DevLaunchers Minecraft Server**",
         color: 0xff9f01,

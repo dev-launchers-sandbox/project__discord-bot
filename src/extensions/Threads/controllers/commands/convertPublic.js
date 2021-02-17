@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 const db = require("quick.db");
 
-exports.help = {
+module.exports.help = {
   name: "convertpublic",
   description: "Converts a private thread to public",
   usage: "convertpublic",
   example: "convertpublic",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   const threads = db.get(`instanced.${message.guild.id}`);
   if (!isValid(message, threads)) return;
 

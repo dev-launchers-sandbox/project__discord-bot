@@ -1,19 +1,19 @@
 const Discord = require("discord.js");
 const dateformat = require("dateformat");
 
-exports.help = {
+module.exports.help = {
   name: "ServerInfo",
   description: "Displays information about the server",
   usage: "serverinfo",
   example: "serverinfo",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["Server"],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let icon = message.guild.iconURL({ size: 2048, dynamic: true });
 
   const members = await message.guild.members.fetch();

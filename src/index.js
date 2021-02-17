@@ -16,7 +16,7 @@ if (speedyBuilds) { // Deploying the server takes too much time for something so
     console.log("SpeedyBuilds has been enabled, please turn it off when you're done.");
 
     function sendEvent(metric) {}
-    exports.sendEvent = sendEvent;
+    module.exports.sendEvent = sendEvent;
 } else {
     const metrics = registerMetrics();
     startMetricsServer(metrics);
@@ -55,7 +55,7 @@ if (speedyBuilds) { // Deploying the server takes too much time for something so
     function sendEvent(metric) {
         metrics.events.inc({ event: metric });
     }
-    exports.sendEvent = sendEvent;
+    module.exports.sendEvent = sendEvent;
 }
 
 require("./handler/module.js")(client);

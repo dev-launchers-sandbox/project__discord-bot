@@ -3,14 +3,14 @@ const db = require("quick.db");
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
     name: "settings",
     description: "Change the settings for the server",
     usage: "settings [type] [value]",
     example: "settings prefix !",
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["setting"],
     cooldown: 5,
     permissions: ["ADMINISTRATOR"],
@@ -39,7 +39,7 @@ const settings = [
     "minXP",
 ];
 
-exports.run = async(client, message, args) => {
+module.exports.run = async(client, message, args) => {
     let successEmbed = new Discord.MessageEmbed()
         .setColor("GREEN")
         .setAuthor(`There has been a change in ${args[0]}`)

@@ -1,18 +1,18 @@
 const getMessageTarget = require("../../../../utils/getMessageTarget");
 
-exports.help = {
+module.exports.help = {
     name: "challenge",
     description: "challenges a user",
     usage: `challenge [@user]`,
     example: `challenge @Hextanium#5890`,
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["c", "chall", "duel"],
     cooldown: 5,
 };
 
-exports.run = async(client, message, args) => {
+module.exports.run = async(client, message, args) => {
     let target = getMessageTarget.getMessageTarget(message, args);
     if (!target) target = message.guild.members.resolve(message.author.id);
     if (target.user.bot) {

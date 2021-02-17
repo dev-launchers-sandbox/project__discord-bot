@@ -13,5 +13,5 @@ async function updateInstancedChannels(guildID) {
   });
 }
 
-exports.instancedChannelsIDs = instancedChannelsIDs;
-exports.updateInstancedChannels = updateInstancedChannels;
+module.exports.instancedChannelsIDs = instancedChannelsIDs;
+module.exports.updateInstancedChannels = updateInstancedChannels;

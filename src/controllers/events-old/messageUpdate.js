@@ -2,40 +2,40 @@ const Discord = require("discord.js");
 const db = require("quick.db");
 const metrics = require("../../index.js");
 
-module.exports = async (client, oldMessage, newMessage) => {
-  metrics.sendEvent("message_update");
-  if (!oldMessage.guild) return; //No audit log for dms
-  if (oldMessage.partial) return;
-  sendAuditLogMessage(client, oldMessage, newMessage);
+module.exports = async(client, oldMessage, newMessage) => {
+    metrics.sendEvent("message_update");
+    if (!oldMessage.guild) return; //No audit log for dms
+    if (oldMessage.partial) return;
+    sendAuditLogMessage(client, oldMessage, newMessage);
 };
 
 async function sendAuditLogMessage(client, oldMessage, newMessage) {
-  const auditChannelID = db.get(`audit.${oldMessage.guild.id}`);
+    const auditChannelID = db.get(`audit.${oldMessage.guild.id}`);
 
-  //If the channel specified is null or does not exist we want to return
-  if (!auditChannelID) return;
-  let auditLogChannel = oldMessage.guild.channels.resolve(auditChannelID);
-  if (!auditLogChannel) return;
-  if (oldMessage.channel.id === auditChannelID) return; //No audit log for the audit log ;)
+    //If the channel specified is null or does not exist we want to return
+    if (!auditChannelID) return;
+    let auditLogChannel = oldMessage.guild.channels.resolve(auditChannelID);
+    if (!auditLogChannel) return;
+    if (oldMessage.channel.id === auditChannelID) return; //No audit log for the audit log ;)
 
-  if (oldMessage.author.bot) return;
-  if (newMessage.deleted) return;
-  if (oldMessage.embeds.length < newMessage.embeds.length) return;
-  if (!oldMessage.content || !newMessage.content) return;
+    if (oldMessage.author.bot) return;
+    if (newMessage.deleted) return;
+    if (oldMessage.embeds.length < newMessage.embeds.length) return;
+    if (!oldMessage.content || !newMessage.content) return;
 
-  const avatar = oldMessage.author.avatarURL({ size: 2048 });
-  let title = `${oldMessage.author.tag} edited a message`;
-  let color = "GREEN";
+    const avatar = oldMessage.author.avatarURL({ size: 2048 });
+    let title = `${oldMessage.author.tag} edited a message`;
+    let color = "GREEN";
 
-  const deletedMessageEmbed = new Discord.MessageEmbed()
-    .setAuthor(title, avatar)
-    .setColor(color)
-    .setDescription(
-      `Channel: <#${oldMessage.channel.id}>\nOld Message: ${oldMessage.content}\nNew Message: ${newMessage.content}`
-    )
-    .setFooter(`ID: ${oldMessage.author.id}`);
+    const deletedMessageEmbed = new Discord.MessageEmbed()
+        .setAuthor(title, avatar)
+        .setColor(color)
+        .setDescription(
+            `Channel: <#${oldMessage.channel.id}>\nOld Message: ${oldMessage.content}\nNew Message: ${newMessage.content}`
+        )
+        .setFooter(`ID: ${oldMessage.author.id}`);
 
-  auditLogChannel.send(deletedMessageEmbed);
+    auditLogChannel.send(deletedMessageEmbed);
 }
 /*const auditLogChannel = oldMessage.guild.channels.cache.find(
   (channel) => channel.id === process.env.AUDIT_LOG_CHANNEL_ID

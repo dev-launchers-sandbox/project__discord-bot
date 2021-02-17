@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 const CommandHandler = require("../../../.common/structures/CommandHandler/CommandHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "popreminder",
   description:
     "Pop the most recently added reminder from a user's reminder stack",
@@ -10,13 +10,13 @@ exports.help = {
   example: "popReminder",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
-  let commandHandler = new CommandHandler(exports.help.name, message, args);
+module.exports.run = async (client, message, args) => {
+  let commandHandler = new CommandHandler(module.exports.help.name, message, args);
   if (commandHandler.validateCommand({})) {
     let channel = message.channel;
     let user = message.author;

@@ -1,20 +1,20 @@
 const Discord = require("discord.js");
 const CommandHandler = require("./../../../../extensions/.common/structures/CommandHandler/CommandHandler.js");
 
-exports.help = {
+module.exports.help = {
   name: "poll",
   description: "Create a simple poll",
   usage: "poll <content>",
   example: "poll Is this helpful?",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: ["p"],
   cooldown: 5,
   arguments: ["Poll Content"],
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let channel = message.channel;
   let user = message.author;
 
@@ -23,6 +23,6 @@ exports.run = async (client, message, args) => {
     author: user.username,
   });
 
-  let commandHandler = new CommandHandler(exports.help.name, message, args);
+  let commandHandler = new CommandHandler(module.exports.help.name, message, args);
   commandHandler.deleteCommand();
 };

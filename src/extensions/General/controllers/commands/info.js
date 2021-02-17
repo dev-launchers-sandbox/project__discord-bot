@@ -2,19 +2,19 @@ const Discord = require("discord.js");
 const moment = require("moment");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 
-exports.help = {
+module.exports.help = {
   name: "info",
   description: "Displays infomation about a user",
   usage: "info [@user]",
   example: "info @Wumpus#0001s",
 };
 
-exports.conf = {
+module.exports.conf = {
   aliases: [],
   cooldown: 5,
 };
 
-exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) target = message.guild.members.resolve(message.author.id);
 

@@ -1,16 +1,16 @@
-exports.help = {
+module.exports.help = {
     name: "listgames",
     description: "Lists all current games that are being played.",
     usage: `listgames`,
     example: `listgames`,
 };
 
-exports.conf = {
+module.exports.conf = {
     aliases: ["lg", "list", "games"],
     cooldown: 5,
 };
 
-exports.run = async(client, message) => {
+module.exports.run = async(client, message) => {
     const ChessManager = require('../../structures/ChessManager');
     let chessManager = new ChessManager();
 

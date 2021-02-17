@@ -28,7 +28,7 @@ if (speedyBuilds) { // Deploying the server takes too much time for something so
         collectDefaultMetrics({ register });
         const events = new promClient.Counter({
             name: "events_count",
-            help: "Count of discrod events",
+            help: "Count of discord events",
             labelNames: ["event"],
         });
         register.registerMetric(events);

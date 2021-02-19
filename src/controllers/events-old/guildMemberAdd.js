@@ -18,8 +18,6 @@ function sendWelcomeEmbed(member) {
     let avatar = member.user.displayAvatarURL({ size: 2048 });
     let icon = member.guild.iconURL({ size: 2048, dynamic: true });
 
-    if (!welcomeChannel) return;
-
     welcomeChannel.sendEmbed({
         color: 0xff9f01,
         author: { name: `${member.user.tag}`, image: avatar },

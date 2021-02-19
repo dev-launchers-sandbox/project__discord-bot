@@ -1,162 +1,119 @@
-const Discord = require("discord.js");
-const db = require("quick.db");
-const ms = require("parse-ms");
 const metrics = require("../../index.js");
+const db = require("quick.db");
 
-async function fetchMessage(client, messageReaction, user) {
-	if (messageReaction.message.partial) {
-		return await messageReaction.fetch();
-	} else return messageReaction;
+async function fetchMessage(messageReaction) {
+    if (messageReaction.message.partial) {
+        return await messageReaction.fetch();
+    } else return messageReaction;
 }
 
-module.exports = async (client, messageReaction, user) => {
-	metrics.sendEvent("remove");
-	if (user.bot) return;
+module.exports = async(client, messageReaction, user) => {
+    metrics.sendEvent("remove");
+    if (user.bot) return;
 
-	if (messageReaction.emoji.name === "DevBean") {
-		let message = await fetchMessage(client, messageReaction, user);
-		const doIgnore = await isReactionIgnored(client, messageReaction, user);
-		if (!doIgnore) return removeDevBean(client, message, user);
-	}
-	if (messageReaction.emoji.name === "GoldenBean") {
-		let message = await fetchMessage(client, messageReaction, user);
-		const doIgnore = await isReactionIgnored(client, messageReaction, user);
-		if (!doIgnore) return removeGoldenBean(client, message, user);
-	}
-	if (messageReaction.emoji.name === "✔️") {
-		let message = await fetchMessage(client, messageReaction, user);
-		return leaveChannel(client, message, user);
-	}
-	if (messageReaction.emoji.name === "villager") {
-		let message = await fetchMessage(client, messageReaction, user);
-		return removeMinecraftRole(client, message, user, messageReaction);
-	}
+    if (messageReaction.emoji.name === "DevBean") {
+        let message = await fetchMessage(messageReaction);
+        const doIgnore = await (messageReaction, user);
+        if (!doIgnore) return removeDevBean(message, user);
+    }
+    if (messageReaction.emoji.name === "GoldenBean") {
+        let message = await fetchMessage(messageReaction);
+        const doIgnore = await isReactionIgnored(messageReaction, user);
+        if (!doIgnore) return removeGoldenBean(message, user);
+    }
+    if (messageReaction.emoji.name === "✔️") {
+        let message = await fetchMessage(messageReaction);
+        return leaveChannel(client, message, user);
+    }
+    if (messageReaction.emoji.name === "villager") {
+        return removeMinecraftRole(user, messageReaction);
+    }
 };
 
-async function removeDevBean(client, messageReaction, user) {
-	//if the user did not unreact with the correct emoji, we do not want to do anything
-	let userToRemoveBeansTo = messageReaction.message.author; //id of the users whos message got a reaction
-	let userWhoReacted = user.id; //user that reacted
+function removeDevBean(messageReaction, user) {
+    let userToRemoveBeansTo = messageReaction.message.author;
 
-	//if there were any bots involved in the message we do not want to continue
-	if (user.bot || userToRemoveBeansTo.bot) return;
-	//if the user reaction to his own message he will not get a devBean
-	if (userToRemoveBeansTo.id === userWhoReacted) return;
-	try {
-		db.subtract(`account.${userToRemoveBeansTo.id}.devBeans`, 1); //subtract the amount of beans
-		db.subtract(`account.${userToRemoveBeansTo.id}.foreverDevBeans`, 1);
-		db.delete(`account.${user.id}.lastDevBean`);
+    if (user.bot || userToRemoveBeansTo.bot || userToRemoveBeansTo.id === user.id) return;
 
-		user.send(
-			`Dev-Bean removed from **${messageReaction.message.author.tag}**`
-		);
-	} catch (err) {
-		//if there is an error, send an "error" message
-		user.send(
-			"Oopsie, for some reason I could not remove a dev-bean from the user"
-		);
-	}
+    try {
+        db.subtract(`account.${userToRemoveBeansTo.id}.devBeans`, 1);
+        db.subtract(`account.${userToRemoveBeansTo.id}.foreverDevBeans`, 1);
+        db.delete(`account.${user.id}.lastDevBean`);
+
+        user.send(`DevBean removed from **${messageReaction.message.author.tag}**`);
+    } catch (e) {
+        // If there is an error, send an "error" message
+        user.send("Due to an unknown error, I was not able to remove a DevBean from that user. Please report this bug.");
+    }
 }
 
-async function removeGoldenBean(client, messageReaction, user) {
-	let lastGoldenBeanAwarded = db.get(`lastGoldenBeanAwarded.${user.id}`);
+function removeGoldenBean(messageReaction, user) {
+    let lastGoldenBeanAwarded = db.get(`lastGoldenBeanAwarded.${user.id}`);
+    let target = messageReaction.message.author.id; //id of the users whos message got an "unreaction"
 
-	let target = messageReaction.message.author.id; //id of the users whos message got an "unreaction"
-	let reactor = user.id; //user that "unreacted"
-	//if there were any bots involved in the message we do not want to continue
-	if (user.bot || messageReaction.message.author.bot) return;
-	//if the user unreacted to his own message he will not get a devBean
-	if (target === reactor) return;
-	if (lastGoldenBeanAwarded !== messageReaction.message.id) {
-		return user.send(
-			`**${user.username}**, you can only remove the last golden-bean you awarded!`
-		);
-	}
-	try {
-		db.subtract(`account.${target}.goldenBeans`, 1); //remove the amount of golden-beans
-		db.subtract(`account.${target}.foreverGoldenBeans`, 1);
-		db.delete(`lastGoldenBean.${user.id}`);
-		user.send(
-			`Golden-Bean removed from **${messageReaction.message.author.tag}**`
-		);
-	} catch (err) {
-		//if there is an error, send an "error" message
-		user.send(
-			"Oopsie, for some reason I could not remove a golden-bean from the user"
-		);
-		console.log(err);
-	}
+    if (user.bot || messageReaction.message.author.bot || target === user.id) return;
+
+    if (lastGoldenBeanAwarded !== messageReaction.message.id) {
+        return user.send(
+            `**${user.username}**, you can only remove the last golden-bean you awarded!`
+        );
+    }
+
+    try {
+        db.subtract(`account.${target}.goldenBeans`, 1); //remove the amount of golden-beans
+        db.subtract(`account.${target}.foreverGoldenBeans`, 1);
+        db.delete(`lastGoldenBean.${user.id}`);
+        user.send(`Golden-Bean removed from **${messageReaction.message.author.tag}**`);
+    } catch (err) {
+        // If there is an error, send an "error" message
+        user.send("Due to an unknown error, I was not able to remove a GoldenBean from that user. Please report this bug.");
+    }
 }
 
 function leaveChannel(client, messageReaction, user) {
-	let channelsCreated = db.get(
-		`instanced.${messageReaction.message.guild.id}`
-	);
-	if (!Array.isArray(channelsCreated)) return;
+    let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
+    if (!Array.isArray(channelsCreated)) return;
 
-	if (channelsCreated.length === 0) return;
+    if (channelsCreated.length === 0) return;
 
-	const messageRole = channelsCreated.find((channel) =>
-		channel.id.includes(messageReaction.message.id)
-	);
-	if (!messageRole) return;
+    const messageRole = channelsCreated.find((channel) => { return channel.id.includes(messageReaction.message.id) });
+    if (!messageRole) return;
 
-	const isRoleActive = messageReaction.message.guild.roles.cache.find(
-		(role) => role.id === messageRole.role
-	);
-	if (!isRoleActive) {
-		return messageReaction.message.channel.send(
-			"`" + user.username + "`" + " that channel does not exist anymore"
-		);
-	}
+    const isRoleActive = messageReaction.message.guild.roles.cache.find((role) => { return role.id === messageRole.role });
+    if (!isRoleActive) return messageReaction.message.channel.send("`" + user.username + "`" + " that channel does not exist anymore");
 
-	if (
-		!messageReaction.message.guild.members.cache
-			.get(user.id)
-			.roles.cache.some((role) => role.id === messageRole.role)
-	)
-		return;
+    if (!messageReaction.message.guild.members.cache.get(user.id).roles.cache.some((role) => { return role.id === messageRole.role })) return;
 
-	let channel = client.channels.cache.get(messageRole.newChannel);
+    let channel = client.channels.cache.get(messageRole.newChannel);
 
-	messageReaction.message.guild.members.cache
-		.get(user.id)
-		.roles.remove(messageRole.role)
-		.then(
-			channel.send("`" + `${user.username}` + "`" + " left the channel!")
-		);
+    messageReaction.message.guild.members.cache.get(user.id).roles.remove(messageRole.role).then(channel.send("`" + `${user.username}` + "`" + " left the channel!"));
 }
 
-async function isReactionIgnored(client, messageReaction, user) {
-	let ignoreReactions = await db.get(`ignore_reactions`);
-	let reaction;
-	if (!ignoreReactions) return false;
-	ignoreReactions.forEach((r) => {
-		if (
-			r.message === messageReaction.message.id &&
-			r.user === user.id &&
-			r.emoji === messageReaction.emoji.id
-		) {
-			reaction = r;
-		}
-	});
-	if (!reaction) return false;
+async function isReactionIgnored(messageReaction, user) {
+    let ignoreReactions = await db.get(`ignore_reactions`);
+    if (!ignoreReactions) return false;
+    let reaction;
 
-	let index = ignoreReactions.indexOf(reaction);
-	ignoreReactions.splice(index, 1);
-	await db.set(`ignore_reactions`, ignoreReactions);
-	return true;
+    ignoreReactions.forEach(r => {
+        if (r.message === messageReaction.message.id && r.user === user.id && r.emoji === messageReaction.emoji.id) {
+            reaction = r;
+        }
+    });
+
+    if (!reaction) return false;
+
+    let index = ignoreReactions.indexOf(reaction);
+
+    ignoreReactions.splice(index, 1);
+
+    await db.set(`ignore_reactions`, ignoreReactions);
+
+    return true;
 }
 
-function removeMinecraftRole(client, message, user, messageReaction) {
-	const minecraftMsg = db.get(
-		`minecraft.${messageReaction.message.guild.id}`
-	);
-	const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
+function removeMinecraftRole(user, messageReaction) {
+    const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
+    const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
 
-	if (messageReaction.message.id === minecraftMsg) {
-		messageReaction.message.guild.members
-			.resolve(user.id)
-			.roles.remove(role);
-	}
+    if (messageReaction.message.id === minecraftMsg) messageReaction.message.guild.members.resolve(user.id).roles.remove(role);
 }

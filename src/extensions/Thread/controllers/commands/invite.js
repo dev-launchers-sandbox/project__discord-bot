@@ -28,7 +28,7 @@ exports.run = async (client, message, args) => {
     return;
   }
 
-  if (thread.isPublic) {
+  if (!thread.isPublic) {
     if (!(ThreadManager.hasThreadPermissions(thread.id, message.member))) {
       channel.sendEmbed({ color: 0xff9f01, description: "The thread is private, only the owner can do this." });
       return;

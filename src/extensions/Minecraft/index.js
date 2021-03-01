@@ -3,7 +3,7 @@ module.exports = {
   helpCategory: "Minecraft",
   helpPage: 4,
   commands: [require("./controllers/commands/minecraft.js")],
-  events: [],
+  events: [require("./controllers/events/minecraftOnGuildMemberUpdate.js")],
   extends: [],
   structures: [],
   permissions: [],

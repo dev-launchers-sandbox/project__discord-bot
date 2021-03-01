@@ -2,7 +2,7 @@ module.exports = {
   name: "Currency",
   helpCategory: "Currency",
   helpPage: 3,
-  commands: [],
+  commands: [require("./controllers/commands/template.js")],
   events: [],
   extends: [],
   structures: [require("./structures/CurrencyManager.js")],

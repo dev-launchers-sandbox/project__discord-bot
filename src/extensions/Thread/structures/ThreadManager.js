@@ -3,7 +3,14 @@ const dbh = require("../../.common/structures/DataHandling/DatabaseHandler.js");
 class ThreadManager {
   constructor() {}
 
-  async createThread(client, guild, channel, threadName, threadCreatorId, isPublic) {
+  async createThread(
+    client,
+    guild,
+    channel,
+    threadName,
+    threadCreatorId,
+    isPublic
+  ) {
     let role = await guild.roles.create({ data: { name: threadName } });
     let threadChannel = await guild.channels.create(threadName);
     let threadCreator = guild.members.resolve(threadCreatorId);
@@ -32,7 +39,7 @@ class ThreadManager {
     });
 
     threadCreator.roles.add(role.id);
-    threadChannel.send(`${threadCreator.toString()}`).then(m => m.delete());
+    threadChannel.send(`${threadCreator.toString()}`).then((m) => m.delete());
     threadInvite.react("🧵");
 
     let directoryMessage = null;
@@ -45,8 +52,14 @@ class ThreadManager {
     let moderationChannel;
 
     if (moderationServer) {
-      moderationChannel = await moderationServer.channels.create(threadChannel.name);
-      moderationChannel.send(`Thread ${threadChannel.name} has been created by ${threadCreator.toString()}`)
+      moderationChannel = await moderationServer.channels.create(
+        threadChannel.name
+      );
+      moderationChannel.send(
+        `Thread ${
+          threadChannel.name
+        } has been created by ${threadCreator.toString()}`
+      );
     }
 
     let thread = {
@@ -56,6 +69,7 @@ class ThreadManager {
       roleId: role.id,
       threadCreatorId: threadCreatorId,
       invites: [threadInvite.id],
+      customInvites: [],
       blacklist: [],
       isPublic: isPublic,
       directoryMessageId: directoryMessage ? directoryMessage.id : null,
@@ -95,22 +109,26 @@ class ThreadManager {
       footer: "React to this message to join the thread!",
     });
 
-    directoryMessage.react("🧵")
+    directoryMessage.react("🧵");
     return directoryMessage;
   }
 
   async updateDirectoryInvite(client, threadId, name, description) {
     let thread = this.getThreadById(threadId);
-    const { MessageEmbed } = require("discord.js")
+    const { MessageEmbed } = require("discord.js");
     let newEmbed = new MessageEmbed()
       .setColor(0xff9f01)
       .setTitle(name + " thread")
-      .setDescription(`Description: *${description ? description : "No description"}*`)
+      .setDescription(
+        `Description: *${description ? description : "No description"}*`
+      )
       .setFooter("React to this message to join the thread!");
 
     let directoryChannelId = dbh.thread.getDirectoryChannelId(thread.guildId);
     let directoryChannel = client.channels.resolve(directoryChannelId);
-    let directoryMessage = await directoryChannel.messages.fetch(thread.directoryMessageId);
+    let directoryMessage = await directoryChannel.messages.fetch(
+      thread.directoryMessageId
+    );
 
     directoryMessage.edit(newEmbed);
   }
@@ -123,7 +141,10 @@ class ThreadManager {
     if (member) {
       thread.blacklist.push(userId);
       member.roles.remove(thread.roleId);
-      member.user.sendEmbed({ color: 0xff9f01, description: `You have been blacklisted from ${channel.name}` });
+      member.user.sendEmbed({
+        color: 0xff9f01,
+        description: `You have been blacklisted from ${channel.name}`,
+      });
     }
 
     dbh.thread.updateThread(threadId, thread);
@@ -135,8 +156,11 @@ class ThreadManager {
 
     let member = guild.members.resolve(userId);
     if (member) {
-      thread.blacklist = thread.blacklist.filter(u => u !== userId);
-      member.user.sendEmbed({ color: 0xff9f01, description: `You have been whitelisted from ${channel.name}` });
+      thread.blacklist = thread.blacklist.filter((u) => u !== userId);
+      member.user.sendEmbed({
+        color: 0xff9f01,
+        description: `You have been whitelisted from ${channel.name}`,
+      });
     }
 
     dbh.thread.updateThread(threadId, thread);
@@ -144,7 +168,10 @@ class ThreadManager {
 
   hasThreadPermissions(threadId, user) {
     let thread = this.getThreadById(threadId);
-    return user.permissions.has("ADMINISTRATOR") || thread.threadCreatorId === user.id;
+    return (
+      user.permissions.has("ADMINISTRATOR") ||
+      thread.threadCreatorId === user.id
+    );
   }
 
   async convertToPublic(client, threadId) {
@@ -156,7 +183,11 @@ class ThreadManager {
     let channel = guild.channels.resolve(thread.channelId);
     if (!channel) return;
 
-    let directoryMessage = await this.sendDirectoryMessage(guild, channel.name, thread.description);
+    let directoryMessage = await this.sendDirectoryMessage(
+      guild,
+      channel.name,
+      thread.description
+    );
     thread.directoryMessage = directoryMessage.id;
     dbh.thread.updateThread(threadId, thread);
   }
@@ -173,7 +204,12 @@ class ThreadManager {
     channel.setTopic(thread.description);
 
     if (thread.isPublic) {
-      this.updateDirectoryInvite(client, thread.id, channel.name, thread.description);
+      this.updateDirectoryInvite(
+        client,
+        thread.id,
+        channel.name,
+        thread.description
+      );
     }
     dbh.thread.updateThread(threadId, thread);
   }
@@ -198,7 +234,7 @@ class ThreadManager {
   }
 
   getMembersInThread(client, guildId, threadId) {
-    let guild = client.guilds.resolve(guildId)
+    let guild = client.guilds.resolve(guildId);
     if (!guild) return 0;
     let thread = this.getThreadById(threadId);
     let role = guild.roles.resolve(thread.roleId);
@@ -224,7 +260,9 @@ class ThreadManager {
     let moderationServer = client.guilds.resolve(moderationServerId);
     if (!moderationServer) return null;
 
-    let moderationChannel = moderationServer.channels.resolve(thread.moderationChannelId);
+    let moderationChannel = moderationServer.channels.resolve(
+      thread.moderationChannelId
+    );
     return moderationChannel;
   }
 }

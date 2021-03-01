@@ -5,6 +5,7 @@ module.exports = {
   commands: [
     require("./controllers/commands/reactTo.js"),
     require("./controllers/commands/createInvite.js"),
+    require("./controllers/commands/addThreadInvite.js"),
   ],
   events: [],
   extends: [],

@@ -36,6 +36,7 @@ const settings = [
   "control-center",
   "thread-inactivity-time",
   "moderation-server",
+  "minecraft-event",
 ];
 
 exports.run = async (client, message, args) => {

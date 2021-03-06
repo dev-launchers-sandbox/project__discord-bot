@@ -35,6 +35,8 @@ spec:
               value: "/etc/tls/api-client.pem"
             - name: BACKEND_MTLS_KEY
               value: "/etc/tls/api-key.key"
+            - name: BACKEND_CA
+              value: "/etc/tls/backend-ca.pem"
           resources:
             limits:
               cpu: 50m

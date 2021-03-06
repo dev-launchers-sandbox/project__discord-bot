@@ -1,4 +1,4 @@
-const CurrencyManager = require("./../../structures/CurrencyManager.js");
+const currencyManager = require("./../../structures/CurrencyManager.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget");
 
 exports.help = {
@@ -28,5 +28,5 @@ exports.run = async (client, message, args) => {
     return;
   }
 
-  CurrencyManager.addCoins(target.id, amount);
+  currencyManager.addCoins(target.id, amount);
 };

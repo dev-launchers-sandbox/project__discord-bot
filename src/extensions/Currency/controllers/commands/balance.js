@@ -1,4 +1,4 @@
-const CurrencyManager = require("./../../structures/CurrencyManager.js");
+const currencyManager = require("./../../structures/CurrencyManager.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget");
 
 exports.help = {
@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
   let target = getMessageTarget.getMessageTarget(message, args);
   if (!target) target = message.member;
 
-  let balance = CurrencyManager.getCoins(target.id) || 0;
+  let balance = currencyManager.getCoins(target.id) || 0;
 
   message.channel.sendEmbed({
     color: 0xff9f01,

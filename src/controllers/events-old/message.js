@@ -10,7 +10,7 @@ module.exports = async (client, message) => {
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
   const args = message.content.slice(prefix.length).trim().split(" ");
 
-  if (message.author.id === "302050872383242240") bumpCheck(message);
+  //if (message.author.id === "302050872383242240") bumpCheck(message);
   if (message.author.id === "159985870458322944") newLevelCheck(message, args);
 
   let inviteLink = [

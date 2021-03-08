@@ -14,19 +14,27 @@ class BeanHandler {
   constructor() {}
 
   getUserDevBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.devBeans`);
+    return quickDB.get(`account.${userId}.devBeans`);
   }
 
   getUserGoldenBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.goldenBeans`);
+    return quickDB.get(`account.${userId}.goldenBeans`);
   }
 
   getUserForeverDevBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.foreverDevBeans`);
+    return quickDB.get(`account.${userId}.foreverDevBeans`);
   }
 
   getUserForeverGoldenBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.foreverGoldenBeans`);
+    return quickDB.get(`account.${userId}.foreverGoldenBeans`);
+  }
+
+  getDevBeanEmojiId(guildId) {
+    return quickDB.get(`dev-bean-emoji.${guildId}`);
+  }
+
+  getGoldenBeanEmojiId(guildId) {
+    return quickDB.get(`golden-bean-emoji.${guildId}`);
   }
 }
 

@@ -36,6 +36,8 @@ const settings = [
   "control-center",
   "thread-inactivity-time",
   "moderation-server",
+  "dev-bean-emoji",
+  "golden-bean-emoji",
 ];
 
 exports.run = async (client, message, args) => {

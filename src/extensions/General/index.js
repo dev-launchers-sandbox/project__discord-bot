@@ -8,6 +8,7 @@ module.exports = {
     require("./controllers/commands/ping.js"),
     require("./controllers/commands/poll.js"),
     require("./controllers/commands/serverinfo.js"),
+    require("./controllers/commands/profile.js"),
   ],
   events: [],
   extends: [],

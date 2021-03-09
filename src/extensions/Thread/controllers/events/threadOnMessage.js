@@ -13,4 +13,7 @@ exports.event = async (client, message, args) => {
   if (moderationChannel && !moderationChannel.deleted) {
       moderationChannel.send(`${message.author.toString()} -- ${message.content}`);
   }
+
+  thread.statistics.numOfMessages++;
+  dbh.thread.updateThread(thread.id, thread);
 };

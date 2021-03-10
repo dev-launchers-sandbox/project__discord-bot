@@ -7,6 +7,9 @@ The key is DISCORD_TOKEN
 
 
 # Development environment
+
+**YOU WILL NEED DOCKER-COMPOSE TO TEST YOUR CODE LOCALLY. Check here for installation instructions: https://docs.docker.com/compose/install/**
+
 Development environment is defined in docker-compose.yaml. To integrate with the backend API
 locally, clone the backend repo https://github.com/dev-launchers/platform__api into a sibling
 repo. 

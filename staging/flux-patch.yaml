@@ -4,6 +4,8 @@ kind: StatefulSet
 metadata:
   name: project-discord-bot
   namespace: project-discord-bot
+  annotations:
+    fluxcd.io/tag.platform-website: regex:^sha-*
 spec:
   template:
     spec:

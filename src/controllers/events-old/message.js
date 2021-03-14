@@ -3,7 +3,7 @@ const Discord = require("discord.js"),
 const db = require("quick.db");
 const commandUsage = require("../../utils/commandUsage.js");
 const metrics = require("../../index.js");
-const CommandHandler = require("./../../extensions/.common/structures/CommandHandler/CommandHandler.js");
+const CommandHandler = require("./../../plugins/.common/structures/CommandHandler/CommandHandler.js");
 
 module.exports = async (client, message) => {
   if (!message.guild) return;

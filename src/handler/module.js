@@ -7,23 +7,23 @@ module.exports = (client) => {
   client.aliases = new Discord.Collection();
   client.helps = new Discord.Collection();
 
-  const extensions = require("../extensions");
-  for (let extension of extensions) {
-    let category = extension.name;
+  const plugins = require("../plugins");
+  for (let plugin of plugins) {
+    let category = plugin.name;
 
-    if (extension.commands.length > 0) {
+    if (plugin.commands.length > 0) {
       let moduleConf = {
-        name: extension.helpCategory,
-        helpPage: extension.helpPage,
+        name: plugin.helpCategory,
+        helpPage: plugin.helpPage,
         hide: false,
-        path: `../extensions/${category}/controllers/commands`,
+        path: `../plugins/${category}/controllers/commands`,
         cmds: [],
-        permissions: extension.permissions,
+        permissions: plugin.permissions,
       };
 
       client.helps.set(category, moduleConf);
 
-      for (let command of extension.commands) {
+      for (let command of plugin.commands) {
         let name = command.help.name.toLowerCase();
         let aliases = command.conf.aliases;
 

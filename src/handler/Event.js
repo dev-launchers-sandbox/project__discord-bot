@@ -3,9 +3,9 @@ const path = require("path");
 
 module.exports = (client) => {
   // New events
-  const extensions = require("../extensions");
-  for (let extension of extensions) {
-    for (let event of extension.events) {
+  const plugins = require("../plugins");
+  for (let plugins of plugins) {
+    for (let event of plugins.events) {
       let eventHandle = event.eventHandle;
       client.on(eventHandle, (...args) => event.event(client, ...args));
     }

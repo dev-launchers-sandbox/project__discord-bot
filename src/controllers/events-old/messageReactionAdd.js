@@ -3,6 +3,9 @@ const db = require("quick.db");
 const ms = require("parse-ms");
 const metrics = require("../../index.js");
 
+const BeanMessenger = require("../../plugins/Bean/structures/BeanMessenger.js");
+let beanMessenger = new BeanMessenger();
+
 async function fetchMessage(client, messageReaction, user) {
   if (messageReaction.message.partial) {
     return await messageReaction.fetch();
@@ -76,6 +79,11 @@ async function awardDevBean(client, messageReaction, user) {
       user.send(
         `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
       );
+      beanMessenger.sendDevBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
+      );
     }
   } catch (err) {
     console.log(err);
@@ -117,6 +125,11 @@ async function awardGoldenBean(client, messageReaction, user) {
       user.send(
         `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
       );
+      beanMessenger.sendGoldenBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
+      );
 
       return db.set(
         `lastGoldenBeanAwarded.${user.id}`,
@@ -131,7 +144,6 @@ async function awardGoldenBean(client, messageReaction, user) {
     console.log(err);
   }
 }
-
 
 async function openTicket(client, messageReaction, user) {
   if (user.bot) return;

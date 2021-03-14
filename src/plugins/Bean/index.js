@@ -11,7 +11,7 @@ module.exports = {
     require("./controllers/commands/leaderboard.js"),
   ],
   events: [require("./controllers/events/beanOnReactionAdd.js")],
-  extends: [require("./structures/BeanMessageReaction.js")],
+  extends: [require("./extends/BeanMessageReaction.js")],
   structures: [],
   permissions: [],
 };

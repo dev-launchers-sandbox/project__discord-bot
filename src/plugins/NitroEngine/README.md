@@ -2,14 +2,14 @@
 
 ##Overview
 
-This plugin adds a Discord Nitro hunting game to the server. At random times,
-the bot will send an embedded message in a predetermined channel "containing"
-a "fragment" of a Nitro Engine. When all of the pieces of the Nitro Engine have
-been collected, they can then be assembled into a full Nitro Engine which can
-then be redeemed for a Discord Nitro membership.
+This plugin adds a Discord Nitro hunting game to the server. On random intervals,
+and triggered by chat activity, the bot will send an embedded message in a predetermined
+channel "containing" a "fragment" of a Nitro Engine. When all of the pieces of the Nitro
+Engine have been collected they can then be assembled into a full Nitro Engine.
+Nitro Engines can then be redeemed for a Discord Nitro.
 
 ###Nitro Engine Parts
-These are the collectable pieces that make up a Nitro Engine. They include:
+These are the collectible pieces that make up a Nitro Engine. They include:
 
 - Combustion Chamber
 - Carburetor

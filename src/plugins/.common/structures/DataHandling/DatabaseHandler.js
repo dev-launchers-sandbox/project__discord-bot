@@ -6,6 +6,7 @@ class DatabaseHandler {
     this.reminder = new ReminderHandler();
     this.invite = new InviteHandler();
     this.thread = new ThreadHandler();
+    this.nitroEngine = new NitroEngineHandler();
   }
 }
 
@@ -113,7 +114,7 @@ class ThreadHandler {
   }
 
   async addThread(guildId, thread) {
-    let threads = this.getThreads(guildId)
+    let threads = this.getThreads(guildId);
 
     //Makes sure that the entry has been created to avoid error on the push.
     if (!Array.isArray(threads)) await this.setThreads([]);
@@ -135,7 +136,7 @@ class ThreadHandler {
 
   updateThread(threadId, updatedThread) {
     let threads = this.getThreads(updatedThread.guildId);
-    let index = threads.findIndex(t => t.id === updatedThread.id);
+    let index = threads.findIndex((t) => t.id === updatedThread.id);
     if (index !== -1) {
       threads.splice(index, 1, updatedThread);
       this.setThreads(threads);
@@ -148,7 +149,7 @@ class ThreadHandler {
 
   removeThread(threadId) {
     let threads = this.getThreads();
-    let updatedThreads = threads.filter(thread => thread.id !== threadId);
+    let updatedThreads = threads.filter((thread) => thread.id !== threadId);
     this.setThreads(updatedThreads);
   }
 
@@ -156,4 +157,43 @@ class ThreadHandler {
     return quickDB.get(`moderation-server.${guildId}`);
   }
 }
+
+class NitroEngineHandler {
+  constructor() {}
+
+  //////////////////////////////
+
+  inventorySchemaSeed() {
+    return [
+      { type: "Combustion Chamber", amount: 0 },
+      { type: "Carburetor", amount: 0 },
+      { type: "Piston", amount: 0 },
+      { type: "Cylinder", amount: 0 },
+      { type: "Exhaust", amount: 0 },
+    ];
+  }
+
+  getUserInventory(userId) {
+    return quickDB.get(`nitroEngine.${userId}.inventory`);
+  }
+
+  setUserInventory(userId, inventoryData) {
+    return quickDB.set(`nitroEngine.${userId}.inventory`, inventoryData);
+  }
+
+  //////////////////////////////
+
+  enginesSchemaSeed() {
+    return 0;
+  }
+
+  getUserEngines(userId) {
+    return quickDB.get(`nitroEngine.${userId}.engines`);
+  }
+
+  setUserEngines(userId, numEngines) {
+    return quickDB.set(`nitroEngine.${userId}.engines`, numEngines);
+  }
+}
+
 module.exports = new DatabaseHandler();

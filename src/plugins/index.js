@@ -21,6 +21,9 @@ module.exports = [
   // Moderation plugin
   require("./Moderation"),
 
+  // NitroEngine plugin
+  require("./NitroEngine"),
+
   // Thread plugin
   require("./Thread"),
 

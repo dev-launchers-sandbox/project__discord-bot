@@ -41,7 +41,7 @@ async function removeDevBean(client, messageReaction, user) {
   try {
     db.subtract(`account.${userToRemoveBeansTo.id}.devBeans`, 1); //subtract the amount of beans
     db.subtract(`account.${userToRemoveBeansTo.id}.foreverDevBeans`, 1);
-    db.delete(`account.${user.id}.lastDevBean`);
+    //db.delete(`account.${user.id}.lastDevBean`);
 
     user.send(
       `Dev-Bean removed from **${messageReaction.message.author.tag}**`
@@ -83,7 +83,6 @@ async function removeGoldenBean(client, messageReaction, user) {
     console.log(err);
   }
 }
-
 
 async function isReactionIgnored(client, messageReaction, user) {
   let ignoreReactions = await db.get(`ignore_reactions`);

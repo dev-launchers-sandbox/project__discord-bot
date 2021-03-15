@@ -71,7 +71,10 @@ async function removeGoldenBean(client, messageReaction, user) {
   try {
     db.subtract(`account.${target}.goldenBeans`, 1); //remove the amount of golden-beans
     db.subtract(`account.${target}.foreverGoldenBeans`, 1);
-    db.delete(`lastGoldenBean.${user.id}`);
+    db.set(
+      `lastGoldenBean.${user.id}`,
+      Date.now() - (1000 * 60 * 60 * 24 - 1000 * 60 * 2) // 1 minute cooldown
+    );
     user.send(
       `Golden-Bean removed from **${messageReaction.message.author.tag}**`
     );

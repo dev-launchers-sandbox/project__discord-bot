@@ -122,7 +122,7 @@ async function awardGoldenBean(client, messageReaction, user) {
       let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
       await removeEmoji(messageReaction, user);
       return user.send(
-        `Please wait ${finalTime} before giving another Dev Bean!`
+        `Please wait ${finalTime} before giving another Golden Bean!`
       );
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());

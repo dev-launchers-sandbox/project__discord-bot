@@ -71,14 +71,18 @@ async function awardDevBean(client, messageReaction, user) {
       let seconds = pad_zero(timeObj.seconds).padStart(2, "");
       let finalTime = `**${seconds} second(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Dev Bean!`
+      );
     } else {
       db.set(`lastDevBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveBeansTo}.devBeans`, 1);
       db.add(`account.${userToGiveBeansTo}.foreverDevBeans`, 1);
+      /*
       user.send(
         `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
       );
+      */
       beanMessenger.sendDevBeanNotification(
         user,
         messageReaction.message.author,
@@ -117,14 +121,18 @@ async function awardGoldenBean(client, messageReaction, user) {
         minutes = pad_zero(timeObj.minutes).padStart(2, "");
       let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Dev Bean!`
+      );
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
       db.add(`account.${userToGiveGoldenBeansTo}.foreverGoldenBeans`, 1);
+      /*
       user.send(
         `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
       );
+      */
       beanMessenger.sendGoldenBeanNotification(
         user,
         messageReaction.message.author,

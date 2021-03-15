@@ -1,3 +1,5 @@
+const LINE_SEPARATOR = "\n----------------------------\n";
+
 class BeanMessenger {
   constructor(dbh, client) {
     this.dbh = dbh;
@@ -5,12 +7,14 @@ class BeanMessenger {
   }
 
   sendDevBeanNotification(sender, recipient, message) {
-    recipient.send(`**${sender.tag}** has beaned your message! ${message.url}`);
+    recipient.send(
+      `${LINE_SEPARATOR}${sender.tag} has given you a **Dev Bean!** ${message.url}${LINE_SEPARATOR}`
+    );
   }
 
   sendGoldenBeanNotification(sender, recipient, message) {
     recipient.send(
-      `*Wow... You got a golden bean!* **${sender.tag}** has __golden__ beaned your message! ${message.url}`
+      `${LINE_SEPARATOR}*Wow... You got a golden bean!* ${sender.tag} has **__Golden__ Beaned** your message! ${message.url}\n\n*Pay it forward and pass on your own Golden Bean by reacting to a message you love.*${LINE_SEPARATOR}`
     );
   }
 }

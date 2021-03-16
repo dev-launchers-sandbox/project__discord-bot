@@ -17,15 +17,16 @@ exports.event = async (client, messageReaction, user) => {
     !isNitroDropClaimed(messageReaction) &&
     user.id != client.user.id
   ) {
+    // Check if user has been active in the past 24 hours
     if (
       dbh.nitroEngine.getUserLastMessageTime(user.id) <
       Date.now() - ACTIVITY_TIME_REQUIREMENT
     ) {
       // Remove user emoji
       user.send(
-        "Sorry, but you must have been **active in the server within the past 24 hours** to claim part drops.\n\n*Come say hello, tell us about your day, show off a project you're working on, ask a question, or... well, you get it!*"
+        "Sorry, but you **must have been active in the server within the past 24 hours** to claim part drops.\n\n*Come say hello, tell us about your day, show off a project you're working on, ask a question, or... well, you get it!*"
       );
-      reaction.message.reactions.cache.first().users.remove(user.id);
+      messageReaction.message.reactions.cache.first().users.remove(user.id);
       return;
     }
 

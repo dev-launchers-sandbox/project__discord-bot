@@ -23,14 +23,14 @@ class PartBox {
     });
     let randNum = parseInt(Math.random() * cumulativeSum);
     let index = -1;
-    cumulativeValues.forEach((sumVal, i) => {
-      if (randNum < sumVal) {
+    for (let i = 0; i < cumulativeValues.length; i++) {
+      if (randNum < cumulativeValues[i]) {
         index = i;
         break;
       }
-    });
+    }
 
-    return partTypes[index];
+    return DROP_TABLE[index].type;
   }
 
   open() {

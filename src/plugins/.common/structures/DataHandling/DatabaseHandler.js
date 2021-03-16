@@ -43,7 +43,7 @@ class ReminderHandler {
 
   removeReminder(reminder) {
     let reminders = this.getReminders();
-    let filtered = reminders.filter((entry) => {
+    let filtered = reminders.filter(entry => {
       return !(
         entry.sentAt === reminder._sentAt && entry.userId === reminder._userId
       );
@@ -57,7 +57,7 @@ class ReminderHandler {
   }
 
   getUserReminders(user) {
-    return quickDB.get(`reminders`).filter((entry) => {
+    return quickDB.get(`reminders`).filter(entry => {
       return entry.userId == user.id;
     });
   }
@@ -136,7 +136,7 @@ class ThreadHandler {
 
   updateThread(threadId, updatedThread) {
     let threads = this.getThreads(updatedThread.guildId);
-    let index = threads.findIndex((t) => t.id === updatedThread.id);
+    let index = threads.findIndex(t => t.id === updatedThread.id);
     if (index !== -1) {
       threads.splice(index, 1, updatedThread);
       this.setThreads(threads);
@@ -149,7 +149,7 @@ class ThreadHandler {
 
   removeThread(threadId) {
     let threads = this.getThreads();
-    let updatedThreads = threads.filter((thread) => thread.id !== threadId);
+    let updatedThreads = threads.filter(thread => thread.id !== threadId);
     this.setThreads(updatedThreads);
   }
 
@@ -163,18 +163,36 @@ class NitroEngineHandler {
 
   //////////////////////////////
 
+  getUserLastMessageTime(userId) {
+    return quickDB.get(`nitroEngine.${userId}.lastMessageTime`);
+  }
+
+  setUserLastMessageTime(userId, time) {
+    return quickDB.set(`nitroEngine.${userId}.lastMessageTime`, time);
+  }
+
+  //////////////////////////////
+
   inventorySchemaSeed() {
     return [
+      { type: "Fuel", amount: 0 },
       { type: "Combustion Chamber", amount: 0 },
       { type: "Carburetor", amount: 0 },
       { type: "Piston", amount: 0 },
       { type: "Cylinder", amount: 0 },
-      { type: "Exhaust", amount: 0 },
+      { type: "Exhaust", amount: 0 }
     ];
   }
 
   getUserInventory(userId) {
-    return quickDB.get(`nitroEngine.${userId}.inventory`);
+    let inventory = quickDB.get(`nitroEngine.${userId}.inventory`);
+    // Make sure this has all the correct items found in the schema
+    let defaultSchema = this.inventorySchemaSeed();
+    defaultSchema.forEach(defaultEntry => {
+      if (!inventory.find(entry => entry.type == defaultEntry.type))
+        inventory.push(schemaEntry);
+    });
+    return inventory;
   }
 
   setUserInventory(userId, inventoryData) {
@@ -184,7 +202,7 @@ class NitroEngineHandler {
   //////////////////////////////
 
   enginesSchemaSeed() {
-    return 0;
+    return [];
   }
 
   getUserEngines(userId) {
@@ -193,6 +211,11 @@ class NitroEngineHandler {
 
   setUserEngines(userId, numEngines) {
     return quickDB.set(`nitroEngine.${userId}.engines`, numEngines);
+  }
+}
+
+function fillMissingFromSchema(value, defaultSchema) {
+  if (Array.isArray(value)) {
   }
 }
 

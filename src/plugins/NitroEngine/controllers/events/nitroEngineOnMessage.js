@@ -12,9 +12,15 @@ function getRandomDropDelay() {
   );
 }
 
+function updateUserLastMessageTime(user) {
+  dbh.nitroEngine.setUserLastMessageTime(user.id, Date.now());
+}
+
 exports.eventHandle = "message";
 exports.event = async (client, message, args) => {
   metrics.sendEvent("message");
+
+  updateUserLastMessageTime(message.author);
 
   if (Math.random() * 100 < DROP_CHANCE_PER_MESSAGE) {
     let channel = message.channel;

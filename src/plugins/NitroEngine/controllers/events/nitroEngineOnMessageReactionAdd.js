@@ -6,6 +6,8 @@ const metrics = require("../../../../index.js");
 const PartInventory = require("../../structures/PartInventory.js");
 const PartBox = require("../../structures/PartBox.js");
 
+const ACTIVITY_TIME_REQUIREMENT = 1000 * 60 * 60 * 24; // in milliseconds
+
 exports.eventHandle = "messageReactionAdd";
 exports.event = async (client, messageReaction, user) => {
   metrics.sendEvent("message_reaction_add");
@@ -15,6 +17,18 @@ exports.event = async (client, messageReaction, user) => {
     !isNitroDropClaimed(messageReaction) &&
     user.id != client.user.id
   ) {
+    if (
+      dbh.nitroEngine.getUserLastMessageTime(user.id) <
+      Date.now() - ACTIVITY_TIME_REQUIREMENT
+    ) {
+      // Remove user emoji
+      user.send(
+        "Sorry, but you must have been **active in the server within the past 24 hours** to claim part drops.\n\n*Come say hello, tell us about your day, show off a project you're working on, ask a question, or... well, you get it!*"
+      );
+      reaction.message.reactions.cache.first().users.remove(user.id);
+      return;
+    }
+
     let message = messageReaction.message;
     let embed = message.embeds[0];
 

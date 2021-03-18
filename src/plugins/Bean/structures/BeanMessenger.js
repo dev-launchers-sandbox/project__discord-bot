@@ -8,13 +8,13 @@ class BeanMessenger {
 
   sendDevBeanNotification(sender, recipient, message) {
     recipient.send(
-      `${LINE_SEPARATOR}${sender.tag} has given you a **Dev Bean!** ${message.url}${LINE_SEPARATOR}`
+      `${LINE_SEPARATOR}Someone has given you a **Dev Bean!** ${message.url}${LINE_SEPARATOR}`
     );
   }
 
   sendGoldenBeanNotification(sender, recipient, message) {
     recipient.send(
-      `${LINE_SEPARATOR}*Wow... You got a golden bean!* ${sender.tag} has **__Golden__ Beaned** your message! ${message.url}\n\n*Pay it forward and pass on your own Golden Bean by reacting to a message you love.*${LINE_SEPARATOR}`
+      `${LINE_SEPARATOR}*Wow... You got a golden bean!* Someone has **__Golden__ Beaned** your message! ${message.url}\n\n*Pay it forward and pass on your own Golden Bean by reacting to a message you love.*${LINE_SEPARATOR}`
     );
   }
 }

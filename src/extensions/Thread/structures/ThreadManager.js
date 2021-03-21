@@ -64,7 +64,6 @@ class ThreadManager {
       lastNameChange: null,
       lastDescriptionChange: null,
       lastReminder: null,
-      statistics: { numOfMessages: 0, maxNumberOfMembers: 0 },
     };
 
     if (directoryMessage) {

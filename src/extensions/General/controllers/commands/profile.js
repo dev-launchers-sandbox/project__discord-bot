@@ -4,13 +4,13 @@ const getMessageTarget = require("../../../../utils/getMessageTarget");
 
 exports.help = {
   name: "profile",
-  description: "Displays ",
-  usage: "ping",
-  example: "ping",
+  description: "Displays your, or other user's profile.",
+  usage: "profile [user]",
+  example: "profile",
 };
 
 exports.conf = {
-  aliases: ["latency", "api", "response"],
+  aliases: [],
   cooldown: 5,
 };
 
@@ -23,8 +23,11 @@ exports.run = async (client, message, args) => {
   let coins = currencyManager.getCoins(target.id) || 0;
 
   let coinEmoji = guild.emojis.cache.find((e) => e.name === "money") || "$";
-  let devBeanEmoji = guild.emojis.resolve(dbh.bean.getDevBeanEmojiId(guild.id)) || "Dev Beans";
-  let goldenBeanEmoji = guild.emojis.resolve(dbh.bean.getGoldenBeanEmojiId(guild.id)) || "Golden Beans";
+  let devBeanEmoji =
+    guild.emojis.resolve(dbh.bean.getDevBeanEmojiId(guild.id)) || "Dev Beans";
+  let goldenBeanEmoji =
+    guild.emojis.resolve(dbh.bean.getGoldenBeanEmojiId(guild.id)) ||
+    "Golden Beans";
 
   let foreverDevBeans = dbh.bean.getUserForeverDevBeans(target.id) || 0;
   let foreverGoldenBeans = dbh.bean.getUserForeverGoldenBeans(target.id) || 0;
@@ -33,10 +36,13 @@ exports.run = async (client, message, args) => {
 
   channel.sendEmbed({
     color: 0xff9f01,
-    author: { name: `${target.user.tag}'s profile`, image: target.user.displayAvatarURL() },
+    author: {
+      name: `${target.user.tag}'s profile`,
+      image: target.user.displayAvatarURL(),
+    },
     fields: [
-      { name: "Dev Beans", value: `${devBeans} ${devBeanEmoji}`},
-      { name: "Golden Beans", value: `${goldenBeans} ${goldenBeanEmoji}`},
+      { name: "Dev Beans", value: `${devBeans} ${devBeanEmoji}` },
+      { name: "Golden Beans", value: `${goldenBeans} ${goldenBeanEmoji}` },
       { name: `Coins`, value: `${coins} ${coinEmoji}` },
     ],
     //thumbnail: target.user.displayAvatarURL(),

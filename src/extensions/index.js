@@ -13,7 +13,7 @@ module.exports = [
   //require("./Chess"),
 
   //Currency Extension
-  require("./Currency"),
+  //require("./Currency"),
 
   // General Extension
   require("./General"),

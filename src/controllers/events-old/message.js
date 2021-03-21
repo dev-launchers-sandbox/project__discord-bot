@@ -6,11 +6,14 @@ const metrics = require("../../index.js");
 const CommandHandler = require("./../../plugins/.common/structures/CommandHandler/CommandHandler.js");
 
 module.exports = async (client, message) => {
+  // Right now, intervals won't be started until "!d bump" is typed at least once
+  this.bumpInterval = -1; // used to track bump intervals
+
   if (!message.guild) return;
   let prefix = db.get(`prefix.${message.guild.id}`) || ".";
   const args = message.content.slice(prefix.length).trim().split(" ");
 
-  //if (message.author.id === "302050872383242240") bumpCheck(message);
+  if (message.author.id === "302050872383242240") bumpCheck(message);
   if (message.author.id === "159985870458322944") newLevelCheck(message, args);
 
   let inviteLink = [
@@ -139,6 +142,16 @@ function moderateInstancedChannels(client, message) {
   moderationChannel.send(messageData);
 }
 
+function scheduleBumpReminderInterval(message) {
+  clearInterval(this.bumpInterval);
+  this.bumpInterval = setInterval(() => {
+    message.channel.sendEmbed({
+      color: 0xff9f01,
+      title:
+        "🤜🤛 Help grow the community! Type *'!d bump'* to elevate our server on Disboard!",
+    });
+  }, 1000 * 60 * 60 * 2 + 1000 * 60 * 5); // 2 hours + five minutes
+}
 function bumpCheck(message) {
   const embed = message.embeds[0];
   if (!embed) return;
@@ -146,6 +159,9 @@ function bumpCheck(message) {
   if (
     embed.image.url === "https://disboard.org/images/bot-command-image-bump.png"
   ) {
+    // New code to send reminders about bumps, instead of giving beans
+    scheduleBumpReminderInterval(message);
+    /*
     const description = embed.description;
     const openingSign = description.indexOf("<");
     const closingSign = description.indexOf(">");
@@ -169,6 +185,7 @@ function bumpCheck(message) {
       db.add(`account.${userId}.foreverDevBeans`, beans.value);
     } else db.add(`account.${userId}.foreverGoldenBeans`, beans.value);
     message.channel.send(userEmbed);
+    */
   }
 }
 

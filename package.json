@@ -27,7 +27,7 @@
   "devDependencies": {
     "nodemon": "1.18.4",
     "node": "12.16.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "js-yaml": "^3.13.1",
     "winston": "^3.2.1"
   },

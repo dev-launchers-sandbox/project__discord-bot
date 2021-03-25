@@ -37,6 +37,8 @@ const settings = [
   "thread-inactivity-time",
   "moderation-server",
   "minecraft-event",
+  "dev-bean-emoji",
+  "golden-bean-emoji",
 ];
 
 exports.run = async (client, message, args) => {

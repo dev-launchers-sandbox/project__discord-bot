@@ -3,6 +3,9 @@ const db = require("quick.db");
 const ms = require("parse-ms");
 const metrics = require("../../index.js");
 
+const BeanMessenger = require("../../plugins/Bean/structures/BeanMessenger.js");
+let beanMessenger = new BeanMessenger();
+
 async function fetchMessage(client, messageReaction, user) {
   if (messageReaction.message.partial) {
     return await messageReaction.fetch();
@@ -68,13 +71,22 @@ async function awardDevBean(client, messageReaction, user) {
       let seconds = pad_zero(timeObj.seconds).padStart(2, "");
       let finalTime = `**${seconds} second(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Dev Bean!`
+      );
     } else {
       db.set(`lastDevBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveBeansTo}.devBeans`, 1);
       db.add(`account.${userToGiveBeansTo}.foreverDevBeans`, 1);
+      /*
       user.send(
         `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
+      );
+      */
+      beanMessenger.sendDevBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
       );
     }
   } catch (err) {
@@ -109,13 +121,22 @@ async function awardGoldenBean(client, messageReaction, user) {
         minutes = pad_zero(timeObj.minutes).padStart(2, "");
       let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Golden Bean!`
+      );
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
       db.add(`account.${userToGiveGoldenBeansTo}.foreverGoldenBeans`, 1);
+      /*
       user.send(
         `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
+      );
+      */
+      beanMessenger.sendGoldenBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
       );
 
       return db.set(
@@ -131,7 +152,6 @@ async function awardGoldenBean(client, messageReaction, user) {
     console.log(err);
   }
 }
-
 
 async function openTicket(client, messageReaction, user) {
   if (user.bot) return;

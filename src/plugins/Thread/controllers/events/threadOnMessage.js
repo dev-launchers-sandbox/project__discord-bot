@@ -11,6 +11,6 @@ exports.event = async (client, message, args) => {
   let moderationChannel = ThreadManager.getModerationChannel(client, thread.id);
 
   if (moderationChannel && !moderationChannel.deleted) {
-      moderationChannel.send(`${message.author.toString()} -- ${message.content}`);
+    moderationChannel.send(`${message.author.toString()} -- ${message.content}`);
   }
 };

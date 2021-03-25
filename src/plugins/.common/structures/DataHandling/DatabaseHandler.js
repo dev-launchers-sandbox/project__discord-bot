@@ -6,6 +6,7 @@ class DatabaseHandler {
     this.reminder = new ReminderHandler();
     this.invite = new InviteHandler();
     this.thread = new ThreadHandler();
+    this.currency = new CurrencyHandler();
   }
 }
 
@@ -13,19 +14,27 @@ class BeanHandler {
   constructor() {}
 
   getUserDevBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.devBeans`);
+    return quickDB.get(`account.${userId}.devBeans`);
   }
 
   getUserGoldenBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.goldenBeans`);
+    return quickDB.get(`account.${userId}.goldenBeans`);
   }
 
   getUserForeverDevBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.foreverDevBeans`);
+    return quickDB.get(`account.${userId}.foreverDevBeans`);
   }
 
   getUserForeverGoldenBeans(userId) {
-    return quickDB.get(`account.${target.user.id}.foreverGoldenBeans`);
+    return quickDB.get(`account.${userId}.foreverGoldenBeans`);
+  }
+
+  getDevBeanEmojiId(guildId) {
+    return quickDB.get(`dev-bean-emoji.${guildId}`);
+  }
+
+  getGoldenBeanEmojiId(guildId) {
+    return quickDB.get(`golden-bean-emoji.${guildId}`);
   }
 }
 
@@ -113,7 +122,7 @@ class ThreadHandler {
   }
 
   async addThread(guildId, thread) {
-    let threads = this.getThreads(guildId)
+    let threads = this.getThreads(guildId);
 
     //Makes sure that the entry has been created to avoid error on the push.
     if (!Array.isArray(threads)) await this.setThreads([]);
@@ -135,7 +144,7 @@ class ThreadHandler {
 
   updateThread(threadId, updatedThread) {
     let threads = this.getThreads(updatedThread.guildId);
-    let index = threads.findIndex(t => t.id === updatedThread.id);
+    let index = threads.findIndex((t) => t.id === updatedThread.id);
     if (index !== -1) {
       threads.splice(index, 1, updatedThread);
       this.setThreads(threads);
@@ -148,12 +157,27 @@ class ThreadHandler {
 
   removeThread(threadId) {
     let threads = this.getThreads();
-    let updatedThreads = threads.filter(thread => thread.id !== threadId);
+    let updatedThreads = threads.filter((thread) => thread.id !== threadId);
     this.setThreads(updatedThreads);
   }
 
   getModerationServer(guildId) {
     return quickDB.get(`moderation-server.${guildId}`);
+  }
+}
+class CurrencyHandler {
+  constructor() {}
+
+  addCoins(user, amount) {
+    quickDB.add(`account.${user}.coins`, amount);
+  }
+
+  removeCoins(user, amount) {
+    quickDB.remove(`account.${user}.coins`, amount);
+  }
+
+  getCoins(user) {
+    return quickDB.get(`account.${user}.coins`);
   }
 }
 module.exports = new DatabaseHandler();

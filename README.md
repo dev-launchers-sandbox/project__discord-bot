@@ -34,3 +34,12 @@ After you are done, run this to stop the containers:
     $ docker-compose -f platform__api/docker-compose.yaml -f project__discord-bot/docker-compose.yaml down
 ```
 Certificate to test auth against the backend is in the `./dev` folder.
+
+---
+
+## Release
+
+We are using semantic versioning to tag release. Follow https://github.com/semantic-release/semantic-release#commit-message-format
+to format the commit messages.
+
+Once you are ready to create a new release, create a PR to merge main branch to release branch.

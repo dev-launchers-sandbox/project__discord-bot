@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 const express = require("express");
+require("./../api.js");
 
 // Bring in polyfills (running old version of node)
 require("./utils/polyfills.js");
@@ -53,7 +54,7 @@ function startMetricsServer(metrics) {
     res.end(metrics.register.metrics());
   });
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 8080;
   console.log(
     `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
   );

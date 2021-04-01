@@ -7,6 +7,7 @@ module.exports = {
     require("./controllers/commands/deleteLeaves.js"),
     require("./controllers/commands/devBeanCooldown.js"),
     require("./controllers/commands/endSeason.js"),
+    require("./controllers/commands/endSeason2.js"),
     require("./controllers/commands/goldenBeanCooldown.js"),
     require("./controllers/commands/leaderboard.js"),
   ],

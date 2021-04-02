@@ -16,4 +16,5 @@ exports.run = async (client, message, args) => {
   const id = args[0] || "-";
   db.delete(`account.${id}.devBeans`);
   db.delete(`account.${id}.goldenBeans`);
+  message.channel.send(`Deleted user <@${id}>`);
 };

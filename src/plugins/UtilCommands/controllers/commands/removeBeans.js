@@ -1,3 +1,5 @@
+const db = require("quick.db");
+
 exports.help = {
   name: "removeBeans",
   description: "Removes the beans from a player",
@@ -16,5 +18,8 @@ exports.run = async (client, message, args) => {
   const id = args[0] || "-";
   db.delete(`account.${id}.devBeans`);
   db.delete(`account.${id}.goldenBeans`);
-  message.channel.send(`Deleted user <@${id}>`);
+  message.channel.sendEmbed({
+    color: 0xff9f01,
+    description: `Deleted user <@${id}>`,
+  });
 };

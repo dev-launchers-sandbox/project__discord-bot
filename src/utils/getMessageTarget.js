@@ -1,11 +1,10 @@
-const Discord = require("discord.js");
-
 // Author: the message sender who has triggered this command
 // Target: a Discord user this command is targetting
 function getTargetByMention(message) {
   let userID = message.mentions.users.first().id;
   return message.guild.members.cache.get(userID);
 }
+
 function getTargetById(message, args) {
   let target = message.guild.members.resolve(args[0]);
   return target;

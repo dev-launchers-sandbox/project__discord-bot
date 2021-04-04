@@ -45,6 +45,7 @@ module.exports = async (client, message) => {
     return message.channel.send(`My prefix is **${prefix}**`);
   }
   if (message.author.bot || message.author === client.user) return;
+
   if (!message.content.startsWith(prefix)) return;
 
   let msg = message.content.toLowerCase();

@@ -3,28 +3,27 @@
 ## Requirements:
 Before you start contributing, you're going to need a few things:
 - **Code Editor:**
-    - Either [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/) (personally, I like VSCode more, but Atom is just as capable)
+    - Either [Atom](https://atom.io/) or [Visual Studio Code](https://code.visualstudio.com/)
     - Why? These are code editors that are 100% guarenteed to support the extensions we use.
 - **Communication:**
     - While it may be obvious, you're going to need a GitHub account.
     - You're also going to need a Discord account, so you can:
         - Communicate effectively with other contributors
         - Test the changes you've made to the bot
-        - Recieve help as you need it
-    - Message `pyxld_kris#2057` (his username changes from time to time, but he will have an orange colored role, and be at the top of the role hierachy when he's online)
+        - Receive help as you need it
+    - Message `Guillermo#2969`
 
 # Standards
 
 ## Code Style
 To prevent formatting wars and be consistent, here are the coding style guidelines we have made:
-- Use 4 space indentation (4 space tabs are fine too)
+- Use 2 space indentation (2 space tabs are fine too)
 - Remove **all** unused variables, and make sure you do before every commit
     - This helps make sure the code runs as smooth as possible, as JavaScripts garbage collector has to do **much** less work.
 - Make sure to annotate your code with [JSDoc comments](https://jsdoc.app/about-getting-started.html#adding-documentation-comments-to-your-code)
     - This helps *all* developers understand what your code does
     - **BONUS:** Atom and VSCode both use JSDoc comments for their autocomplete and inline function argument shower thing (don't know the offical name of it)
-- Preferably use double quotes (`" "`) for strings
-    - This rule isn't really that strict, so don't worry if you use single quotes (`' '`) from time to time.
+- Use double quotes (`" "`) for strings
 - Always use ES6's Template Literals for string interpolation, and **never** concatenate strings.
     - Example:
       ```js
@@ -34,12 +33,8 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
       // Good:
       console.log(`${user} has ${xp} xp.`);
       ```
-- End statements and expressions with semicolons (`;`). 
-    - This rule is semi-strict, and enforceable
-    - Why? There are two reasons:
-        - JavaScripts **Automatic Semicolon Insertion (ASI)** spends time on automatically inserting semicolons, but it's not always perfect.
-        - There are a few common cases where ASI fails to correctly guess where to end statements.
-            - This causes very uninformative error messages, and can take **hours** to diagnose if you're not very experienced.
+- End statements and expressions with semicolons (`;`).
+
 - Use `module.exports = value` rather than `exports = value`
     - Why? [Because `exports` has inconsistent behavior](https://stackoverflow.com/questions/16383795/difference-between-module-exports-and-exports-in-the-commonjs-module-system)
 
@@ -79,5 +74,5 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
     - You may be asked questions about what certain things do
     - You may be asked to refactor/change your code because:
         - It doesn't comply with the standards we've set forth
-        - It would be wise to add a new feature 
+        - It would be wise to add a new feature
         - Or, something is missing or confusing

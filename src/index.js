@@ -3,6 +3,9 @@ const express = require("express");
 // Bring in polyfills (running old version of node)
 require("./utils/polyfills.js");
 
+// Run plugins after initializing client, before doing any other work
+const plugins = require("./plugins");
+
 const devlaunchersBot = require("./handler/ClientBuilder.js");
 const client = new devlaunchersBot({
   partials: ["MESSAGE", "CHANNEL", "REACTION", "USER", "GUILD_MEMBER"],

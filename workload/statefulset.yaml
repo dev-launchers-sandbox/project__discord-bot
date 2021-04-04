@@ -31,6 +31,12 @@ spec:
                   key: discord-token
             - name: PORT
               value: "3000"
+            - name: BACKEND_MTLS_CERT
+              value: "/etc/tls/api-client.pem"
+            - name: BACKEND_MTLS_KEY
+              value: "/etc/tls/api-key.key"
+            - name: BACKEND_CA
+              value: "/etc/tls/backend-ca.pem"
           resources:
             limits:
               cpu: 50m
@@ -49,7 +55,14 @@ spec:
           volumeMounts:
             - name: project-discord-bot-storage
               mountPath: /usr/src/app/data
+            - name: api-mtls
+              # Mount 2 files, cert at /etc/tls/api-client.pem and key at /etc/tls/api-key.key
+              mountPath: "/etc/tls"
+              readOnly: true
       volumes:
         - name: project-discord-bot-storage
           persistentVolumeClaim:
             claimName: project-discord-bot-hostpath-pvc
+        - name: api-mtls
+          secret:
+            secretName: tls

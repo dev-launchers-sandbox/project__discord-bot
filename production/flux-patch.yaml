@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: project-discord-bot
+  namespace: project-discord-bot
+  annotations:
+    fluxcd.io/tag.project-discord-bot: semver:*
+spec:
+  template:
+    spec:
+      $setElementOrder/containers:
+      - name: project-discord-bot
+      containers:
+      - image: devlaunchers/project_discord-bot:sha-f589aed
+        name: project-discord-bot

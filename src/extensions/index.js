@@ -9,11 +9,17 @@ module.exports = [
   // Bean Extension
   require("./Bean"),
 
-  //Reminder Extension
-  require("./Reminder"),
+  // Chess Extension
+  //require("./Chess"),
+
+  //Currency Extension
+  //require("./Currency"),
 
   // General Extension
   require("./General"),
+
+  // Invites Extension
+  require("./Invites"),
 
   // Minecraft Extension
   require("./Minecraft"),
@@ -21,15 +27,12 @@ module.exports = [
   // Moderation Extension
   require("./Moderation"),
 
-  // Threads Extension
-  require("./Threads"),
+  //Reminder Extension
+  require("./Reminder"),
 
-  // Chess Extension
-  require("./Chess"),
+  // Thread Extension
+  require("./Thread"),
 
   // UtilCommands Extension
   require("./UtilCommands"),
-
-  // Invites Extension
-  require("./Invites"),
 ];

@@ -53,12 +53,15 @@ Please refer to [our contributors guide](CONTRIBUTING.md).
 Development environment is defined in docker-compose.yaml. To integrate with the backend API
 locally, clone the backend repo https://github.com/dev-launchers/platform__api into a sibling
 repo.
+
 The directory structure should look like
 -
  | -plaform__api
  | -project__discord-bot
 
+
 All the following commands assume you are running in the parent directory of this repo.
+
 If you make any change to the code, this rebuilds the docker containers:
 ```
     $ docker-compose -f platform__api/docker-compose.yaml -f project__discord-bot/docker-compose.yaml build
@@ -81,8 +84,8 @@ Certificate to test auth against the backend is in the `./dev` folder.
 
 We are using semantic versioning to tag release. Follow https://github.com/semantic-release/semantic-release#commit-message-format
 to format the commit messages.
-
 Once you are ready to create a new release, create a PR to merge main branch to release branch.
 
 ## License
 This repository is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
+

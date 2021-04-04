@@ -3,6 +3,9 @@ const db = require("quick.db");
 const ms = require("parse-ms");
 const metrics = require("../../index.js");
 
+const BeanMessenger = require("../../plugins/Bean/structures/BeanMessenger.js");
+let beanMessenger = new BeanMessenger();
+
 async function fetchMessage(client, messageReaction, user) {
   if (messageReaction.message.partial) {
     return await messageReaction.fetch();
@@ -41,10 +44,6 @@ module.exports = async (client, messageReaction, user) => {
     let message = await fetchMessage(client, messageReaction, user);
     return awardGoldenBean(client, message, user);
   }
-  if (messageReaction.emoji.name === "✔️") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return instancedChannelAddRole(client, message, user);
-  }
   if (messageReaction.emoji.name === "🎟️") {
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
@@ -72,13 +71,22 @@ async function awardDevBean(client, messageReaction, user) {
       let seconds = pad_zero(timeObj.seconds).padStart(2, "");
       let finalTime = `**${seconds} second(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Dev Bean!`
+      );
     } else {
       db.set(`lastDevBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveBeansTo}.devBeans`, 1);
       db.add(`account.${userToGiveBeansTo}.foreverDevBeans`, 1);
+      /*
       user.send(
         `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
+      );
+      */
+      beanMessenger.sendDevBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
       );
     }
   } catch (err) {
@@ -113,13 +121,22 @@ async function awardGoldenBean(client, messageReaction, user) {
         minutes = pad_zero(timeObj.minutes).padStart(2, "");
       let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
       await removeEmoji(messageReaction, user);
-      return user.send(`You need to wait ${finalTime} `);
+      return user.send(
+        `Please wait ${finalTime} before giving another Golden Bean!`
+      );
     } else {
       db.set(`lastGoldenBean.${user.id}`, Date.now());
       db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
       db.add(`account.${userToGiveGoldenBeansTo}.foreverGoldenBeans`, 1);
+      /*
       user.send(
         `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
+      );
+      */
+      beanMessenger.sendGoldenBeanNotification(
+        user,
+        messageReaction.message.author,
+        messageReaction.message
       );
 
       return db.set(
@@ -134,51 +151,6 @@ async function awardGoldenBean(client, messageReaction, user) {
     );
     console.log(err);
   }
-}
-
-async function instancedChannelAddRole(client, messageReaction, user) {
-  let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
-  if (!channelsCreated) return;
-  if (user.bot) return;
-  if (channelsCreated.length === 0) return;
-  const messageRole = channelsCreated.find((channel) =>
-    channel.id.includes(messageReaction.message.id)
-  );
-  if (!messageRole) return;
-  const isUserBlacklisted = messageRole.blacklist.includes(user.id);
-  if (isUserBlacklisted) {
-    return messageReaction.message.channel
-      .send(
-        "`" + user.username + "`" + " you are blacklisted from this channel"
-      )
-      .then((m) => m.delete({ timeout: 10000 }));
-  }
-
-  const isRoleActive = messageReaction.message.guild.roles.cache.find(
-    (role) => role.id === messageRole.role
-  );
-  if (!isRoleActive) {
-    return messageReaction.message.channel
-      .send("`" + user.username + "`" + " that channel does not exist anymore")
-      .then((m) => m.delete({ timeout: 10000 }));
-  }
-  if (
-    messageReaction.message.guild.members.cache
-      .get(user.id)
-      .roles.cache.some((role) => role.id === messageRole.role)
-  )
-    return;
-
-  let channel = client.channels.cache.get(messageRole.newChannel);
-  await messageReaction.message.guild.members.cache
-    .get(user.id)
-    .roles.add(messageRole.role)
-    .then(
-      channel.send("`" + `${user.username}` + "`" + " joined the channel!")
-    );
-  channel.send(`<@${user.id}>`).then((msg) => {
-    if (!msg.deleted) msg.delete();
-  });
 }
 
 async function openTicket(client, messageReaction, user) {
@@ -257,7 +229,6 @@ function giveMinecraftRole(client, message, user, messageReaction) {
   const minecraftMsg = db.get(`minecraft.${messageReaction.message.guild.id}`);
   const role = db.get(`minecraft-role.${messageReaction.message.guild.id}`);
   const userReacted = messageReaction.message.guild.members.resolve(user.id);
-  console.log(userReacted.roles.cache.has(role));
   if (messageReaction.message.id === minecraftMsg) {
     if (!userReacted.roles.cache.has(role)) {
       userReacted.roles.add(role);

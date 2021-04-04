@@ -23,10 +23,6 @@ module.exports = async (client, messageReaction, user) => {
     const doIgnore = await isReactionIgnored(client, messageReaction, user);
     if (!doIgnore) return removeGoldenBean(client, message, user);
   }
-  if (messageReaction.emoji.name === "✔️") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return leaveChannel(client, message, user);
-  }
   if (messageReaction.emoji.name === "villager") {
     let message = await fetchMessage(client, messageReaction, user);
     return removeMinecraftRole(client, message, user, messageReaction);
@@ -45,7 +41,7 @@ async function removeDevBean(client, messageReaction, user) {
   try {
     db.subtract(`account.${userToRemoveBeansTo.id}.devBeans`, 1); //subtract the amount of beans
     db.subtract(`account.${userToRemoveBeansTo.id}.foreverDevBeans`, 1);
-    db.delete(`account.${user.id}.lastDevBean`);
+    //db.delete(`account.${user.id}.lastDevBean`);
 
     user.send(
       `Dev-Bean removed from **${messageReaction.message.author.tag}**`
@@ -75,7 +71,10 @@ async function removeGoldenBean(client, messageReaction, user) {
   try {
     db.subtract(`account.${target}.goldenBeans`, 1); //remove the amount of golden-beans
     db.subtract(`account.${target}.foreverGoldenBeans`, 1);
-    db.delete(`lastGoldenBean.${user.id}`);
+    db.set(
+      `lastGoldenBean.${user.id}`,
+      Date.now() - (1000 * 60 * 60 * 24 - 1000 * 60 * 2) // 1 minute cooldown
+    );
     user.send(
       `Golden-Bean removed from **${messageReaction.message.author.tag}**`
     );
@@ -86,41 +85,6 @@ async function removeGoldenBean(client, messageReaction, user) {
     );
     console.log(err);
   }
-}
-
-function leaveChannel(client, messageReaction, user) {
-  let channelsCreated = db.get(`instanced.${messageReaction.message.guild.id}`);
-  if (!Array.isArray(channelsCreated)) return;
-
-  if (channelsCreated.length === 0) return;
-
-  const messageRole = channelsCreated.find((channel) =>
-    channel.id.includes(messageReaction.message.id)
-  );
-  if (!messageRole) return;
-
-  const isRoleActive = messageReaction.message.guild.roles.cache.find(
-    (role) => role.id === messageRole.role
-  );
-  if (!isRoleActive) {
-    return messageReaction.message.channel.send(
-      "`" + user.username + "`" + " that channel does not exist anymore"
-    );
-  }
-
-  if (
-    !messageReaction.message.guild.members.cache
-      .get(user.id)
-      .roles.cache.some((role) => role.id === messageRole.role)
-  )
-    return;
-
-  let channel = client.channels.cache.get(messageRole.newChannel);
-
-  messageReaction.message.guild.members.cache
-    .get(user.id)
-    .roles.remove(messageRole.role)
-    .then(channel.send("`" + `${user.username}` + "`" + " left the channel!"));
 }
 
 async function isReactionIgnored(client, messageReaction, user) {

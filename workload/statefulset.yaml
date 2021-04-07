@@ -31,7 +31,7 @@ spec:
                   name: project-discord-bot
                   key: discord-token
             - name: PORT
-              value: "8000"
+              value: "3000"
             - name: BACKEND_MTLS_CERT
               value: "/etc/tls/api-client.pem"
             - name: BACKEND_MTLS_KEY

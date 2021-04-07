@@ -26,5 +26,5 @@ app.get("/discord/users/:id/golden-beans", (req, res) => {
   res.send(goldenBeans.toString());
 });
 
-const port = process.env.PORT || 8000;
+const port = process.env.API_PORT || 8000;
 app.listen(port, () => console.log(`Listening on port ${port}`));

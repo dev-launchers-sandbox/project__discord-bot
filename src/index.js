@@ -19,7 +19,7 @@ const speedyBuilds = process.argv.includes("speedyBuilds");
 if (speedyBuilds) {
   console.log("SpeedyBuilds has been enabled");
 
-  function sendEvent(metric) {}
+  function sendEvent(metric) { }
   exports.sendEvent = sendEvent;
 } else {
   const metrics = registerMetrics();
@@ -49,7 +49,7 @@ if (speedyBuilds) {
       res.end(metrics.register.metrics());
     });
 
-    const port = process.env.PORT || 3000;
+    const port = process.env.METRICS_PORT || 3000;
     console.log(
       `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
     );

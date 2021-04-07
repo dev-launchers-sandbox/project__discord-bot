@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
+    "dev-start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js speedyBuilds",
     "win-start": "npm install discord.js && node src\\index.js",
     "prod-start": "cd data && node ../src/index.js"
   },
@@ -23,14 +24,31 @@
     "node-superfetch": "0.1.10",
     "parse-ms": "2.1.0",
     "prom-client": "^12.0.0",
-    "quick.db": "7.1.1"
+    "quick.db": "7.1.1",
+    "semantic-release": "^17.4.2"
   },
   "devDependencies": {
-    "nodemon": "1.18.4",
-    "node": "12.16.3",
     "axios": "^0.21.1",
     "js-yaml": "^3.13.1",
+    "node": "12.16.3",
+    "nodemon": "1.18.4",
     "winston": "^3.2.1"
+  },
+  "release": {
+    "branches": [
+      "release"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/github"
+    ]
   },
   "keywords": []
 }

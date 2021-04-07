@@ -6,6 +6,7 @@ module.exports = {
     require("./controllers/commands/reactTo.js"),
     require("./controllers/commands/createInvite.js"),
     require("./controllers/commands/addThreadCustomInvite.js"),
+    require("./controllers/commands/removeBeans.js"),
   ],
   events: [],
   extends: [],

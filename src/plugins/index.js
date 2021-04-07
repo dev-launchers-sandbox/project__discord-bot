@@ -9,9 +9,6 @@ module.exports = [
   // Bean plugin
   require("./Bean"),
 
-  //Reminder plugin
-  require("./Reminder"),
-
   // General plugin
   require("./General"),
 
@@ -20,6 +17,12 @@ module.exports = [
 
   // Moderation plugin
   require("./Moderation"),
+
+  //Reminder plugin
+  require("./Reminder"),
+
+  //Role plugin
+  require("./Role"),
 
   // Thread plugin
   require("./Thread"),

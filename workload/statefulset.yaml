@@ -23,6 +23,7 @@ spec:
           image: devlaunchers/project_discord-bot:latest
           ports:
             - containerPort: 3000
+            - containerPort: 8000
           env:
             - name: DISCORD_TOKEN
               valueFrom:
@@ -30,7 +31,7 @@ spec:
                   name: project-discord-bot
                   key: discord-token
             - name: PORT
-              value: "3000"
+              value: "8000"
             - name: BACKEND_MTLS_CERT
               value: "/etc/tls/api-client.pem"
             - name: BACKEND_MTLS_KEY

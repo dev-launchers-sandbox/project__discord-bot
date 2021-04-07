@@ -1,4 +1,5 @@
 const express = require("express");
+require("./../api.js");
 
 // Bring in polyfills (running old version of node)
 require("./utils/polyfills.js");
@@ -72,3 +73,4 @@ client.on("warn", console.warn);
 client.on("error", console.error);
 
 client.login(process.env.DISCORD_TOKEN);
+

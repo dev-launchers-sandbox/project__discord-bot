@@ -15,12 +15,12 @@ app.use(
   })
 );
 
-app.get("/users/:id/dev-beans", (req, res) => {
+app.get("/discord/users/:id/dev-beans", (req, res) => {
   const devBeans = databaseHandler.bean.getUserDevBeans(req.params.id) || 0;
   res.send(devBeans.toString());
 });
 
-app.get("/users/:id/golden-beans", (req, res) => {
+app.get("/discord/users/:id/golden-beans", (req, res) => {
   //prettier-ignore
   const goldenBeans = databaseHandler.bean.getUserGoldenBeans(req.params.id) || 0;
   res.send(goldenBeans.toString());

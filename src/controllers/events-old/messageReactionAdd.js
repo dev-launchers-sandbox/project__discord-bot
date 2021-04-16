@@ -3,7 +3,7 @@ const db = require("quick.db");
 const ms = require("parse-ms");
 const metrics = require("../../index.js");
 
-const BeanMessenger = require("../../plugins/Bean/structures/BeanMessenger.js");
+const BeanMessenger = require("../../plugins/Bean/structures/BeanManager.js");
 let beanMessenger = new BeanMessenger();
 
 async function fetchMessage(client, messageReaction, user) {

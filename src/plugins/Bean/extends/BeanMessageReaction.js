@@ -1,33 +1,28 @@
-const Discord = require("discord.js");
+const BeanManager = require("./../structures/BeanManager.js");
 const { Structures } = require("discord.js");
-
-const BEAN_EMOJIS = ["DevBean", "DevBean-1"];
+const dbh = require("./../../.common/structures/DataHandling/DatabaseHandler.js");
+const ms = require("parse-ms");
 
 Structures.extend("MessageReaction", (MessageReaction) => {
   class BeanMessageReaction extends MessageReaction {
     constructor(client, data, message) {
       super(client, data, message);
+      this.beanManager = new BeanManager(dbh, client);
     }
 
-    isBeanReaction() {
-      if (BEAN_EMOJIS.includes(this.emoji.name)) return true;
+    isDevBeanReaction() {
+      let devBeanEmoji = this.beanManager.getDevBeanEmoji();
+      if (!devBeanEmoji) return false;
+      if (this._emoji.id === devBeanEmoji.id) return true;
       return false;
     }
 
-    async handleBeanReaction(message, user) {
-      console.log("handling bean reaction");
-      let sender = this.emoji.client.user.username;
-      let receiver = this.message.author.username;
-
-      this.message.channel.sendEmbed({
-        title: "DevBean Reaction Detected",
-        description: sender + " has given a DevBean to " + receiver,
-      });
+    isGoldenBeanReaction() {
+      let goldenBeanEmoji = this.beanManager.getGoldenBeanEmoji();
+      if (!goldenBeanEmoji) return false;
+      if (this._emoji.id === goldenBeanEmoji.id) return true;
+      return false;
     }
-
-    addBeanToUser() {}
-
-    removeBeanFromUser() {}
   }
 
   return BeanMessageReaction;

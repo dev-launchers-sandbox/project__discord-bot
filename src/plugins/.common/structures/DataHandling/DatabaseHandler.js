@@ -48,8 +48,21 @@ class BeanHandler {
     quickDB.set(`lastDevBean.${userId}`, date);
   }
 
-  setLastGoldenBean(userId) {
+  setLastGoldenBean(userId, date) {
     quickDB.set(`lastGoldenBean.${userId}`, date);
+  }
+
+  addDevBean(userId, amount = 1) {
+    quickDB.add(`account.${userId}.devBeans`, amount);
+  }
+
+  addGoldenBean(userId, amount = 1) {
+    quickDB.add(`account.${userId}.goldenBeans`, amount);
+  }
+
+  async addDevBeanedMessage(userId, messageId) {
+    if (!this.getDevBeanedMessages()) await this.setDevBeanedMessages([]);
+    quickDB.push(`${userId}.devBeanedMessages`, messageId);
   }
 }
 

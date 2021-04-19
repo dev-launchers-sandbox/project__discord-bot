@@ -19,25 +19,38 @@ exports.event = async (client, messageReaction, reactor) => {
   if (messageReaction.isDevBeanReaction()) {
     let cooldown = beanManager.getDevBeanCooldown(reactor.id);
     let devBeanEmoji = beanManager.getDevBeanEmoji();
+
     if (cooldown) {
       reactor.sendEmbed({
         color: 0xff9f01,
         description: `You have to wait ${cooldown} second(s) before giving another ${devBeanEmoji}`,
       });
-      removeReaction(message, devBeanEmoji.id, reactor.id);
-      message.react("❌");
-
-      setTimeout(() => {
-        removeReaction(message, "❌", client.id);
-      }, 5000);
-    }
-
-    if (!cooldown) {
+      removeReaction(message, devBeanEmoji.id, reactor.id); //remove the bean reaction
+      beanManager.showCross(message); //display an X
+    } else {
+      dbh.bean.addDevBean(receiver.id);
       dbh.bean.setLastDevBeanGiven(reactor.id, Date.now());
+      beanManager.sendDevBeanNotification(receiver, message);
+      beanManager.showCheckmark(message);
     }
   }
 
   if (messageReaction.isGoldenBeanReaction()) {
-    console.log("detected golden bean reaction");
+    let cooldown = beanManager.getGoldenBeanCooldown(reactor.id);
+    let goldenBeanEmoji = beanManager.getGoldenBeanEmoji();
+
+    if (cooldown) {
+      reactor.sendEmbed({
+        color: 0xff9f01,
+        description: `You have to wait ${cooldown.hours} hour(s) and ${cooldown.minutes} minute(s) before giving another ${goldenBeanEmoji}`,
+      });
+      removeReaction(message, goldenBeanEmoji.id, reactor.id);
+      beanManager.showCross(message);
+    } else {
+      dbh.bean.addGoldenBean(receiver.id);
+      dbh.bean.setLastGoldenBean(reactor.id, Date.now());
+      beanManager.sendGoldenBeanNotification(receiver, message);
+      beanManager.showCheckmark(message);
+    }
   }
 };

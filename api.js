@@ -17,6 +17,16 @@ app.use(
   })
 );
 
+app.get("/discord/users/:id/beans", (req, res) => {
+  const devBeans = databaseHandler.bean.getUserDevBeans(req.params.id) || 0;
+  const goldenBeans =databaseHandler.bean.getUserGoldenBeans(req.params.id) || 0;
+  const beans = {
+    devBeans: devBeans,
+    goldenBeans: goldenBeans,
+  };
+  res.send(beans);
+});
+
 app.get("/discord/users/:id/dev-beans", (req, res) => {
   const devBeans = databaseHandler.bean.getUserDevBeans(req.params.id) || 0;
   res.send(devBeans.toString());

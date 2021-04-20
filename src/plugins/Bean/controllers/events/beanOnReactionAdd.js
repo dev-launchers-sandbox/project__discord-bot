@@ -13,13 +13,22 @@ exports.event = async (client, messageReaction, reactor) => {
   if (message.partial) await message.fetch();
   let receiver = message.author;
 
-  //if (receiver.id === reactor.id) return;
+  if (receiver.id === reactor.id) return;
   if (receiver.bot || reactor.bot) return;
 
   if (messageReaction.isDevBeanReaction()) {
-    let cooldown = beanManager.getDevBeanCooldown(reactor.id);
     let devBeanEmoji = beanManager.getDevBeanEmoji();
 
+    if (dbh.bean.getDevBeanedMessages(reactor.id).includes(message.id)) {
+      beanManager.showCross(message);
+      reactor.sendEmbed({
+        color: 0xff9f01,
+        description: `You have already given a ${devBeanEmoji} to this message!`,
+      });
+      return;
+    }
+
+    let cooldown = beanManager.getDevBeanCooldown(reactor.id);
     if (cooldown) {
       reactor.sendEmbed({
         color: 0xff9f01,
@@ -30,15 +39,25 @@ exports.event = async (client, messageReaction, reactor) => {
     } else {
       dbh.bean.addDevBean(receiver.id);
       dbh.bean.setLastDevBeanGiven(reactor.id, Date.now());
+      dbh.bean.addDevBeanedMessage(reactor.id, message.id);
       beanManager.sendDevBeanNotification(receiver, message);
       beanManager.showCheckmark(message);
     }
   }
 
   if (messageReaction.isGoldenBeanReaction()) {
-    let cooldown = beanManager.getGoldenBeanCooldown(reactor.id);
     let goldenBeanEmoji = beanManager.getGoldenBeanEmoji();
 
+    if (dbh.bean.getGoldenBeanedMessages(reactor.id).includes(message.id)) {
+      beanManager.showCross(message);
+      reactor.sendEmbed({
+        color: 0xff9f01,
+        description: `You have already given a ${goldenBeanEmoji} to this message!`,
+      });
+      return;
+    }
+
+    let cooldown = beanManager.getGoldenBeanCooldown(reactor.id);
     if (cooldown) {
       reactor.sendEmbed({
         color: 0xff9f01,
@@ -49,6 +68,7 @@ exports.event = async (client, messageReaction, reactor) => {
     } else {
       dbh.bean.addGoldenBean(receiver.id);
       dbh.bean.setLastGoldenBean(reactor.id, Date.now());
+      dbh.bean.addGoldenBeanedMessage(reactor.id, message.id);
       beanManager.sendGoldenBeanNotification(receiver, message);
       beanManager.showCheckmark(message);
     }

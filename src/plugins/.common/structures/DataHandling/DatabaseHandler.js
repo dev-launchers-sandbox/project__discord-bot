@@ -60,9 +60,24 @@ class BeanHandler {
     quickDB.add(`account.${userId}.goldenBeans`, amount);
   }
 
+  getDevBeanedMessages(userId) {
+    let devBeanedMessages = quickDB.get(`${userId}.devBeanedMessages`);
+    return devBeanedMessages || [];
+  }
+
+  getGoldenBeanedMessages(userId) {
+    let goldenBeanedMessages = quickDB.get(`${userId}.goldenBeanedMessages`);
+    return goldenBeanedMessages || [];
+  }
+
   async addDevBeanedMessage(userId, messageId) {
-    if (!this.getDevBeanedMessages()) await this.setDevBeanedMessages([]);
+    if (!this.getDevBeanedMessages()) await quickDB.set(`${userId}.devBeanedMessages`, []);
     quickDB.push(`${userId}.devBeanedMessages`, messageId);
+  }
+
+  async addGoldenBeanedMessage(userId, messageId) {
+    if (!this.getGoldenBeanedMessages()) await quickDB.set(`${userId}.goldenBeanedMessages`, []);
+    quickDB.push(`${userId}.goldenBeanedMessages`, messageId);
   }
 }
 

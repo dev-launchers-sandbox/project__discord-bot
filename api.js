@@ -8,8 +8,10 @@ app.use(
   cors({
     credentials: true,
     origin: [
-      "https://devlaunchers.com/",
-      "https://staging.devlaunchers.com/",
+      "https://devlaunchers.com",
+      "https://staging.devlaunchers.com",
+      "https://api.devlaunchers.com",
+      "https://api-staging.devlaunchers.com",
       "http://localhost:3000",
     ],
   })

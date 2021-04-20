@@ -54,10 +54,12 @@ class BeanHandler {
 
   addDevBean(userId, amount = 1) {
     quickDB.add(`account.${userId}.devBeans`, amount);
+    quickDB.add(`account.${userId}.foreverDevBeans`, amount);
   }
 
   addGoldenBean(userId, amount = 1) {
     quickDB.add(`account.${userId}.goldenBeans`, amount);
+    quickDB.add(`account.${userId}.foreverGoldenBeans`, amount);
   }
 
   getDevBeanedMessages(userId) {

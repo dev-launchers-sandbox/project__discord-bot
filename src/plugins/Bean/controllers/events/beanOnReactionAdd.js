@@ -13,7 +13,7 @@ exports.event = async (client, messageReaction, reactor) => {
   if (message.partial) await message.fetch();
   let receiver = message.author;
 
-  if (receiver.id === reactor.id) return;
+  //if (receiver.id === reactor.id) return;
   if (receiver.bot || reactor.bot) return;
 
   if (messageReaction.isDevBeanReaction()) {

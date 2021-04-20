@@ -3,7 +3,7 @@ const db = require("quick.db");
 const ms = require("parse-ms");
 const metrics = require("../../index.js");
 
-const BeanMessenger = require("../../plugins/Bean/structures/BeanMessenger.js");
+const BeanMessenger = require("../../plugins/Bean/structures/BeanManager.js");
 let beanMessenger = new BeanMessenger();
 
 async function fetchMessage(client, messageReaction, user) {
@@ -22,8 +22,8 @@ async function removeEmoji(messageReaction, user) {
   } catch (error) {
     console.log(error);
   }
-  const userReactions = messageReaction.message.reactions.cache.filter(
-    (reaction) => reaction.users.cache.has(user.id)
+  const userReactions = messageReaction.message.reactions.cache.filter((reaction) =>
+    reaction.users.cache.has(user.id)
   );
   try {
     for (const reaction of userReactions.values()) {
@@ -36,14 +36,6 @@ async function removeEmoji(messageReaction, user) {
 
 module.exports = async (client, messageReaction, user) => {
   metrics.sendEvent("message_reaction_add");
-  if (messageReaction.emoji.name === "DevBean") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return awardDevBean(client, message, user);
-  }
-  if (messageReaction.emoji.name === "GoldenBean") {
-    let message = await fetchMessage(client, messageReaction, user);
-    return awardGoldenBean(client, message, user);
-  }
   if (messageReaction.emoji.name === "🎟️") {
     let message = await fetchMessage(client, messageReaction, user);
     return openTicket(client, message, user);
@@ -54,110 +46,9 @@ module.exports = async (client, messageReaction, user) => {
   }
 };
 
-async function awardDevBean(client, messageReaction, user) {
-  let userToGiveBeansTo = messageReaction.message.author.id; //id of the users whos message got a reaction
-  let userWhoReacted = user.id; //user that reacted
-  //if there were any bots involved in the message we do not want to continue
-  let cooldown = 60000;
-  let pad_zero = (num) => (num < 10 ? "0" : "") + num; //do not ask me what this does
-  let timeObj;
-  let lastDevBean = db.get(`lastDevBean.${user.id}`);
-  if (user.bot || messageReaction.message.author.bot) return;
-  //if the user reaction to his own message he will not get a devBean
-  if (userToGiveBeansTo === userWhoReacted) return;
-  try {
-    if (lastDevBean !== null && cooldown - (Date.now() - lastDevBean) > 0) {
-      timeObj = ms(cooldown - (Date.now() - lastDevBean));
-      let seconds = pad_zero(timeObj.seconds).padStart(2, "");
-      let finalTime = `**${seconds} second(s)**`;
-      await removeEmoji(messageReaction, user);
-      return user.send(
-        `Please wait ${finalTime} before giving another Dev Bean!`
-      );
-    } else {
-      db.set(`lastDevBean.${user.id}`, Date.now());
-      db.add(`account.${userToGiveBeansTo}.devBeans`, 1);
-      db.add(`account.${userToGiveBeansTo}.foreverDevBeans`, 1);
-      /*
-      user.send(
-        `Dev Bean added to **${messageReaction.message.author.tag}** balance!`
-      );
-      */
-      beanMessenger.sendDevBeanNotification(
-        user,
-        messageReaction.message.author,
-        messageReaction.message
-      );
-    }
-  } catch (err) {
-    console.log(err);
-    user.send(
-      "Oopsie, for some reason I could not award the user with the dev-bean"
-    );
-  }
-}
-
-async function awardGoldenBean(client, messageReaction, user) {
-  //if there were any bots involved in the message we do not want to continue
-  if (user.bot || messageReaction.message.author.bot) return;
-  //if the user does not react with the correct emoji, we do not want to do anything
-  if (messageReaction.emoji.name !== "GoldenBean") return;
-  //if the user is not an admininstrator, we do not want to award the user with a golden bean
-  let userToGiveGoldenBeansTo = messageReaction.message.author.id; //id of the users whos message got a reaction
-  let userWhoReacted = user.id; //user that reacted
-  let cooldown = 8.64e7;
-  let pad_zero = (num) => (num < 10 ? "0" : "") + num; //do not ask me what this does
-  //if the user reaction to his own message he will not get a devBean
-  if (userToGiveGoldenBeansTo === userWhoReacted) return;
-  let lastGoldenBean = db.get(`lastGoldenBean.${user.id}`);
-  let timeObj;
-  try {
-    if (
-      lastGoldenBean !== null &&
-      cooldown - (Date.now() - lastGoldenBean) > 0
-    ) {
-      timeObj = ms(cooldown - (Date.now() - lastGoldenBean));
-      let hours = pad_zero(timeObj.hours).padStart(2, "0"),
-        minutes = pad_zero(timeObj.minutes).padStart(2, "");
-      let finalTime = `**${hours} hour(s) and ${minutes} minute(s)**`;
-      await removeEmoji(messageReaction, user);
-      return user.send(
-        `Please wait ${finalTime} before giving another Golden Bean!`
-      );
-    } else {
-      db.set(`lastGoldenBean.${user.id}`, Date.now());
-      db.add(`account.${userToGiveGoldenBeansTo}.goldenBeans`, 1);
-      db.add(`account.${userToGiveGoldenBeansTo}.foreverGoldenBeans`, 1);
-      /*
-      user.send(
-        `Golden Bean added to **${messageReaction.message.author.tag}** balance!`
-      );
-      */
-      beanMessenger.sendGoldenBeanNotification(
-        user,
-        messageReaction.message.author,
-        messageReaction.message
-      );
-
-      return db.set(
-        `lastGoldenBeanAwarded.${user.id}`,
-        messageReaction.message.id
-      );
-    }
-  } catch (err) {
-    //if there is an error, send an "error" message
-    user.send(
-      "Oopsie, for some reason I could not award the user with the golden-bean"
-    );
-    console.log(err);
-  }
-}
-
 async function openTicket(client, messageReaction, user) {
   if (user.bot) return;
-  const ticketMessage = await db.get(
-    `ticket.${messageReaction.message.guild.id}`
-  );
+  const ticketMessage = await db.get(`ticket.${messageReaction.message.guild.id}`);
 
   if (messageReaction.message.id !== ticketMessage) return;
 
@@ -167,9 +58,7 @@ async function openTicket(client, messageReaction, user) {
   if (!ticketCategory || !categoryExists(ticketCategory, message.guild)) return;
 
   if (numOfTicketsOpen(message, ticketCategory) >= 10) {
-    user.send(
-      "There are too many tickets open! If it is an emergency, please dm an admin/mod"
-    );
+    user.send("There are too many tickets open! If it is an emergency, please dm an admin/mod");
     return removeReaction(client, message, user);
   }
 
@@ -178,9 +67,7 @@ async function openTicket(client, messageReaction, user) {
   let adminRole = db.get(`admin.${message.guild.id}`);
   if (!adminRole) adminRole = "blank"; //Avoid empty message error in line 222
 
-  const newTicket = await message.guild.channels.create(
-    `ticket-${user.username}`
-  );
+  const newTicket = await message.guild.channels.create(`ticket-${user.username}`);
 
   await newTicket.updateOverwrite(message.channel.guild.roles.everyone, {
     VIEW_CHANNEL: false,

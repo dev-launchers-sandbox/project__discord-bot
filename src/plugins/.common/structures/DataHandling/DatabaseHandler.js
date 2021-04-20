@@ -14,19 +14,19 @@ class BeanHandler {
   constructor() {}
 
   getUserDevBeans(userId) {
-    return quickDB.get(`account.${userId}.devBeans`);
+    return quickDB.get(`account.${userId}.devBeans`) || 0;
   }
 
   getUserGoldenBeans(userId) {
-    return quickDB.get(`account.${userId}.goldenBeans`);
+    return quickDB.get(`account.${userId}.goldenBeans`) || 0;
   }
 
   getUserForeverDevBeans(userId) {
-    return quickDB.get(`account.${userId}.foreverDevBeans`);
+    return quickDB.get(`account.${userId}.foreverDevBeans`) || 0;
   }
 
   getUserForeverGoldenBeans(userId) {
-    return quickDB.get(`account.${userId}.foreverGoldenBeans`);
+    return quickDB.get(`account.${userId}.foreverGoldenBeans`) || 0;
   }
 
   getDevBeanEmojiId(guildId) {
@@ -35,6 +35,51 @@ class BeanHandler {
 
   getGoldenBeanEmojiId(guildId) {
     return quickDB.get(`golden-bean-emoji.${guildId}`);
+  }
+
+  getLastDevBeanGiven(userId) {
+    return quickDB.get(`lastDevBean.${userId}`);
+  }
+  getLastGoldenBeanGiven(userId) {
+    return quickDB.get(`lastGoldenBean.${userId}`);
+  }
+
+  setLastDevBeanGiven(userId, date) {
+    quickDB.set(`lastDevBean.${userId}`, date);
+  }
+
+  setLastGoldenBean(userId, date) {
+    quickDB.set(`lastGoldenBean.${userId}`, date);
+  }
+
+  addDevBean(userId, amount = 1) {
+    quickDB.add(`account.${userId}.devBeans`, amount);
+    quickDB.add(`account.${userId}.foreverDevBeans`, amount);
+  }
+
+  addGoldenBean(userId, amount = 1) {
+    quickDB.add(`account.${userId}.goldenBeans`, amount);
+    quickDB.add(`account.${userId}.foreverGoldenBeans`, amount);
+  }
+
+  getDevBeanedMessages(userId) {
+    let devBeanedMessages = quickDB.get(`${userId}.devBeanedMessages`);
+    return devBeanedMessages || [];
+  }
+
+  getGoldenBeanedMessages(userId) {
+    let goldenBeanedMessages = quickDB.get(`${userId}.goldenBeanedMessages`);
+    return goldenBeanedMessages || [];
+  }
+
+  async addDevBeanedMessage(userId, messageId) {
+    if (!this.getDevBeanedMessages()) await quickDB.set(`${userId}.devBeanedMessages`, []);
+    quickDB.push(`${userId}.devBeanedMessages`, messageId);
+  }
+
+  async addGoldenBeanedMessage(userId, messageId) {
+    if (!this.getGoldenBeanedMessages()) await quickDB.set(`${userId}.goldenBeanedMessages`, []);
+    quickDB.push(`${userId}.goldenBeanedMessages`, messageId);
   }
 }
 
@@ -52,9 +97,7 @@ class ReminderHandler {
   removeReminder(reminder) {
     let reminders = this.getReminders();
     let filtered = reminders.filter((entry) => {
-      return !(
-        entry.sentAt === reminder._sentAt && entry.userId === reminder._userId
-      );
+      return !(entry.sentAt === reminder._sentAt && entry.userId === reminder._userId);
     });
     this.setReminders(filtered);
   }

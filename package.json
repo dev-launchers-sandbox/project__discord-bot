@@ -15,7 +15,7 @@
     "chrono-node": "2.1.10",
     "cors": "^2.8.5",
     "dateformat": "^3.0.3",
-    "discord.js": "^12.5.2",
+    "discord.js": "^12.5.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "minecraft-status": "^1.1.0",

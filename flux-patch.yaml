@@ -12,3 +12,6 @@ spec:
       containers:
       - image: devlaunchers/project_discord-bot:sha-0dc061c
         name: project-discord-bot
+        env:
+          - name: MAIN_GUILD
+            value: "711687367081328752"

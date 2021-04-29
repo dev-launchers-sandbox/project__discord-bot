@@ -43,7 +43,8 @@ class BeanManager {
   }
 
   getDevBeanCooldown(userId) {
-    let timePerBean = 60000;
+    //TODO: Make the timePerBean (aka cooldown) customizable via the Db
+    let timePerBean = 1000 * 30; //30 seconds
     let lastGivenDevBean = this.dbh.bean.getLastDevBeanGiven(userId);
     if (!lastGivenDevBean) return null;
 
@@ -56,7 +57,8 @@ class BeanManager {
   }
 
   getGoldenBeanCooldown(userId) {
-    let timePerBean = 1000 * 60 * 60 * 24;
+    //TODO: Make the timePerBean (aka cooldown) customizable via the Db
+    let timePerBean = 1000 * 60 * 60 * 3; //3 hours
     let lastGivenGoldenBean = this.dbh.bean.getLastGoldenBeanGiven(userId);
     if (!lastGivenGoldenBean) return null;
 

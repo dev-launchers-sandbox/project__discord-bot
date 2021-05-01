@@ -4,6 +4,7 @@ services:
     build:
         context: .
         dockerfile: Dockerfile
+    entrypoint: ["npm", "run", "docker-start"]
     env_file:
       - .env
     environment:

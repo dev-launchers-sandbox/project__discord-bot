@@ -7,6 +7,7 @@
     "start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js",
     "dev-start": "./node_modules/node/bin/node ./node_modules/nodemon/bin/nodemon.js src/index.js speedyBuilds",
     "win-start": "npm install discord.js && node src\\index.js",
+    "docker-start": "node src/index.js",
     "prod-start": "cd data && node ../src/index.js"
   },
   "dependencies": {

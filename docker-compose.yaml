@@ -2,8 +2,8 @@ version: '3.9'
 services:
   bot:
     build:
-        context: .
-        dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile
     entrypoint: ["npm", "run", "docker-start"]
     env_file:
       - .env
@@ -11,3 +11,16 @@ services:
       - PORT=3000
       - BACKEND_MTLS_CERT=./dev/cert.pem
       - BACKEND_MTLS_KEY=./dev/key.key
+      - DISCORD_BOT_POSTGRES_USER=postgres
+      - DISCORD_BOT_POSTGRES_PASSWORD=postgres
+      - DISCORD_BOT_POSTGRES_DB=postgres
+      - DISCORD_BOT_POSTGRES_HOST=db
+      - DISCORD_BOT_POSTGRES_PORT=5432
+  db:
+    image: postgres:12.3
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432

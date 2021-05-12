@@ -1,5 +1,6 @@
 const ms = require("parse-ms");
 const { removeReaction } = require("./../../../utils/reactionUtils.js");
+const { getRandomMessage } = require("./../../../utils/randomMessages.js");
 require("dotenv").config(); //load .env vars
 const pad_zero = (num) => (num < 10 ? "0" : "") + num;
 const LINE_SEPARATOR = "\n----------------------------\n";
@@ -22,15 +23,15 @@ class BeanManager {
   }
 
   async sendDevBeanNotification(recipient, message) {
-    recipient.send(
-      `${LINE_SEPARATOR}Someone has given you a **Dev Bean!** ${message.url}${LINE_SEPARATOR}`
-    );
+    const randomMessages = require("./../assets/messages/receiveDevBeanMessages.json");
+    const randomMessage = getRandomMessage(message, randomMessages);
+    recipient.send(`${LINE_SEPARATOR}${randomMessage}${LINE_SEPARATOR}`);
   }
 
   async sendGoldenBeanNotification(recipient, message) {
-    recipient.send(
-      `${LINE_SEPARATOR}*Wow... You got a golden bean!* Someone has **__Golden__ Beaned** your message! ${message.url}\n\n*Pay it forward and pass on your own Golden Bean by reacting to a message you love.*${LINE_SEPARATOR}`
-    );
+    const randomMessages = require("./../assets/messages/receiveGoldenBeanMessages.json");
+    const randomMessage = getRandomMessage(message, randomMessages);
+    recipient.send(`${LINE_SEPARATOR}${randomMessage}${LINE_SEPARATOR}`);
   }
 
   getBeanData(user) {

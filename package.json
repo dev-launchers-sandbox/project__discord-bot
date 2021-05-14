@@ -29,7 +29,8 @@
     "prom-client": "^12.0.0",
     "quick.db": "7.1.1",
     "semantic-release": "^17.4.2",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "axios": "^0.21.1",

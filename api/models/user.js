@@ -1,3 +1,4 @@
+"use strict";
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
@@ -5,15 +6,18 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
-      devBeans: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        allowNull: false,
-      },
       id: {
         type: DataTypes.TEXT,
         allowNull: false,
         primaryKey: true,
+      },
+      devBeans: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      goldenBeans: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
     },
     {

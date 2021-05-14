@@ -1,0 +1,13 @@
+const path = require('path');
+
+module.exports = {
+  'config': path.resolve('api', 'config', 'config.js'),
+  'models-path': path.resolve('api', 'models'),
+  'migrations-path': path.resolve('api', 'migrations')
+}
+
+
+/*
+  Needed in order to have the config, migration, and models inside of the api folder,
+  or it will try (and fail) to find the folders in the root.
+*/

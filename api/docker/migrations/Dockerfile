@@ -10,6 +10,7 @@ RUN npm install sequelize-cli
 COPY api/config/config.js /usr/src/app/api/config/config.js
 COPY api/migrations /usr/src/app/api/migrations
 COPY api/models /usr/src/app/api/models
+COPY .sequelizerc /usr/src/app/.sequelizerc
 
 #runs migrations
 CMD ["npx", "sequelize-cli", "db:migrate"]

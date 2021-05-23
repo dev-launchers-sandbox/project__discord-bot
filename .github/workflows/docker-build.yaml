@@ -6,6 +6,7 @@ on:
     # Build image whenever a file under src/ is changed
     paths:
       - 'src/**'
+      - '.github/workflows/docker-build.yaml'
       - 'package*.json'
 jobs:
   build:

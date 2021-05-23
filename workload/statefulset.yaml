@@ -19,53 +19,53 @@ spec:
         app: project-discord-bot
     spec:
       containers:
-        - name: project-discord-bot
-          image: devlaunchers/project_discord-bot:latest # {"$imagepolicy": "discord-bot:discord-bot"}
-          ports:
-            - containerPort: 3000
-            - containerPort: 8000
-          env:
-            - name: DISCORD_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: project-discord-bot
-                  key: discord-token
-            - name: METRICS_PORT
-              value: "3000"
-            - name: API_PORT
-              value: "8000"
-            - name: BACKEND_MTLS_CERT
-              value: "/etc/tls/api-client.pem"
-            - name: BACKEND_MTLS_KEY
-              value: "/etc/tls/api-key.key"
-            - name: BACKEND_CA
-              value: "/etc/tls/backend-ca.pem"
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-            requests:
-              cpu: 25m
-              memory: 32Mi
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: 3000
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 5
-          volumeMounts:
-            - name: project-discord-bot-storage
-              mountPath: /usr/src/app/data
-            - name: api-mtls
-              # Mount 2 files, cert at /etc/tls/api-client.pem and key at /etc/tls/api-key.key
-              mountPath: "/etc/tls"
-              readOnly: true
-      volumes:
+      - name: project-discord-bot
+        image: devlaunchers/project_discord-bot:6e18556-202105232215 # {"$imagepolicy": "discord-bot:discord-bot"}
+        ports:
+        - containerPort: 3000
+        - containerPort: 8000
+        env:
+        - name: DISCORD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: project-discord-bot
+              key: discord-token
+        - name: METRICS_PORT
+          value: "3000"
+        - name: API_PORT
+          value: "8000"
+        - name: BACKEND_MTLS_CERT
+          value: "/etc/tls/api-client.pem"
+        - name: BACKEND_MTLS_KEY
+          value: "/etc/tls/api-key.key"
+        - name: BACKEND_CA
+          value: "/etc/tls/backend-ca.pem"
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 25m
+            memory: 32Mi
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 5
+        volumeMounts:
         - name: project-discord-bot-storage
-          persistentVolumeClaim:
-            claimName: project-discord-bot-hostpath-pvc
+          mountPath: /usr/src/app/data
         - name: api-mtls
-          secret:
-            secretName: tls
+          # Mount 2 files, cert at /etc/tls/api-client.pem and key at /etc/tls/api-key.key
+          mountPath: "/etc/tls"
+          readOnly: true
+      volumes:
+      - name: project-discord-bot-storage
+        persistentVolumeClaim:
+          claimName: project-discord-bot-hostpath-pvc
+      - name: api-mtls
+        secret:
+          secretName: tls

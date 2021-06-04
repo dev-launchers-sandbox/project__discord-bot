@@ -7,9 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.TEXT,
       },
-      id: {
-        type: Sequelize.TEXT,
-      },
       devBeans: {
         type: Sequelize.INTEGER,
       },

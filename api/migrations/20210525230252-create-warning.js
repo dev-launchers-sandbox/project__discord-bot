@@ -1,9 +1,9 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Warnings", {
+    await queryInterface.createTable("warnings", {
       id: {
-        allowNull: true,
+        allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
@@ -11,6 +11,10 @@ module.exports = {
       userId: {
         allowNull: false,
         type: Sequelize.TEXT,
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       reason: {
         allowNull: false,
@@ -31,6 +35,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Warnings");
+    await queryInterface.dropTable("warnings");
   },
 };

@@ -13,11 +13,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Warning.init(
     {
-      id: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-        primaryKey: true,
-      },
       userId: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -34,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "warning",
     }
   );
   return Warning;

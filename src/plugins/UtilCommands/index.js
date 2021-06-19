@@ -9,6 +9,7 @@ module.exports = {
     require("./controllers/commands/removeBeans.js"),
     require("./controllers/commands/addWarning.js"),
     require("./controllers/commands/createUser.js"),
+    require("./controllers/commands/getWarnings.js"),
   ],
   events: [],
   extends: [],

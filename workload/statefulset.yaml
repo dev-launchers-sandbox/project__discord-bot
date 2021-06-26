@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: project-discord-bot
-          image: devlaunchers/project_discord-bot:latest # {"$imagepolicy": "discord-bot:discord-bot"}
+          image: devlaunchers/project_discord-bot:latest
           ports:
             - containerPort: 3000
             - containerPort: 8000

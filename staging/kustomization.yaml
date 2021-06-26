@@ -5,3 +5,7 @@ bases:
   - pvc.yaml
   - service.yaml
   - statefulset.yaml
+images:
+- name: devlaunchers/project_discord-bot
+  newName: devlaunchers/project_discord-bot
+  newTag: a0ca8d5-202106191748 # {"$imagepolicy": "discord-bot:discord-bot:tag"}

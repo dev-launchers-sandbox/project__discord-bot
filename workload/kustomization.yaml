@@ -1,4 +1,4 @@
 resources:
-  - persistent-volume.yaml
+  - pvc.yaml
   - service.yaml
   - statefulset.yaml

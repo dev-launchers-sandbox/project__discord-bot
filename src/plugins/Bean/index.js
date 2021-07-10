@@ -5,6 +5,7 @@ module.exports = {
   commands: [
     require("./controllers/commands/beans.js"),
     require("./controllers/commands/endSeason.js"),
+    require("./controllers/commands/endSeasonTwo.js"),
     require("./controllers/commands/leaderboard.js"),
   ],
   events: [require("./controllers/events/beanOnReactionAdd.js")],

@@ -23,4 +23,5 @@ exports.run = async (client, message, args) => {
     db.delete(`account.${memberId}.devBeans`);
     db.delete(`account.${memberId}.goldenBeans`);
   }
+  channel.send("Process over?");
 };

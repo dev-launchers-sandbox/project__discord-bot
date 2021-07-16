@@ -10,16 +10,16 @@ Structures.extend("MessageReaction", (MessageReaction) => {
       this.beanManager = new BeanManager(dbh, client);
     }
 
-    isDevBeanReaction() {
+    async isDevBeanReaction() {
       /*
         A reaction is considered a Dev Bean Reaction when the emoji name matches the name of the
         "Parent Reaction" (the Dev Bean reaction in the main Dev Launchers server), and when the emoji is from the
         same server as the message being beaned (To make sure an external reaction named "DevBean" doesn't work as a Dev Bean)
       */
       let devBeanEmoji = this.beanManager.getDevBeanEmoji();
+      let isInGuild = this.message.guild.emojis.resolve(this._emoji.id) !== undefined;
       if (!devBeanEmoji) return false;
-      if (this._emoji.name === devBeanEmoji.name && this.message.guild.id === this._emoji.guild.id)
-        return true;
+      if (this._emoji.name === devBeanEmoji.name && isInGuild) return true;
       return false;
     }
 
@@ -30,9 +30,9 @@ Structures.extend("MessageReaction", (MessageReaction) => {
         same server as the message being beaned (To make sure an external reaction named "GoldenBean" doesn't work as a Golden Bean)
       */
       let goldenBeanEmoji = this.beanManager.getGoldenBeanEmoji();
+      let isInGuild = this.message.guild.emojis.resolve(this._emoji.id) !== undefined;
       if (!goldenBeanEmoji) return false;
-      if (this._emoji.name === goldenBeanEmoji.name && this.message.guild.id === this._emoji.guild.id)
-        return true;
+      if (this._emoji.name === goldenBeanEmoji.name && isInGuild) return true;
       return false;
     }
   }

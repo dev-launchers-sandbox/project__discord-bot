@@ -14,11 +14,11 @@ class BeanHandler {
   constructor() {}
 
   getUserDevBeans(userId) {
-    return quickDB.get(`account.${userId}.devBeans`) || 0;
+    return quickDB.get(`account.${userId}.devBeansTwo`) || 0;
   }
 
   getUserGoldenBeans(userId) {
-    return quickDB.get(`account.${userId}.goldenBeans`) || 0;
+    return quickDB.get(`account.${userId}.goldenBeansTwo`) || 0;
   }
 
   getUserForeverDevBeans(userId) {
@@ -53,12 +53,12 @@ class BeanHandler {
   }
 
   addDevBean(userId, amount = 1) {
-    quickDB.add(`account.${userId}.devBeans`, amount);
+    quickDB.add(`account.${userId}.devBeansTwo`, amount);
     quickDB.add(`account.${userId}.foreverDevBeans`, amount);
   }
 
   addGoldenBean(userId, amount = 1) {
-    quickDB.add(`account.${userId}.goldenBeans`, amount);
+    quickDB.add(`account.${userId}.goldenBeansTwo`, amount);
     quickDB.add(`account.${userId}.foreverGoldenBeans`, amount);
   }
 

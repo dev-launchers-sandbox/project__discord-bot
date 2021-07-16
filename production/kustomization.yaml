@@ -6,4 +6,4 @@ bases:
 images:
 - name: devlaunchers/project_discord-bot
   newName: devlaunchers/project_discord-bot
-  newTag: 1.1.3 # {"$imagepolicy": "discord-bot:discord-bot:tag"}
+  newTag: 1.1.4 # {"$imagepolicy": "discord-bot:discord-bot:tag"}

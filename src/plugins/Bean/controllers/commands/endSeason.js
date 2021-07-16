@@ -25,8 +25,8 @@ exports.run = async (client, message, args) => {
   let count = 0;
   Object.keys(accounts).forEach((userId) => {
     message.channel.send(`Removed beans for user with id ${userId}`);
-    db.delete(`account.${userId}.devBeans`);
-    db.delete(`account.${userId}.goldenBeans`);
+    db.delete(`account.${userId}.devBeansTwo`);
+    db.delete(`account.${userId}.goldenBeansTwo`);
     count++;
   });
 

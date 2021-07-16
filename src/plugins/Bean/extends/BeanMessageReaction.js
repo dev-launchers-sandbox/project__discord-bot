@@ -10,7 +10,7 @@ Structures.extend("MessageReaction", (MessageReaction) => {
       this.beanManager = new BeanManager(dbh, client);
     }
 
-    async isDevBeanReaction() {
+    isDevBeanReaction() {
       /*
         A reaction is considered a Dev Bean Reaction when the emoji name matches the name of the
         "Parent Reaction" (the Dev Bean reaction in the main Dev Launchers server), and when the emoji is from the

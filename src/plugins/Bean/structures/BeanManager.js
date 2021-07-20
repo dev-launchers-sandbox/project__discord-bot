@@ -79,13 +79,6 @@ class BeanManager {
       removeReaction(message, "✅", this.client.id);
     }, 2 * 1000);
   }
-
-  showCross(message) {
-    message.react("❌");
-    setTimeout(() => {
-      removeReaction(message, "❌", this.client.id);
-    }, 2 * 1000);
-  }
 }
 
 module.exports = BeanManager;

@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const { MinecraftServerListPing, MinecraftQuery } = require("minecraft-status");
+const status = require("minecraft-server-status");
 
 exports.help = {
   name: "minecraft",
@@ -15,23 +15,27 @@ exports.conf = {
 
 exports.run = async (client, message, args) => {
   message.delete();
-  MinecraftServerListPing.ping(4, "72.249.104.219", 31672, 3000)
-    .then((response) => {
-      const embed = new Discord.MessageEmbed()
-        .setTitle(response.description.extra[0].text)
-        .addField("Max Players", response.players.max)
-        .addField("Online Players", response.players.online)
-        .addField("Version", response.version.name)
-        .setThumbnail(message.guild.iconURL({ dynamic: true }))
-        .setColor(0xff9f01);
-      message.author.send(embed);
-    })
-    .catch((error) => {
-      console.log(error);
-      message.author.send(
-        "```" +
-          "There was an issue while trying to fetch the server’s data. The server is probably offline and/or in maintenance." +
-          "```"
-      );
+  status("minecraft.devlaunchers.com", 25565, (response) => {
+    if (!response || response.status !== "success") {
+      message.author.sendEmbed({
+        color: 0xff9f01,
+        description: "The server is currently not available",
+      });
+      return;
+    }
+
+    let { online, favicon, players, server } = response;
+
+    message.author.sendEmbed({
+      color: 0xff9f01,
+      author: { image: message.guild.iconURL(), name: "Dev Launchers Minecraft Server" },
+      fields: [
+        { name: "IP:", value: "minecraft.devlaunchers.com:25565" },
+        { name: "Version:", value: server.name, inline: true },
+        { name: "Online:", value: online ? "🟢" : "🔴", inline: true },
+        { name: "Players On:", value: players.now, inline: true },
+      ],
+      timestamp: Date.now(),
     });
+  });
 };

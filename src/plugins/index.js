@@ -18,6 +18,9 @@ module.exports = [
   // Moderation plugin
   require("./Moderation"),
 
+  //NewUser plugin
+  require("./NewUser"),
+
   //Reminder plugin
   require("./Reminder"),
 

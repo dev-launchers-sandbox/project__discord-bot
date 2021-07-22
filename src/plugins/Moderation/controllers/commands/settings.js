@@ -21,6 +21,7 @@ const settings = [
   "welcome",
   "audit",
   "total",
+  "introductions-channel",
   "threads-category",
   "invite",
   "moderator",
@@ -55,9 +56,7 @@ exports.run = async (client, message, args) => {
 
   if (!args[1]) {
     const currentValue = db.get(`${args[0]}.${message.guild.id}`);
-    message.channel.send(
-      `The current value of **${args[0]}** is **${currentValue || "null!"} **`
-    );
+    message.channel.send(`The current value of **${args[0]}** is **${currentValue || "null!"} **`);
     return;
   }
 
@@ -83,11 +82,8 @@ function sendBasicEmbed(channel, guildName) {
   channel.sendEmbed({
     color: 0xff9f01,
     title: `Settings for ${guildName}`,
-    footer:
-      "Use settings [name] [value] to set a value | Use delete to delete it",
-    fields: [
-      { name: "Settings", value: settings.map((x) => `\`${x}\``).join(" | ") },
-    ],
+    footer: "Use settings [name] [value] to set a value | Use delete to delete it",
+    fields: [{ name: "Settings", value: settings.map((x) => `\`${x}\``).join(" | ") }],
   });
 }
 

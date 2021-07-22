@@ -7,6 +7,7 @@ class DatabaseHandler {
     this.invite = new InviteHandler();
     this.thread = new ThreadHandler();
     this.currency = new CurrencyHandler();
+    this.newUserRoles = new NewUserRolesHandler();
   }
 }
 
@@ -221,6 +222,30 @@ class CurrencyHandler {
 
   getCoins(user) {
     return quickDB.get(`account.${user}.coins`);
+  }
+}
+
+class NewUserRolesHandler {
+  constructor() {}
+
+  getRoles(guildId) {
+    return quickDB.get(`${guildId}.newUserRoles`);
+  }
+
+  addRole(guildId, roleId) {
+    let roles = this.getRoles(guildId) || [];
+    if (roles.indexOf(roleId) > -1) return false; //If the role is already in the array, return.
+    quickDB.push(`${guildId}.newUserRoles`, roleId);
+    return true;
+  }
+
+  removeRole(guildId, roleId) {
+    let roles = this.getRoles(guildId) || [];
+    let indexToRemove = roles.indexOf(roleId);
+    if (indexToRemove === -1) return false; //If the role is not in the array, return.
+    roles.splice(indexToRemove, 1); //Remove the role from the array.
+    quickDB.set(`${guildId}.newUserRoles`, roles);
+    return true;
   }
 }
 module.exports = new DatabaseHandler();

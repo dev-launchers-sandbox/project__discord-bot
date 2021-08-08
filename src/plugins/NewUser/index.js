@@ -7,8 +7,11 @@ module.exports = {
     require("./controllers/commands/roles.js"),
     require("./controllers/commands/removeRole.js"),
   ],
-  events: [require("./controllers/events/onNewUserSendMessage.js")],
+  events: [
+    require("./controllers/events/onNewUserSendMessage.js"),
+    require("./controllers/events/onNewUserEditMessage.js"),
+  ],
   extends: [],
-  structures: [],
+  structures: [require("./structures/NewUserHandler.js")],
   permissions: ["ADMINISTRATOR"],
 };

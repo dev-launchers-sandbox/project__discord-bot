@@ -12,11 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 
   User.init(
     {
-      id: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        primaryKey: true,
-      },
       devBeans: {
         type: DataTypes.INTEGER,
         defaultValue: 0,

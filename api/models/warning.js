@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Warning.init(
     {
       userId: {
-        type: DataTypes.TEXT,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       reason: {

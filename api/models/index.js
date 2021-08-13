@@ -22,6 +22,8 @@ const db = {
   User: require("./user")(sequelize, Sequelize.DataTypes),
   Warning: require("./warning")(sequelize, Sequelize.DataTypes),
   Thread: require("./thread")(sequelize, Sequelize.DataTypes),
+  Guild: require("./guild")(sequelize, Sequelize.DataTypes),
+  Channel: require("./channel")(sequelize, Sequelize.DataTypes),
 };
 
 db.sequelize = sequelize;

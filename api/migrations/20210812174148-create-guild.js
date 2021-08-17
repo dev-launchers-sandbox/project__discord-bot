@@ -5,6 +5,7 @@ module.exports = {
       id: {
         allowNull: false,
         type: Sequelize.STRING,
+        primaryKey: true,
       },
       prefix: {
         defaultValue: ".",
@@ -28,6 +29,10 @@ module.exports = {
       },
       moderationServer: {
         type: Sequelize.STRING,
+      },
+      modCooldown: {
+        defaultValue: 1000 * 60 * 5,
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,

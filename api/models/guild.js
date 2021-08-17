@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       threadInactivityTime: DataTypes.INTEGER,
       moderationServer: DataTypes.STRING,
+      modCooldown: DataTypes.INTEGER,
     },
     {
       sequelize,

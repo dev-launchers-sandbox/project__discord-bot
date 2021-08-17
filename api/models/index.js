@@ -22,6 +22,8 @@ const db = {
   User: require("./user")(sequelize, Sequelize.DataTypes),
   Warning: require("./warning")(sequelize, Sequelize.DataTypes),
   Thread: require("./thread")(sequelize, Sequelize.DataTypes),
+  BeanType: require("./beantype")(sequelize, Sequelize.DataTypes),
+  BeanLog: require("./beanlog")(sequelize, Sequelize.DataTypes),
 };
 
 db.sequelize = sequelize;

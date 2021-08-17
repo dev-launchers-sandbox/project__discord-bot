@@ -7,6 +7,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Warning, {
         foreignKey: "userId",
       });
+      User.hasMany(models.BeanLog, {
+        foreignKey: "userId",
+      });
     }
   }
 

@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   'config': path.resolve('api', 'config', 'config.js'),
   'models-path': path.resolve('api', 'models'),
-  'migrations-path': path.resolve('api', 'migrations')
+  'migrations-path': path.resolve('api', 'migrations'),
 }
 
 

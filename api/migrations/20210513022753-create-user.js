@@ -7,20 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      devBeans: {
-        type: Sequelize.INTEGER,
-      },
-      goldenBeans: {
-        type: Sequelize.INTEGER,
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
     });
   },
   down: async (queryInterface, Sequelize) => {

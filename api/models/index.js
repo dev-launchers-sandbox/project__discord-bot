@@ -24,6 +24,8 @@ const db = {
   Thread: require("./thread")(sequelize, Sequelize.DataTypes),
   BeanType: require("./beantype")(sequelize, Sequelize.DataTypes),
   BeanLog: require("./beanlog")(sequelize, Sequelize.DataTypes),
+  Guild: require("./guild")(sequelize, Sequelize.DataTypes),
+  Channel: require("./channel")(sequelize, Sequelize.DataTypes),
 };
 
 db.sequelize = sequelize;

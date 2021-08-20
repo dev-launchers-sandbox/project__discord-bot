@@ -24,14 +24,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       threadInactivityTime: {
-        defaultValue: 1000 * 60 * 60 * 24 * 7,
+        defaultValue: 1000 * 60 * 60 * 24 * 7, //milliseconds
         type: Sequelize.INTEGER,
       },
       moderationServer: {
         type: Sequelize.STRING,
       },
       modCooldown: {
-        defaultValue: 1000 * 60 * 5,
+        defaultValue: 1000 * 60 * 5, //milliseconds
         type: Sequelize.INTEGER,
       },
       createdAt: {

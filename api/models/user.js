@@ -14,21 +14,10 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.init(
-    {
-      devBeans: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-      goldenBeans: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-    },
+    {},
     {
       sequelize,
       modelName: "user",
     }
   );
-
-  return User;
 };

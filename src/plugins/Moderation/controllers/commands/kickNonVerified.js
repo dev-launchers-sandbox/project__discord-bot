@@ -16,22 +16,29 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   const { guild, channel, member } = message;
   let nonVerified = [];
-  let members = await guild.members.fetch();
-  let verifiedRoles = newUserRoles.getRoles(guild.id) || [];
+  const members = await guild.members.fetch();
+  const verifiedRoles = newUserRoles.getRoles(guild.id) || [];
 
-  for (let member of members) {
-    if (member[1]._roles.length === 0) nonVerified.push(member[0]);
+  for (const member of members) {
+    if (member[1]._roles.length === 0) {
+      nonVerified.push(member[0]);
+    }
   }
+  //Descriptions cannot be more than 1024 characters long
+  if (nonVerified.length === 0) {
+    return channel.send("There are no non-verified members");
+  }
+  let length = nonVerified.map((e) => e.length) + 3; //id + <@>
 
-  try {
+  if (length < 1024) {
     channel.sendEmbed({
       color: 0xff9f01,
       author: { name: "Non-Verified Users" },
       description: nonVerified.map((id) => `<@${id}>`),
     });
-  } catch (e) {
-    for (let user of verifiedUsers) {
-      channel.send(user);
+  } else {
+    for (const user of nonVerified) {
+      await channel.send(`<@${user}>`);
     }
   }
 

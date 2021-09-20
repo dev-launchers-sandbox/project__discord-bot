@@ -3,6 +3,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("guilds", {
       id: {
+        primaryKey: true,
         allowNull: false,
         type: Sequelize.STRING,
       },

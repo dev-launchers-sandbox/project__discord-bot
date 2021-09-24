@@ -7,25 +7,17 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Warning, {
         foreignKey: "userId",
       });
+      User.hasMany(models.BeanLog, {
+        foreignKey: "userId",
+      });
     }
   }
 
   User.init(
-    {
-      devBeans: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-      goldenBeans: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-      },
-    },
+    {},
     {
       sequelize,
       modelName: "user",
     }
   );
-
-  return User;
 };

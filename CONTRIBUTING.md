@@ -11,7 +11,13 @@ Before you start contributing, you're going to need a few things:
         - Communicate effectively with other contributors
         - Test the changes you've made to the bot
         - Receive help as you need it
-    - Message `Guillermo#2969`
+    - Message `Guillermo#2969` to join the testing server.
+- **Docker:**
+    - [Windows](https://docs.docker.com/desktop/windows/install/) 
+    - [Mac](https://docs.docker.com/desktop/mac/install/)
+    - [Linux](https://docs.docker.com/engine/install/) 
+- **Tilt:**
+    - TODO
 
 # Standards
 
@@ -34,9 +40,8 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
       console.log(`${user} has ${xp} xp.`);
       ```
 - End statements and expressions with semicolons (`;`).
+- Use camelCase when naming variables
 
-- Use `module.exports = value` rather than `exports = value`
-    - Why? [Because `exports` has inconsistent behavior](https://stackoverflow.com/questions/16383795/difference-between-module-exports-and-exports-in-the-commonjs-module-system)
 
 ## Plugins
 - ### What are plugins?
@@ -52,7 +57,10 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
         - **extends** _(files that extend existing Discord.js classes [TextChannel, Guild, etc], adding functionality and state needed for this plugin)_
         - **structures** _(new classes, or structures, created and used by this specific plugin)_
         - **utils** _(files with utility modules [functions, classes, etc] which don't fit within **structures**, but are needed fir this specific plugin to function. **Using classes and thinking in terms of Structures is usually preferred!**)_
+        - **index.js** _(file that has all the information to load the plugin, every plugin **MUST** contain this file. [Example](https://github.com/dev-launchers-sandbox/project__discord-bot/blob/release/src/plugins/Thread/index.js)_
+        
 
+_Note: Not all plugins will need all of the folders shown above!_ 
 ## Commits, Branches, and Pull Requests
 - Before starting anything, make sure you:
     - ```bash
@@ -76,3 +84,5 @@ To prevent formatting wars and be consistent, here are the coding style guidelin
         - It doesn't comply with the standards we've set forth
         - It would be wise to add a new feature
         - Or, something is missing or confusing
+## Release
+We are using semantic versioning to tag releases. Follow the [Format Guide](https://github.com/semantic-release/semantic-release#commit-message-format) to format commit messages.

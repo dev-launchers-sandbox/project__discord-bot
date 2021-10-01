@@ -17,7 +17,7 @@ Before you start contributing, you're going to need a few things:
     - [Mac](https://docs.docker.com/desktop/mac/install/)
     - [Linux](https://docs.docker.com/engine/install/) 
 - **Tilt:**
-    - TODO
+    - Follow the [instructions](https://docs.tilt.dev/install.html) to install tilt. We are not using Kubernetes, so you can skip the kubernetes installation.
 
 # Standards
 

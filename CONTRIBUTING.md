@@ -18,6 +18,10 @@ Before you start contributing, you're going to need a few things:
     - [Linux](https://docs.docker.com/engine/install/) 
 - **Tilt:**
     - Follow the [instructions](https://docs.tilt.dev/install.html) to install tilt. We are not using Kubernetes, so you can skip the kubernetes installation.
+- **Node.js**
+    - Install the latest **recommended** version at https://nodejs.org/
+- **Git**
+    - This is essential for version control. We will also be using Git Bash to run the bot. https://git-scm.com/
 
 # Standards
 

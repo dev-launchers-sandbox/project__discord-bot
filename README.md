@@ -36,7 +36,7 @@ Follow these steps to run the bot:
 ```
 7. Now that you are inside of the dev-env repository, **open the Docker App**, and run `tilt up` to run the discord bot! Tilt provides a great UI at http://localhost:10350. Check it out! If for any reason the bot does not start up, let us know in the Discord Server!
 ```
-   $ tilt up
+   $ tilt up bot
 ```
 8. Once you are done running the bot, run `tilt down` to end all services.
 ```

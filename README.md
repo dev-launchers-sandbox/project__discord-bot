@@ -2,7 +2,7 @@
 
 ## What is this repository about?
 
-This repository hosts the code for our _open-source, community-driven_ Discord Bot.
+This repository hosts the code for our _open-source, community-driven_ [Discord Bot](https://discord.js.org/#/docs/main/stable/general/welcome).
 
 ## Setup
 
@@ -34,7 +34,7 @@ Follow these steps to run the bot:
    $ cd platform__dev-env
    $ npm install
 ```
-7. Now that you are inside of the dev-env repository, and you have installed everything, you can run `tilt up` to run the discord bot! Tilt provides a great UI at http://localhost:10350. Check it out!
+7. Now that you are inside of the dev-env repository, **open the Docker App**, and run `tilt up` to run the discord bot! Tilt provides a great UI at http://localhost:10350. Check it out! If for any reason the bot does not start up, let us know in the Discord Server!
 ```
    $ tilt up
 ```

@@ -88,5 +88,8 @@ _Note: Not all plugins will need all of the folders shown above!_
         - It doesn't comply with the standards we've set forth
         - It would be wise to add a new feature
         - Or, something is missing or confusing
+## Staging
+All features must be tested using the staging bot, before being pushed into release. The staging bot runs on the staging brach. The staging bot is *always* running in the Testing Server!
+
 ## Release
 We are using semantic versioning to tag releases. Follow the [Format Guide](https://github.com/semantic-release/semantic-release#commit-message-format) to format commit messages.

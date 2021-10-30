@@ -7,16 +7,13 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      User.hasOne(models.Profile, {
-        foreignKey: "guildId",
-      });
-    }
+    static associate(models) {}
   }
   Guild.init(
     {
       prefix: DataTypes.STRING,
       opRoles: DataTypes.ARRAY(DataTypes.STRING),
+      defaultMemberRoles: DataTypes.ARRAY(DataTypes.STRING),
       levels: {
         type: DataTypes.STRING,
         get: function () {

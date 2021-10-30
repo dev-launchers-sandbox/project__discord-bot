@@ -13,13 +13,16 @@ module.exports = (sequelize, DataTypes) => {
   }
   Channel.init(
     {
+      guildId: DataTypes.STRING,
       welcome: DataTypes.STRING,
       auditLog: DataTypes.STRING,
-      totalMembercounter: DataTypes.STRING,
+      memberCounter: DataTypes.STRING,
       threadDirectory: DataTypes.STRING,
       threadCategory: DataTypes.STRING,
       teamsAndProjects: DataTypes.STRING,
       newUserMention: DataTypes.ARRAY(DataTypes.STRING),
+      introductions: DataTypes.STRING,
+      invites: DataTypes.STRING,
     },
     {
       sequelize,

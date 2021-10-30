@@ -4,12 +4,12 @@ module.exports = {
     await queryInterface.createTable("channels", {
       id: {
         allowNull: false,
+        primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
       guildId: {
         allowNull: false,
-        primaryKey: true,
         type: Sequelize.STRING,
         references: {
           model: "guilds",
@@ -22,7 +22,7 @@ module.exports = {
       auditLog: {
         type: Sequelize.STRING,
       },
-      totalMembercounter: {
+      memberCounter: {
         type: Sequelize.STRING,
       },
       threadDirectory: {
@@ -35,7 +35,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       newUserMention: {
+        defaultValue: [],
         type: Sequelize.ARRAY(Sequelize.STRING),
+      },
+      introductions: {
+        type: Sequelize.STRING,
+      },
+      invites: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

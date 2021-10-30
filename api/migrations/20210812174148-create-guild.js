@@ -12,27 +12,31 @@ module.exports = {
         defaultValue: ".",
         type: Sequelize.STRING,
       },
+      defaultMemberRoles: {
+        defaultValue: [],
+        type: Sequelize.ARRAY(Sequelize.STRING),
+      },
       opRoles: {
         defaultValue: [],
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
       levels: {
         defaultValue: "[]",
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1024),
       },
       invites: {
         defaultValue: "[]",
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1024),
       },
       threadInactivityTime: {
-        defaultValue: 1000 * 60 * 60 * 24 * 7, //milliseconds
+        defaultValue: 60 * 24 * 2, // 2 days in minutes
         type: Sequelize.INTEGER,
       },
       moderationServer: {
         type: Sequelize.STRING,
       },
       modCooldown: {
-        defaultValue: 1000 * 60 * 5, //milliseconds
+        defaultValue: 5, //5 minutes
         type: Sequelize.INTEGER,
       },
       createdAt: {

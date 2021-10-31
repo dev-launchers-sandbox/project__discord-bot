@@ -6,7 +6,6 @@ Structures.extend("TextChannel", (TextChannel) => {
     constructor(guild, data) {
       super(guild, data);
     }
-
     sendEmbed(args) {
       const embed = new Discord.MessageEmbed();
       if (args.color) embed.setColor(args.color);
@@ -28,7 +27,7 @@ Structures.extend("TextChannel", (TextChannel) => {
           embed.setFooter(args.footer.text, args.footer.image);
         } else embed.setFooter(args.footer);
       }
-      if (args.timestamp) embed.setTimestamp(args.timestamp);
+      if (args.timestamp) embed.setTimestamp(Date.now());
       if (args.image) embed.setImage(args.image);
       return this.send(embed);
     }

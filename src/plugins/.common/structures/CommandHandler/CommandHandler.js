@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
 
 module.exports = class CommandHandler {
   constructor(commandName, message, args) {
@@ -47,9 +46,7 @@ module.exports = class CommandHandler {
       if (this.args.length < requirements.arguments.length) {
         this.error({
           title: "Missing Parameters!",
-          description: `Required parameters: **${requirements.arguments.join(
-            " "
-          )}**`,
+          description: `Required parameters: **${requirements.arguments.join(" ")}**`,
           footer: `For further help, type ${prefix}help ${this.name}`,
         });
         return false;

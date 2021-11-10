@@ -28,7 +28,7 @@ module.exports = [
   require("./Role"),
 
   // Thread plugin
-  require("./Thread"),
+  //require("./Thread"),
 
   // Chess plugin
   //require("./Chess"),

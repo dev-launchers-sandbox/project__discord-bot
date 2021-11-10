@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: discord-bot
 bases:
-- ../workload
+  - ../workload
 images:
-- name: devlaunchers/project_discord-bot
-  newName: devlaunchers/project_discord-bot
-  newTag: 803e3a4-202110121501 # {"$imagepolicy": "discord-bot:discord-bot:tag"}
+  - name: devlaunchers/project_discord-bot
+    newName: devlaunchers/project_discord-bot
+    newTag: 3608eff-202111100028 # {"$imagepolicy": "discord-bot:discord-bot:tag"}

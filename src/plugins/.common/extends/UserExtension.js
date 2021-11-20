@@ -37,6 +37,7 @@ Structures.extend("User", (User) => {
       try {
         return await this.send(embed);
       } catch (err) {
+        console.log(err);
         console.log("User's DMs are off");
       }
     }

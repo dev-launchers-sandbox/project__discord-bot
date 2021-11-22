@@ -19,27 +19,34 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   const guilds = client.guilds.cache;
   for (const guild of guilds) {
-    const guildId = message.guild.id;
-    const guildInDb = await Guild.findOne({ where: { id: guildId } });
+    //guild: [id, {guildObject}]
+    const guildId = guild[0];
+    const guildName = guild[1].name;
 
-    if (guildInDb !== null) {
-      message.channel.send(`${guild[1].name} already has been created`);
-      continue; //Skips to the next guild;
+    //If the guild is found in the db, skip to the next one.
+    if ((await Guild.findOne({ where: { id: guildId } })) !== null) {
+      message.channel.send(`${guildName} already has been created`);
+      continue;
     }
 
-    /*For things that can be copy-pasted, with no modifications being made to the data,
-        we will use the system below
-      */
-    let keys = [
+    // =============================================================================================
+    // Guild Migration =============================================================================
+    // =============================================================================================
+
+    /*
+     * For things that can be copy-pasted, with no modifications being made to the data,
+     * we will use the system below
+     */
+    const guildKeys = [
       { oldKey: `prefix.${guildId}`, newKey: "prefix" },
       { oldKey: `${guildId}.newUserRoles`, newKey: "defaultMemberRoles" },
       { oldKey: `moderation-server.${guildId}`, newKey: "moderationServer" },
     ];
 
-    const guildObject = migrationsHandler.copyData(keys);
-
+    const guildObject = migrationsHandler.copyData(guildKeys);
     guildObject.id = guildId;
 
+    //Special cases that require more than a copy paste.
     const opRoles = [];
     const modRole = db.get(`moderator.${guildId}`);
     const adminRole = db.get(`admin.${guildId}`);
@@ -59,6 +66,7 @@ exports.run = async (client, message, args) => {
       "thirty-five",
       "forty",
     ];
+
     for (const levelNum of levelNums) {
       levels.push({ name: levelNum, role: db.get(`levels.${guildId}.${levelNum}`) });
     }
@@ -82,30 +90,48 @@ exports.run = async (client, message, args) => {
     const modCooldown = db.get(`mod-cooldown.${guildId}`);
     if (modCooldown) guildObject.modCooldown = parseInt(modCooldown);
 
+    // =============================================================================================
+    // Finish Guild Migration ======================================================================
+    // =============================================================================================
+
     const dbGuild = await Guild.create(guildObject);
 
     await message.channel.send(
-      `Created guild for **${guild[1].name}** with attributes: \`\`\`${Object.keys(
-        dbGuild.dataValues
-      ).map((attribute) => dbGuild.dataValues[attribute])}\`\`\``
+      `Created guild for **${guildName}** with attributes: \`\`\`${Object.keys(dbGuild.dataValues).map(
+        (attribute) => dbGuild.dataValues[attribute]
+      )}\`\`\``
     );
+
+    // =============================================================================================
+    // Channels Migration ==========================================================================
+    // =============================================================================================
     await message.channel.send("Starting to migrate the **important channels...**");
 
-    keys = [
+    /*
+     * For things that can be copy-pasted, with no modifications being made to the data,
+     * we will use the system below
+     */
+    const channelsKeys = [
       { oldKey: `welcome.${guildId}`, newKey: "welcome" },
       { oldKey: `audit.${guildId}`, newKey: "auditLog" },
       { oldKey: `total.${guildId}`, newKey: "memberCounter" },
-      { oldKey: `threads-category.${guildId}`, newKey: `threadDirectory` },
+      { oldKey: `threads-category.${guildId}`, newKey: `threadCategory` },
+      { oldKey: `directory-channel.${guildId}`, newKey: "threadDirectory" },
       { oldKey: `teams.${guildId}`, newKey: "teamsAndProjects" },
       { oldKey: `introductions-channel.${guildId}`, newKey: "introductions" },
       { oldKey: `invite.${guildId}`, newKey: invites },
     ];
 
-    const channelsObject = migrationsHandler.copyData(keys);
+    const channelsObject = migrationsHandler.copyData(channelsKeys);
     channelsObject.guildId = guildObject.id;
 
+    //Special cases that require more than a copy paste.
     const controlCenter = db.get(`control-center.${guildId}`);
     if (controlCenter) channelsObject.newUserMention = [controlCenter];
+
+    // =============================================================================================
+    // Finish Channel Migration ====================================================================
+    // =============================================================================================
 
     const dbChannels = await Channel.create(channelsObject);
 
@@ -118,12 +144,3 @@ exports.run = async (client, message, args) => {
     await message.channel.send("Important channel data migration has been **completed.**");
   }
 };
-
-function copyData(channel, keys) {
-  let copiesObject = {};
-  for (const key of keys) {
-    const dbValue = db.get(key.oldKey);
-    if (dbValue) copiesObject[key.newKey] = dbValue;
-  }
-  return copiesObject;
-}

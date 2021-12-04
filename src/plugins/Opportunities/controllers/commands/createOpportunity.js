@@ -16,6 +16,6 @@ exports.conf = {
 exports.run = async (client, message, args) => {
   const { author } = message;
 
-  const opportunity = new Opportunity(author);
+  const opportunity = new Opportunity(client, author);
   opportunity.createOpportunity();
 };

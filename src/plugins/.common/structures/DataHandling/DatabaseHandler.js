@@ -1,5 +1,3 @@
-const quickDB = require("quick.db");
-
 class DatabaseHandler {
   constructor() {
     this.bean = new BeanHandler();

@@ -1,6 +1,6 @@
 module.exports = class {
   constructor() {
-    const db = require("quick.db");
+    
     // * this.asyncBugDelay may be needed to be modified if deployed in an area with high ping.
     this.tempChannel, (this.asyncBugDelay = 500); // ms
     this.db = new db.table("chess");

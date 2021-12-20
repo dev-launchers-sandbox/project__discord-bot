@@ -19,7 +19,7 @@ const speedyBuilds = process.argv.includes("speedyBuilds");
 if (speedyBuilds) {
   console.log("SpeedyBuilds has been enabled");
 
-  function sendEvent(metric) { }
+  function sendEvent(metric) {}
   exports.sendEvent = sendEvent;
 } else {
   const metrics = registerMetrics();
@@ -50,9 +50,7 @@ if (speedyBuilds) {
     });
 
     const port = process.env.METRICS_PORT || 3000;
-    console.log(
-      `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
-    );
+    console.log(`Metrics server listening to ${port}, metrics exposed on /metrics endpoint`);
     server.listen(port);
   }
 
@@ -61,16 +59,26 @@ if (speedyBuilds) {
   }
   exports.sendEvent = sendEvent;
 }
+process.on("uncaughtException", function (err) {
+  console.log("Caught exception: ", err);
+});
 
 require("./handler/module.js")(client);
 require("./handler/Event.js")(client);
 
 client.package = require("../package.json");
 
+process.on("uncaughtException", (err) => {
+  console.log("\n\n");
+  if (err.message.includes("db ")) {
+    console.log("A command using quick.db was run.");
+  } else process.exit(1);
+});
+
 require("dotenv").config();
 
+//client.on("error", console.error);
+
 client.on("warn", console.warn);
-client.on("error", console.error);
 
 client.login(process.env.DISCORD_TOKEN);
-

@@ -1,4 +1,4 @@
-const db = require("quick.db");
+
 const { newUserRoles } = require("./../../.common/structures/DataHandling/DatabaseHandler.js");
 
 class NewUserHandler {

@@ -7,12 +7,11 @@ class Task {
   }
 
   checkExecution() {
-    if (new Date().getTime() - this._executionTime > this._interval)
-      this.execute();
+    if (new Date().getTime() - this._executionTime > this._interval) this.execute();
   }
 
   execute() {
-    this._execute();
+    //this._execute();
 
     this._executionTime = new Date().getTime();
   }

@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
+
 const commandUsage = require("../../../../utils/commandUsage.js");
 const getMessageTarget = require("../../../../utils/getMessageTarget.js");
 

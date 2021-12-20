@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const BeanManager = require("./../../structures/BeanManager.js");
 const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
 
-const db = require("quick.db");
+
 const getMessageTarget = require("../../../../utils/getMessageTarget");
 
 exports.help = {

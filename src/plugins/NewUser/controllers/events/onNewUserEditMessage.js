@@ -5,5 +5,5 @@ exports.eventHandle = "messageUpdate";
 exports.event = async (client, oldMessage, newMessage) => {
   metrics.sendEvent("messageUpdate");
 
-  newUserHandler.giveRoles(newMessage);
+  //newUserHandler.giveRoles(newMessage);
 };

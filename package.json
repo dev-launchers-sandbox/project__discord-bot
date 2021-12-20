@@ -21,17 +21,16 @@
     "express": "^4.17.1",
     "minecraft-server-status": "^1.0.1",
     "moment": "^2.26.0",
-    "node": "12.16.3",
+    "node": "16.6.1",
     "node-superfetch": "0.1.10",
     "parse-ms": "2.1.0",
     "prom-client": "^12.0.0",
-    "quick.db": "7.1.1",
     "semantic-release": "^17.4.2"
   },
   "devDependencies": {
     "axios": "^0.21.1",
     "js-yaml": "^3.13.1",
-    "node": "12.16.3",
+    "node": "16.6.1",
     "nodemon": "1.18.4",
     "winston": "^3.2.1"
   },

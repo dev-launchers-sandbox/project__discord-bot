@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
 const metrics = require("../../../../index.js");
-const db = require("quick.db");
+
 
 console.log("required");
 exports.eventHandle = "guildMemberUpdate";

@@ -21,6 +21,8 @@ module.exports = [
   //NewUser plugin
   require("./NewUser"),
 
+  //Opportunities plugin
+  require("./Opportunities"),
   //Reminder plugin
   require("./Reminder"),
 

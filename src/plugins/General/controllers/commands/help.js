@@ -33,7 +33,10 @@ exports.run = async (client, message, args) => {
     for (const mod of module) {
       fields.push({
         name: mod.name,
-        value: mod.cmds.map((x) => `\`${x}\``).join(" | "),
+        value: mod.cmds
+          .filter((x) => !client.commands.get(x).conf.isSubCommand)
+          .map((x) => `\`${x}\``)
+          .join(" | "),
       });
     }
 
@@ -45,19 +48,12 @@ exports.run = async (client, message, args) => {
     });
   } else {
     let cmd = args[0].toLowerCase();
-    if (
-      client.commands.has(cmd) ||
-      client.commands.get(client.aliases.get(cmd))
-    ) {
-      let command =
-        client.commands.get(cmd) ||
-        client.commands.get(client.aliases.get(cmd));
+    if (client.commands.has(cmd) || client.commands.get(client.aliases.get(cmd))) {
+      let command = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
       let name = command.help.name;
       let description = command.help.description;
       let cooldown = command.conf.cooldown + " second(s)";
-      let aliases = command.conf.aliases.join(", ")
-        ? command.conf.aliases.join(", ")
-        : "None";
+      let aliases = command.conf.aliases.join(", ") ? command.conf.aliases.join(", ") : "None";
       let usage = command.help.usage ? command.help.usage : "None";
       let example = command.help.example ? command.help.example : "None";
 

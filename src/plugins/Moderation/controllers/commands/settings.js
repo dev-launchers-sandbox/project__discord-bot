@@ -17,6 +17,7 @@ exports.conf = {
 };
 
 const settings = [
+  "opportunity",
   "prefix",
   "welcome",
   "audit",

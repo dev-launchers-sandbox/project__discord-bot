@@ -7,6 +7,7 @@ class NewUserHandler {
   giveRoles(message) {
     let { guild, channel, member } = message;
 
+    if (!guild) return;
     if (message.author.bot) return; //Ignore bots.
     let introductionsChannel = db.get(`introductions-channel.${guild.id}`);
 

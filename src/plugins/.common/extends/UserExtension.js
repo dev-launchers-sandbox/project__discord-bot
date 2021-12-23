@@ -33,10 +33,11 @@ Structures.extend("User", (User) => {
         } else embed.setFooter(args.footer);
       }
       if (args.timestamp) embed.setTimestamp(args.timestamp);
-
+      if (args.image) embed.setImage(args.image);
       try {
         return await this.send(embed);
       } catch (err) {
+        console.log(err);
         console.log("User's DMs are off");
       }
     }

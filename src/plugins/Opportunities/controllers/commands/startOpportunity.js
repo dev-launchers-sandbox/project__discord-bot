@@ -3,7 +3,7 @@ const db = require("quick.db");
 
 exports.help = {
   name: "startOpportunity",
-  description: "Create an opportunity in the #opportunity channel",
+  description: "Starts the Opportunity Creation Guide",
   usage: "startOpportunity",
   example: "startOpportunity",
 };

@@ -31,13 +31,18 @@ exports.run = async (client, message, args) => {
     module.sort((a, b) => a.helpPage - b.helpPage);
     let fields = [];
     for (const mod of module) {
-      fields.push({
-        name: mod.name,
-        value: mod.cmds
-          .filter((x) => !client.commands.get(x).conf.isSubCommand)
-          .map((x) => `\`${x}\``)
-          .join(" | "),
-      });
+      //Sub commands will not be shown in the help command
+      const cmds = mod.cmds.filter((x) => !client.commands.get(x).conf.isSubCommand);
+      //This allows different plugins to use the same help category
+      if (fields.some((field) => field.name === mod.name)) {
+        const index = fields.findIndex((field) => field.name === mod.name);
+        fields[index].value += " | " + cmds.map((x) => `\`${x}\``).join(" | ");
+      } else {
+        fields.push({
+          name: mod.name,
+          value: cmds.map((x) => `\`${x}\``).join(" | "),
+        });
+      }
     }
 
     return message.channel.sendEmbed({

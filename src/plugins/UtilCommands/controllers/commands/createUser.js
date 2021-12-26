@@ -16,11 +16,13 @@ exports.conf = {
 
 exports.run = async (client, message, args) => {
   let userId = args[0];
-  let userInDb = await User.findByPk(userId);
+  let userInDb = await User.findOne({ where: { discordId: userId } });
+
   if (userInDb) {
     message.channel.send("User already exists");
     return;
   }
-  await User.create({ id: userId });
+  const ul = await User.create({ discordId: userId });
+  console.log(ul);
   message.channel.send("Created user");
 };

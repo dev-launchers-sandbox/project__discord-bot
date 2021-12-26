@@ -315,7 +315,6 @@ class Opportunity {
     );
 
     embed.image = this.opportunity.image;
-    embed.timestamp = Date.now();
     embed.fields = [{ name: "Submitted By:", value: this._user.toString() }];
     embed.fields = [
       ...embed.fields,
@@ -324,7 +323,11 @@ class Opportunity {
         return { name: field.displayName, value: fieldInput };
       }),
     ];
-    embed.footer = { image: this._client.user.displayAvatarURL(), text: " | Dev Launchers" };
+    //TODO: Import prefix!
+    embed.footer = {
+      image: this._client.user.displayAvatarURL(),
+      text: " | Run the.createOpportunity command to create YOUR opportunity now!",
+    };
     this.opportunityEmbed = embed;
   }
 

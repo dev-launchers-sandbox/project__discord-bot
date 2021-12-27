@@ -14,10 +14,13 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   User.init(
-    {},
+    {
+      discordId: DataTypes.STRING,
+    },
     {
       sequelize,
       modelName: "user",
     }
   );
+  return User;
 };

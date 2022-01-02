@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.BeanLog, {
         foreignKey: "userId",
       });
+      User.hasMany(models.Reminder, {
+        foreignKey: "userId",
+      });
     }
   }
 

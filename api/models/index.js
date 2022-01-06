@@ -20,6 +20,7 @@ const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
 
 const db = {
   User: require("./user")(sequelize, Sequelize.DataTypes),
+  Reminder: require("./reminder")(sequelize, Sequelize.DataTypes),
   Warning: require("./warning")(sequelize, Sequelize.DataTypes),
   Thread: require("./thread")(sequelize, Sequelize.DataTypes),
   BeanType: require("./beantype")(sequelize, Sequelize.DataTypes),

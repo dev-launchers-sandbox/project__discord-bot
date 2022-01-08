@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   BeanLog.init(
     {
-      beanType: DataTypes.UUID,
+      beanType: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       givenBy: DataTypes.STRING,
     },

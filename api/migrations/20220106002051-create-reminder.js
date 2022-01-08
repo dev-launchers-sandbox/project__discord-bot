@@ -3,10 +3,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("reminders", {
       id: {
-        allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("uuid_generate_v4()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       channel: {
         allowNull: false,

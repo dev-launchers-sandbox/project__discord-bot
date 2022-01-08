@@ -326,7 +326,7 @@ class Opportunity {
     //TODO: Import prefix!
     embed.footer = {
       image: this._client.user.displayAvatarURL(),
-      text: " | Run the.createOpportunity command to create YOUR opportunity now!",
+      text: " | Run the .createOpportunity command to create YOUR opportunity now!",
     };
     this.opportunityEmbed = embed;
   }

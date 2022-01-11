@@ -4,9 +4,13 @@ module.exports = {
     await queryInterface.createTable("guilds", {
       id: {
         primaryKey: true,
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+      },
+      guildId: {
         allowNull: false,
         type: Sequelize.STRING,
-        primaryKey: true,
+        unique: true,
       },
       prefix: {
         defaultValue: ".",

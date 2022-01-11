@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
     const guildName = guild[1].name;
 
     //If the guild is found in the db, skip to the next one.
-    if ((await Guild.findOne({ where: { id: guildId } })) !== null) {
+    if ((await Guild.findOne({ where: { guildId: guildId } })) !== null) {
       message.channel.send(`${guildName} already has been created`);
       continue;
     }
@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
     ];
 
     const guildObject = migrationsHandler.copyData(guildKeys);
-    guildObject.id = guildId;
+    guildObject.guildId = guildId;
 
     //Special cases that require more than a copy paste.
     const opRoles = [];
@@ -123,7 +123,7 @@ exports.run = async (client, message, args) => {
     ];
 
     const channelsObject = migrationsHandler.copyData(channelsKeys);
-    channelsObject.guildId = guildObject.id;
+    channelsObject.guildId = dbGuild.dataValues.id;
 
     //Special cases that require more than a copy paste.
     const controlCenter = db.get(`control-center.${guildId}`);

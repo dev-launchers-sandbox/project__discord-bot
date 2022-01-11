@@ -22,6 +22,8 @@ Before you start contributing, you're going to need a few things:
     - Install the latest **recommended** version at https://nodejs.org/
 - **Git**
     - This is essential for version control. We will also be using Git Bash to run the bot. https://git-scm.com/
+- **Python**
+    - Python is required to run Node.js. Download it at https://www.python.org/downloads/
 
 # Standards
 

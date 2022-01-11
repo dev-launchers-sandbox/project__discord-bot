@@ -3,13 +3,12 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("BeanLogs", {
       id: {
-        allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("uuid_generate_v4()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       beanTypeId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
           model: "beanTypes",
           key: "id",

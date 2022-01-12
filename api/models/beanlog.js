@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       beanType: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
-      givenBy: DataTypes.STRING,
+      givenBy: DataTypes.INTEGER,
     },
     {
       sequelize,

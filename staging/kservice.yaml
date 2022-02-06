@@ -10,7 +10,7 @@ spec:
       - name: discord-bot
         image: devlaunchers/project_discord-bot:latest
         ports:
-          - containerPort: 3000
+          - containerPort: 8000
         env:
           - name: DISCORD_TOKEN
             valueFrom:

@@ -17,7 +17,7 @@ const promClient = require("prom-client");
 const speedyBuilds = process.argv.includes("speedyBuilds");
 
 if (speedyBuilds) {
-  console.log("Cheese");
+  console.log("Speedby Builds!");
 
   function sendEvent(metric) {}
   exports.sendEvent = sendEvent;

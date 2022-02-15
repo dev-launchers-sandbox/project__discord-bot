@@ -7,7 +7,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         autoIncrement: true,
       },
-      guildId: {
+      discordId: {
         allowNull: false,
         type: Sequelize.STRING,
         unique: true,

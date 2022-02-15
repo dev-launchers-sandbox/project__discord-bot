@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Guild.init(
     {
-      guildId: DataTypes.STRING,
       prefix: DataTypes.STRING,
       opRoles: DataTypes.ARRAY(DataTypes.STRING),
       defaultMemberRoles: DataTypes.ARRAY(DataTypes.STRING),

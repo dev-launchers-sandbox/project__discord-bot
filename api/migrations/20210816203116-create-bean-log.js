@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("BeanLogs", {
+    await queryInterface.createTable("beanlogs", {
       id: {
         primaryKey: true,
         type: Sequelize.INTEGER,
@@ -10,7 +10,7 @@ module.exports = {
       beanTypeId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "beanTypes",
+          model: "beantypes",
           key: "id",
         },
       },
@@ -35,15 +35,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("BeanLogs");
+    await queryInterface.dropTable("beanlogs");
   },
 };
-
-/*
-
-
-A beantype has many BeanLogs
-
-
-
-*/

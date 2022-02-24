@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       Guild.hasMany(models.Channel, {
         foreignKey: "guildId",
       });
+      Guild.hasMany(models.Thread, {
+        foreignKey: "guildId",
+      });
     }
   }
   Guild.init(

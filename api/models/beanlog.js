@@ -8,19 +8,16 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-    }
+    static associate(models) {}
   }
   BeanLog.init(
     {
-      beanType: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
       givenBy: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "BeanLog",
+      modelName: "beanlog",
     }
   );
   return BeanLog;

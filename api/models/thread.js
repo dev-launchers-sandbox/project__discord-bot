@@ -7,13 +7,11 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
-    }
+    static associate(models) {}
   }
   Thread.init(
     {
-      guildId: DataTypes.STRING,
+      guildId: DataTypes.INTEGER,
       channelId: DataTypes.STRING,
       roleId: DataTypes.STRING,
       threadCreatorId: DataTypes.STRING,

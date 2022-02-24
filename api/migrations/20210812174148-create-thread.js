@@ -9,7 +9,11 @@ module.exports = {
       },
       guildId: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "guilds",
+          key: "id",
+        },
       },
       channelId: {
         allowNull: false,

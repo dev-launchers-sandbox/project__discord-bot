@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Channel.init(
     {
-      guildId: DataTypes.STRING,
+      guildId: DataTypes.INTEGER,
       welcome: DataTypes.STRING,
       auditLog: DataTypes.STRING,
       memberCounter: DataTypes.STRING,

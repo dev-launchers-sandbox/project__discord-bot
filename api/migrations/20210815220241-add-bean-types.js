@@ -3,7 +3,7 @@ console.log("add bean types");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "beanTypes",
+      "beantypes",
       [
         {
           name: "DevBean",
@@ -21,6 +21,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("beanTypes", null, {});
+    await queryInterface.bulkDelete("beantypes", null, {});
   },
 };

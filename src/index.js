@@ -1,5 +1,5 @@
 const express = require("express");
-require("./../api.js");
+require("./../api/index.js");
 
 // Bring in polyfills (running old version of node)
 require("./utils/polyfills.js");

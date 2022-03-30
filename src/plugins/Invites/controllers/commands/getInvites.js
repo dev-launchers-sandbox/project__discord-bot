@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const dbh = require("../../../.common/structures/DataHandling/DatabaseHandler.js");
+const dbh = require("./../../../.common/structures/DataHandling/DatabaseHandler.js");
 const inviteHandler = require("./../../structures/InviteHandler.js");
 
 exports.help = {
@@ -18,25 +18,22 @@ exports.conf = {
 
 exports.run = async (client, message, args) => {
   let channel = message.channel;
-  let invites = dbh.invite.getInvites(message.guild.id);
+  let invites = await dbh.invite.getInvites(message.guild.id);
 
-  let description = "None found";
-  Object.keys(invites).forEach((name) => {
-    if (description === "None found") description = "";
-    let code = dbh.invite.getInvite(message.guild.id, name);
-    let invite = inviteHandler.getInvite(message.guild.id, code);
-    if (!invite) return;
-    let uses = invite.uses;
+  let description = invites.length === 0 ? "None found" : "";
+
+  for (const invite of invites) {
+    const { name, code } = invite;
+    const guildInvite = inviteHandler.getInvite(message.guild.id, code);
 
     description = description.concat(
-      `\ Name: **${name}** | Code: **${code}** | Uses: **${uses}**`
+      "\n",
+      `\ Name: **${name}** | Code: **${code}** | Uses: **${guildInvite ? guildInvite.uses : 0}**`
     );
-  });
+  }
 
   if (description.length > 2048) {
-    message.channel.send(
-      "Time for an upgrade! You have too many invites for me to display!"
-    );
+    message.channel.send("Time for an update! You have too many invites for me to display!");
     return;
   }
 

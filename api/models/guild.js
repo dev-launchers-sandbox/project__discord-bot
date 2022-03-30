@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Guild.hasMany(models.Channel, {
         foreignKey: "guildId",
+        onDelete: "cascade",
       });
       Guild.hasMany(models.Thread, {
         foreignKey: "guildId",
@@ -43,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       threadInactivityTime: DataTypes.INTEGER,
       moderationServer: DataTypes.STRING,
       modCooldown: DataTypes.INTEGER,
+      minecraftRole: DataTypes.STRING,
     },
     {
       sequelize,

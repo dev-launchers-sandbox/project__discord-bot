@@ -1,13 +1,246 @@
 const quickDB = require("quick.db");
+const { Guild, Channel } = require("./../../../../../api/models/index.js");
 
 class DatabaseHandler {
   constructor() {
+    this.guild = new GuildHandler();
+    this.invite = new InviteHandler();
+    this.channels = new ChannelsHandler();
     this.bean = new BeanHandler();
     this.reminder = new ReminderHandler();
-    this.invite = new InviteHandler();
     this.thread = new ThreadHandler();
     this.currency = new CurrencyHandler();
-    this.newUserRoles = new NewUserRolesHandler();
+  }
+}
+
+class GuildHandler {
+  constructor() {}
+
+  async createGuild(guildId) {
+    console.log(`Creating guild with id: ${guildId}`);
+    if (this.getGuild(guildId, false) !== null) return false;
+    return await Guild.create(
+      { discordId: guildId },
+      {
+        include: Guild.Channel,
+      }
+    );
+  }
+
+  async deleteGuild(guildId) {
+    console.log(`Deleting guild with id: ${guildId}`);
+    const guild = await this.getGuild(guildId, false);
+    if (!guild) return;
+    console.log(`Destroying guild with id: ${guildId}`);
+    guild.destroy();
+  }
+
+  async getGuild(guildId, createIfNotExist = true) {
+    if (createIfNotExist) {
+      const [guild, wasCreated] = await Guild.findOrCreate({
+        where: { discordId: guildId },
+        include: Guild.Channel,
+      });
+      return guild;
+    }
+    console.log(`Getting guild with id: ${guildId}`);
+    return await Guild.findOne({ where: { discordId: guildId } });
+  }
+
+  //DO NOT USE THIS METHOD UNLESS NECESSARY. Use the specific field methods below!
+  async getField(guildId, field, createIfNotExist = true) {
+    const guild = await this.getGuild(guildId, createIfNotExist);
+    if (!guild) return;
+    return guild.get(field);
+  }
+
+  //Guild ID is the discord string, getId returns the custom generated integer id.
+  async getId(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "id", createIfNotExist);
+  }
+  async getPrefix(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "prefix", createIfNotExist);
+  }
+
+  async getOpRoles(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "opRoles", createIfNotExist);
+  }
+
+  async getDefaultMemberRoles(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "defaultMemberRoles", createIfNotExist);
+  }
+
+  async getLevels(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "levels", createIfNotExist);
+  }
+
+  async getInvites(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "invites", createIfNotExist);
+  }
+
+  async getThreadInactivityTime(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "threadInactivityTime", createIfNotExist);
+  }
+
+  async getModerationServer(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "moderationServer", createIfNotExist);
+  }
+
+  async getModCooldown(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "modCooldown", createIfNotExist);
+  }
+
+  async getMinecraftRole(guildId, createIfNotExist = true) {
+    return this.getField(guildId, "minecraftRole", createIfNotExist);
+  }
+  //DO NOT USE THIS METHOD UNLESS NECESSARY. Use the specific field methods below!
+  async setField(guildId, field, newValue, createIfNotExist = true) {
+    const guild = await this.getGuild(guildId, createIfNotExist);
+    guild[field] = newValue;
+    guild.save();
+  }
+
+  async setLevels(guildId, newValue, createIfNotExist = true) {
+    this.setField(guildId, "levels", newValue, createIfNotExist);
+  }
+
+  async setDefaultMemberRoles(guildId, newValue, createIfNotExist = true) {
+    this.setField(guildId, "defaultMemberRoles", newValue, createIfNotExist);
+  }
+}
+
+class InviteHandler {
+  constructor() {
+    this._guild = new GuildHandler();
+  }
+  async getInvites(guildId, createIfNotExist = true) {
+    const guild = this._guild.getGuild(guildId, createIfNotExist);
+    if (!guild) return null;
+    else return guild.get("invites");
+  }
+
+  async getInviteByCode(guildId, code, createIfNotExist = true) {
+    return (await this.getInvites(guildId, createIfNotExist)).find((invite) => invite.code === code);
+  }
+
+  async getInviteByName(guildId, name, createIfNotExist = true) {
+    return (await this.getInvites(guildId, createIfNotExist)).find((invite) => invite.name === name);
+  }
+
+  async addInvite(guildId, name, code, createIfNotExist = true) {
+    const invites = await this.getInvites(guildId, createIfNotExist);
+    //If an invite with the same name/code exists, don't change anything and return false.
+    if (invites.some((invite) => invite.name === name || invite.code === code)) return false;
+    invites.push({ name: name, code: code });
+    this._setInvites(guildId, invites);
+    return true;
+  }
+
+  async removeInviteByName(guildId, name, createIfNotExist = true) {
+    const invites = await this.getInvites(guildId, createIfNotExist);
+    const invite = await this.getInviteByName(guildId, name, createIfNotExist);
+    if (!invite) return false; //If the invite doesn't exist, ignore and return false.
+    invites.splice(invites.indexOf(invite), 1);
+    this._setInvites(guildId, invites);
+    return true;
+  }
+
+  async removeInviteByCode(guildId, code, createIfNotExist = true) {
+    const invites = await this.getInvites(guildId, createIfNotExist);
+    const invite = await this.getInviteByCode(guildId, code, createIfNotExist);
+    if (!invite) return false; //If the invite doesn't exist, ignore and return false.
+    invites.splice(invites.indexOf(invite), 1);
+    this._setInvites(guildId, invites);
+    return true;
+  }
+
+  async setInvite(guildId, name, code, createIfNotExist = true) {
+    const invites = await this.getInvites(guildId, createIfNotExist);
+    const index = invites.findIndexOf((invite) => invite.name == name);
+    if (index === -1) return false;
+
+    const invite = invites[index];
+    //If the invite doesn't exist or no fields are going to be changed, return false;
+    if (!invite || (invite.name === name && invite.code === code)) return false;
+
+    invites[index].name = name;
+    invites[index].code = code;
+    this._setInvites(invites);
+    return true;
+  }
+
+  async _setInvites(guildId, invites) {
+    const guild = await this._guild.getGuild(guildId);
+    guild.invites = invites;
+    guild.save();
+  }
+}
+
+class ChannelsHandler {
+  constructor() {
+    this._guild = new GuildHandler();
+  }
+
+  createChannels() {}
+
+  async getChannels(guildId, createIfNotExist = true) {
+    const customGuildId = await this._guild.getId(guildId, createIfNotExist);
+    if (!customGuildId) return null;
+    const channels = await Channel.findOne({ where: { guildId: customGuildId } });
+    if (channels) return channels;
+    return await Channel.create({ guildId: customGuildId });
+  }
+
+  //DO NOT USE THIS METHOD UNLESS NECESSARY. Use the specific field methods below!
+  async getField(guildId, field, createIfNotExist = true) {
+    const channels = await this.getChannels(guildId, createIfNotExist);
+    if (!channels) return;
+    return channels.get(field);
+  }
+
+  async getWelcome(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "welcome", createIfNotExist);
+  }
+
+  async getOpportunity(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "opportunity", createIfNotExist);
+  }
+
+  async getAuditLog(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "auditLog", createIfNotExist);
+  }
+
+  async getMemberCounter(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "memberCounter", createIfNotExist);
+  }
+  async getThreadDirectory(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "threadDirectory", createIfNotExist);
+  }
+
+  async getTeamsAndProjects(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "teamsAndProjects", createIfNotExist);
+  }
+
+  async getNewUserMention(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "newUserMention", createIfNotExist);
+  }
+
+  async getIntroductions(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "introductions", createIfNotExist);
+  }
+
+  async getInvites(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "invites", createIfNotExist);
+  }
+
+  async getMinecraft(guildId, createIfNotExist = true) {
+    return await this.getField(guildId, "minecraft", createIfNotExist);
+  }
+
+  async setField(guildId, field, newValue, createIfNotExist = true) {
+    const channels = await this.getChannels(guildId, createIfNotExist);
+    channels[field] = newValue;
+    channels.save();
   }
 }
 
@@ -120,7 +353,6 @@ class ReminderHandler {
     let reminder;
     for (let i = reminders.length - 1; i >= 0; i--) {
       if (user.id == reminders[i].userId) {
-        console.log("FOUND REMINDER");
         reminder = reminders.splice(i, 1)[0];
         break;
       }
@@ -131,30 +363,6 @@ class ReminderHandler {
 
   clearReminders() {
     quickDB.set(`reminders`, []);
-  }
-}
-
-class InviteHandler {
-  constructor() {}
-
-  setInvite(guildId, name, code) {
-    quickDB.set(`invites.${guildId}.${name}`, code);
-  }
-
-  getInvites(guildId) {
-    return quickDB.get(`invites.${guildId}`);
-  }
-
-  getInvite(guildId, name) {
-    return quickDB.get(`invites.${guildId}.${name}`);
-  }
-
-  removeInvite(guildId, name) {
-    quickDB.delete(`invites.${guildId}.${name}`);
-  }
-
-  getInviteChannel(guildId) {
-    return quickDB.get(`invite.${guildId}`);
   }
 }
 
@@ -225,27 +433,4 @@ class CurrencyHandler {
   }
 }
 
-class NewUserRolesHandler {
-  constructor() {}
-
-  getRoles(guildId) {
-    return quickDB.get(`${guildId}.newUserRoles`);
-  }
-
-  addRole(guildId, roleId) {
-    let roles = this.getRoles(guildId) || [];
-    if (roles.indexOf(roleId) > -1) return false; //If the role is already in the array, return.
-    quickDB.push(`${guildId}.newUserRoles`, roleId);
-    return true;
-  }
-
-  removeRole(guildId, roleId) {
-    let roles = this.getRoles(guildId) || [];
-    let indexToRemove = roles.indexOf(roleId);
-    if (indexToRemove === -1) return false; //If the role is not in the array, return.
-    roles.splice(indexToRemove, 1); //Remove the role from the array.
-    quickDB.set(`${guildId}.newUserRoles`, roles);
-    return true;
-  }
-}
 module.exports = new DatabaseHandler();

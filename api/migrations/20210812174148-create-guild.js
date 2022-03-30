@@ -43,6 +43,9 @@ module.exports = {
         defaultValue: 5, //5 minutes
         type: Sequelize.INTEGER,
       },
+      minecraftRole: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

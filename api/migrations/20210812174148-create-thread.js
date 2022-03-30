@@ -14,6 +14,7 @@ module.exports = {
           model: "guilds",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       channelId: {
         allowNull: false,

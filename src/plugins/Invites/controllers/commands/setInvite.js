@@ -19,11 +19,11 @@ exports.run = async (client, message, args) => {
   let name = args[0].toLowerCase();
   let code = args[1];
 
-  const res = dbh.invite.addInvite(message.guild.id, name, code);
+  const res = await dbh.invite.setInvite(message.guild.id, name, code);
 
   message.channel.sendEmbed({
     color: 0xff9f01,
-    author: { name: res ? `New Invite Added` : `Invite already exists!` },
-    description: `Invite **${code}** now matches **${name}**`,
+    author: { name: res ? `New Invite Added` : `Invite ${name} not found` },
+    description: res ? `${name} is now linked with --> ${code}` : `No changes were made.`,
   });
 };

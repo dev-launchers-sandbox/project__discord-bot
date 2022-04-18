@@ -17,7 +17,6 @@ class GuildHandler {
   constructor() {}
 
   async createGuild(guildId) {
-    console.log(`Creating guild with id: ${guildId}`);
     if (this.getGuild(guildId, false) !== null) return false;
     return await Guild.create(
       { discordId: guildId },
@@ -28,10 +27,8 @@ class GuildHandler {
   }
 
   async deleteGuild(guildId) {
-    console.log(`Deleting guild with id: ${guildId}`);
     const guild = await this.getGuild(guildId, false);
     if (!guild) return;
-    console.log(`Destroying guild with id: ${guildId}`);
     guild.destroy();
   }
 
@@ -43,7 +40,6 @@ class GuildHandler {
       });
       return guild;
     }
-    console.log(`Getting guild with id: ${guildId}`);
     return await Guild.findOne({ where: { discordId: guildId } });
   }
 

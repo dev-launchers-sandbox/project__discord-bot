@@ -1,6 +1,5 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
-const utils = require("./../../../../utils/commandUsage.js");
+const dbh = require("./../../../.common/structures/DataHandling/DatabaseHandler.js");
 
 const lvls = [
   "one",
@@ -27,58 +26,64 @@ exports.conf = {
 };
 
 exports.run = async (client, message, args) => {
+  const { guild, channel } = message;
   if (!args[0] || !lvls.includes(args[0])) {
-    return sendOptionsEmbed(message);
+    return sendOptionsEmbed(channel, guild.name);
   }
+
+  const levels = await dbh.guild.getLevels(message.guild.id);
+
+  const levelIndex = levels.findIndex((l) => l.number === args[0]);
+  const level = levels[levelIndex];
+  const levelName = args[0];
 
   if (!args[1]) {
-    return sendLevelValueEmbed(message, args);
-  }
-
-  if (["delete", "remove"].includes(args[1])) {
-    db.delete(`levels.${message.guild.id}.${args[0]}`);
-    return sendDeletedValueEmbed(message, args);
-  }
-
-  db.set(`levels.${message.guild.id}.${args[0]}`, args[1]);
-  sendUpdatedValueEmbed(message, args);
+    return sendLevelValueEmbed(channel, guild, level, levelName);
+  } else if (["delete", "remove"].includes(args[1])) {
+    return sendDeletedValueEmbed(channel, levels, levelIndex, levelName, guild.id);
+  } else sendUpdatedValueEmbed(channel, levels, level, levelName, levelIndex, guild.id, args[1]);
 };
 
-function sendOptionsEmbed(message) {
-  message.channel.sendEmbed({
+function sendOptionsEmbed(channel, guildName) {
+  channel.sendEmbed({
     color: 0xff9f01,
-    title: `Level-Roles for ${message.guild.name}`,
-    footer:
-      "Use levels [name] [value] to set a value | Use delete to delete it",
-    fields: [
-      { name: "Level-Roles", value: lvls.map((x) => `\`${x}\``).join(" | ") },
-    ],
+    title: `Level-Roles for ${guildName}`,
+    footer: "Use levels [name] [value] to set a value | Use delete to delete it",
+    fields: [{ name: "Level-Roles", value: lvls.map((x) => `\`${x}\``).join(" | ") }],
   });
 }
 
-function sendLevelValueEmbed(message, args) {
-  const value = db.get(`levels.${message.guild.id}.${args[0]}`);
-  const role = message.guild.roles.resolve(value || "");
+async function sendLevelValueEmbed(channel, guild, level = {}, levelName) {
+  const role = guild.roles.resolve(level.value || "");
 
-  message.channel.sendEmbed({
+  channel.sendEmbed({
     color: 0xff9f01,
-    description: `The value for the level ${args[0]} is ${
-      role ? role : value ? `${value}` : "**Not defined**"
+    description: `The value for the level ${levelName} is ${
+      role ? role : level.value ? `${level.value}` : "**Not defined**"
     }`,
   });
 }
 
-function sendDeletedValueEmbed(message, args) {
-  message.channel.sendEmbed({
+async function sendDeletedValueEmbed(channel, levels, levelIndex, levelName, guildId) {
+  if (levelIndex !== null) {
+    levels[levelIndex].value = null;
+  }
+  dbh.guild.setLevels(guildId, levels);
+
+  channel.sendEmbed({
     color: 0xff9f01,
-    description: `✅ | The value of ${args[0]} has been deleted.`,
-    footer: `You can set it back by doing .levels ${args[0]} <value>`,
+    description: `✅ | The value of ${levelName} has been deleted.`,
+    footer: `You can set it back by doing .levels ${levelName} <value>`,
   });
 }
 
-function sendUpdatedValueEmbed(message, args) {
-  message.channel.sendEmbed({
+function sendUpdatedValueEmbed(channel, levels, level, levelName, levelIndex, guildId, newValue) {
+  if (!level) levels.push({ number: levelName, value: newValue });
+  else levels[levelIndex].value = newValue;
+  dbh.guild.setLevels(guildId, levels);
+
+  channel.sendEmbed({
     color: 0xff9f01,
-    description: `✅ | The value of ${args[0]} has been updated. The new value is ${args[1]}.`,
+    description: `✅ | The value of ${levelName} has been updated. The new value is ${newValue}.`,
   });
 }

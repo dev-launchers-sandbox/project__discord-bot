@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const db = require("quick.db");
 const CommandHandler = require("./../../../.common/structures/CommandHandler/CommandHandler.js");
+const dbh = require("./../../../.common/structures/DataHandling/DatabaseHandler.js");
 
 exports.help = {
   name: "help",
@@ -15,7 +15,8 @@ exports.conf = {
 };
 
 exports.run = async (client, message, args) => {
-  let prefix = db.get(`prefix.${message.guild.id}`) || ".";
+  const prefix = await dbh.guild.getPrefix(message.guild.id);
+
   if (!args[0]) {
     let module = client.helps.array();
 

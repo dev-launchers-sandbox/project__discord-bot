@@ -1,5 +1,5 @@
 const Opportunity = require("./../../structures/Opportunity.js");
-const db = require("quick.db");
+const dbh = require("./../../../.common/structures/DataHandling/DatabaseHandler.js");
 
 exports.help = {
   name: "startOpportunity",
@@ -17,10 +17,9 @@ exports.conf = {
 
 exports.run = async (client, message, args) => {
   const { author, guild } = message;
-  const opportunityChannelId = db.get(`opportunity.${guild.id}`);
+  const opportunityChannelId = await dbh.channels.getOpportunity(guild.id);
   const opportunityChannel = guild.channels.resolve(opportunityChannelId);
-  if (!opportunityChannel) author.send("Coming Soon!");
-
+  if (!opportunityChannel) return author.send("Coming Soon!");
   const opportunity = new Opportunity(client, author, guild);
   opportunity.createOpportunity();
 };

@@ -10,6 +10,7 @@ module.exports = {
     require("./controllers/commands/addWarning.js"),
     require("./controllers/commands/createUser.js"),
     require("./controllers/commands/getWarnings.js"),
+    require("./controllers/commands/delete.js"),
   ],
   events: [],
   extends: [],

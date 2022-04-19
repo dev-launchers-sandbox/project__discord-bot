@@ -2,7 +2,10 @@ module.exports = {
   name: ".common",
   helpCategory: "Common",
   commands: [],
-  events: [],
+  events: [
+    require("./controllers/events/onGuildCreate.js"),
+    require("./controllers/events/onGuildDelete.js"),
+  ],
   extends: [
     require("./extends/GuildExtension.js"),
     require("./extends/MessageExtension.js"),

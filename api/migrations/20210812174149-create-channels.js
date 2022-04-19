@@ -14,6 +14,7 @@ module.exports = {
           model: "guilds",
           key: "id",
         },
+        onDelete: "CASCADE",
       },
       welcome: {
         type: Sequelize.STRING,
@@ -22,6 +23,12 @@ module.exports = {
         type: Sequelize.STRING,
       },
       memberCounter: {
+        type: Sequelize.STRING,
+      },
+      minecraft: {
+        type: Sequelize.STRING,
+      },
+      opportunity: {
         type: Sequelize.STRING,
       },
       threadDirectory: {
@@ -43,6 +50,7 @@ module.exports = {
       invites: {
         type: Sequelize.STRING,
       },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

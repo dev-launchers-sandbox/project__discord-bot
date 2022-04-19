@@ -1,0 +1,92 @@
+[
+  {
+    "displayName": "OP_Roles",
+    "fieldName": "opRoles",
+    "type": "array",
+    "model": "guild"
+  },
+  {
+    "displayName": "Welcome_Channel",
+    "fieldName": "welcome",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "AuditLog_Channel",
+    "fieldName": "auditLog",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "MemberCount_Channel",
+    "fieldName": "memberCounter",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "ThreadDirectory_Channel",
+    "fieldName": "threadDirectory",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "ThreadCategory_Channel",
+    "fieldName": "threadCategory",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "TeamsAndProjects_Channel",
+    "fieldName": "teamsAndProjects",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "NewUserMention_Channels",
+    "fieldName": "newUserMention",
+    "type": "array",
+    "model": "channels"
+  },
+  {
+    "displayName": "Introductions_Channel",
+    "fieldName": "introductions",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "Invites_Channel",
+    "fieldName": "invites",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "New_Member_Roles",
+    "fieldName": "defaultMemberRoles",
+    "type": "array",
+    "model": "guild"
+  },
+  {
+    "displayName": "Prefix",
+    "fieldName": "prefix",
+    "type": "string",
+    "model": "guild"
+  },
+  {
+    "displayName": "Minecraft_Channel",
+    "fieldName": "minecraft",
+    "type": "integer",
+    "model": "channels"
+  },
+  {
+    "displayName": "Minecraft_Role",
+    "fieldName": "minecraftRole",
+    "type": "integer",
+    "model": "guild"
+  },
+  {
+    "displayName": "Opportunities_Channel",
+    "fieldName": "opportunity",
+    "type": "integer",
+    "model": "channels"
+  }
+]

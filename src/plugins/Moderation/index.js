@@ -11,7 +11,7 @@ module.exports = {
     require("./controllers/commands/mute.js"),
     require("./controllers/commands/removewarn.js"),
     require("./controllers/commands/setnickname.js"),
-    require("./controllers/commands/settings.js"),
+    require("./controllers/commands/guildSettings.js"),
     require("./controllers/commands/teamsrules.js"),
     require("./controllers/commands/unmute.js"),
     require("./controllers/commands/warn.js"),

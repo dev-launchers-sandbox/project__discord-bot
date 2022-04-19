@@ -1,70 +1,61 @@
-const db = require("quick.db");
+const dbh = require("./../../.common/structures/DataHandling/DatabaseHandler.js");
 const { newUserRoles } = require("./../../.common/structures/DataHandling/DatabaseHandler.js");
 
 class NewUserHandler {
   constructor() {}
 
-  giveRoles(message) {
+  async giveRoles(client, message) {
     let { guild, channel, member } = message;
 
     if (!guild) return;
     if (message.author.bot) return; //Ignore bots.
-    let introductionsChannel = db.get(`introductions-channel.${guild.id}`);
+    const introductionsChannel = await dbh.channels.getIntroductions(guild.id);
 
-    if (channel.id === (introductionsChannel && introductionsChannel.toString())) {
-      let roles = newUserRoles.getRoles(message.guild.id);
+    if (channel.id === introductionsChannel) {
+      const roles = await dbh.guild.getDefaultMemberRoles(guild.id);
+      //If the user already has every role that would be given to them, ignore the msg.
+      if (roles.every((r) => member.roles.cache.find((role) => role.id === r.id))) return;
 
-      /*
-      If the length of the content of the message is greater than 40, give the user the roles, if not,
-      tell them to fix it.
-      */
-      if (message.content.length > 40) {
-        for (let role of roles) {
-          if (!member.roles.cache.find((r) => r.id === role)) {
-            sendWelcomeEmbed(member);
-            break;
-          }
-        }
-        for (let role of roles) {
-          message.member.roles.add(role);
-        }
+      //Introductions must be > 40 in length in order to be allowed.
+      if (message.content.length < 40) {
+        member.send("Your introduction must at least contain 40 characters!");
         return;
-      } else {
-        /*
-        If the user does not has all of the roles they would get from posting an introduction, refrain from sending
-        them a DM
-        */
-        for (let role of roles) {
-          if (!member.roles.cache.find((r) => r.id === role)) {
-            member.send("Your introduction must at least contain 40 characters!");
-            break;
-          }
-        }
       }
+
+      for (const roleId of roles) {
+        //Check if the role with the id provided exists in the guild.
+        const role = guild.roles.resolve(roleId);
+        if (!role) return;
+        if (!role.editable) return; //Check if the client (bot) has permission to give the role.
+        member.roles.add(role);
+      }
+      //member.roles.add(roles);
+      sendWelcomeEmbed(member, guild.id);
     }
   }
 }
 
-function sendWelcomeEmbed(member) {
-  let welcomeChannelID = db.get(`welcome.${member.guild.id}`) || "none";
+async function sendWelcomeEmbed(member, guildId) {
+  let welcomeChannelID = dbh.channels.getWelcome(guildId);
   const welcomeChannel = member.guild.channels.resolve(welcomeChannelID);
   if (!welcomeChannel) return;
   let icon = member.guild.iconURL({ size: 2048, dynamic: true });
   let avatar = member.user.displayAvatarURL({ size: 2048 });
 
+  const USER_PING = `<${member.user.id}>`;
   welcomeChannel.sendEmbed({
     color: 0xff9f01,
     author: { name: `${member.user.tag}`, image: avatar },
     description: `Welcome to DevLaunchers **${member.user.username}**`,
     footer: { text: ` | ${member.id}`, image: icon },
   });
-  welcomeChannel.send(member.user.toString()).then((m) => m.delete());
+  welcomeChannel.send(USER_PING).then((m) => m.delete());
 
-  let controlCenterID = db.get(`control-center.${member.guild.id}`) || "none";
-  let controlChannel = member.guild.channels.resolve(controlCenterID);
-  if (!controlChannel) return;
-
-  controlChannel.send(member.user.toString()).then((m) => m.delete());
+  for (const channelId of await dbh.channel.getNewUserMention(guildId)) {
+    const channel = member.guild.channels.resolve(channelId);
+    if (!channel) return;
+    channel.send(USER_PING).then((m) => m.delete());
+  }
 }
 
 module.exports = new NewUserHandler();

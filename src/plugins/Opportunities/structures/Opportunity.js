@@ -1,5 +1,6 @@
 const { wait } = require("./../../.common/structures/Utilities/Utilities.js");
-const db = require("quick.db");
+const dbh = require("./../../.common/structures/DataHandling/DatabaseHandler.js");
+
 const OPPORTUNITYFIELDS = [
   {
     name: "name",
@@ -334,7 +335,7 @@ class Opportunity {
   async postIntroduction() {
     this.buildOpportunityEmbed();
 
-    const opportunityChannelId = db.get(`opportunity.${this._guild.id}`);
+    const opportunityChannelId = await dbh.channels.getOpportunity(this._guild.id);
     const opportunityChannel = this._guild.channels.resolve(opportunityChannelId);
     const opportunityMsg = await opportunityChannel.sendEmbed(this.opportunityEmbed);
 

@@ -5,5 +5,5 @@ exports.eventHandle = "message";
 exports.event = async (client, message, args) => {
   metrics.sendEvent("message");
 
-  newUserHandler.giveRoles(message);
+  newUserHandler.giveRoles(client, message);
 };

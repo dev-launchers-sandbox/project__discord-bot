@@ -21,6 +21,6 @@ exports.event = async (client, oldMember, newMember) => {
   minecraftChannel.sendEmbed({
     color: 0xff9f01,
     description: `${newMember.toString()} Welcome to Minecraft!
-    Server IP: minecraft.devlaunchers.org`,
+    Server Address: minecraft.devlaunchers.org`,
   });
 };

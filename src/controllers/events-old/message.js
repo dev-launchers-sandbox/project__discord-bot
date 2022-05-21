@@ -16,11 +16,7 @@ module.exports = async (client, message) => {
   if (message.author.id === "302050872383242240") bumpCheck(message);
   if (message.author.id === "159985870458322944") newLevelCheck(message, args);
 
-  let inviteLink = [
-    "discord.gg",
-    "discord.com/invite",
-    "discordapp.com/invite",
-  ];
+  let inviteLink = ["discord.gg", "discord.com/invite", "discordapp.com/invite"];
 
   if (inviteLink.some((word) => message.content.toLowerCase().includes(word))) {
     let teamsChannel = db.get(`teams.${message.guild.id}`) || "None";
@@ -38,10 +34,7 @@ module.exports = async (client, message) => {
 
   moderateInstancedChannels(client, message);
 
-  if (
-    message.content.startsWith(`<@!${client.user.id}>`) &&
-    message.content.length === 22
-  ) {
+  if (message.content.startsWith(`<@!${client.user.id}>`) && message.content.length === 22) {
     return message.channel.send(`My prefix is **${prefix}**`);
   }
   if (message.author.bot || message.author === client.user) return;
@@ -56,8 +49,7 @@ module.exports = async (client, message) => {
   while (args[0] && args[0][0] === "-") {
     message.flags.push(args.shift().slice(1));
   }
-  let commandFile =
-    client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
+  let commandFile = client.commands.get(cmd) || client.commands.get(client.aliases.get(cmd));
   if (!commandFile) return console.log("command not found");
 
   if (!cooldowns.has(commandFile.help.name))
@@ -94,11 +86,7 @@ module.exports = async (client, message) => {
         console.log("ERROR IN DELETING MESSAGE --> message.js");
       }
       return message.channel
-        .send(
-          `You need to wait **${timeLeft.toFixed(
-            1
-          )}** seconds to use this command again!`
-        )
+        .send(`You need to wait **${timeLeft.toFixed(1)}** seconds to use this command again!`)
         .then((msg) => commandUsage.deleteMsg(msg));
     }
 
@@ -118,15 +106,11 @@ function moderateInstancedChannels(client, message) {
   let instancedChannels = db.get(`instanced.${message.guild.id}`);
   let instancedChannel;
   if (Array.isArray(instancedChannels)) {
-    instancedChannel = instancedChannels.find(
-      (channel) => channel.newChannel === message.channel.id
-    );
+    instancedChannel = instancedChannels.find((channel) => channel.newChannel === message.channel.id);
   }
   if (!instancedChannel) return;
 
-  let moderationChannel = client.channels.resolve(
-    instancedChannel.channelForModeration.id
-  );
+  let moderationChannel = client.channels.resolve(instancedChannel.channelForModeration.id);
 
   if (!moderationChannel) return;
   let messageData =
@@ -148,8 +132,7 @@ function scheduleBumpReminderInterval(message) {
   this.bumpInterval = setInterval(() => {
     message.channel.sendEmbed({
       color: 0xff9f01,
-      title:
-        "🤜🤛 Help grow the community! Type *'!d bump'* to elevate our server on Disboard!",
+      title: "🤜🤛 Help grow the community! Run *'/d bump'* to elevate our server on Disboard!",
     });
   }, 1000 * 60 * 60 * 2 + 1000 * 60 * 5); // 2 hours + five minutes
 }
@@ -157,9 +140,7 @@ function bumpCheck(message) {
   const embed = message.embeds[0];
   if (!embed) return;
   if (!embed.image) return;
-  if (
-    embed.image.url === "https://disboard.org/images/bot-command-image-bump.png"
-  ) {
+  if (embed.image.url === "https://disboard.org/images/bot-command-image-bump.png") {
     // New code to send reminders about bumps, instead of giving beans
     scheduleBumpReminderInterval(message);
     /*
@@ -238,9 +219,7 @@ function getRoleLevel(message, lvl) {
   else if (lvl === "35") wordNum = "thirty-five";
   else wordNum = "forty";
 
-  const role = message.guild.roles.resolve(
-    db.get(`levels.${message.guild.id}.${wordNum}`)
-  );
+  const role = message.guild.roles.resolve(db.get(`levels.${message.guild.id}.${wordNum}`));
 
   return role;
 }

@@ -132,7 +132,7 @@ function scheduleBumpReminderInterval(message) {
   this.bumpInterval = setInterval(() => {
     message.channel.sendEmbed({
       color: 0xff9f01,
-      title: "🤜🤛 Help grow the community! Run *'/d bump'* to elevate our server on Disboard!",
+      title: "🤜🤛 Help grow the community! Run */bump'* to elevate our server on Disboard!",
     });
   }, 1000 * 60 * 60 * 2 + 1000 * 60 * 5); // 2 hours + five minutes
 }
@@ -143,31 +143,6 @@ function bumpCheck(message) {
   if (embed.image.url === "https://disboard.org/images/bot-command-image-bump.png") {
     // New code to send reminders about bumps, instead of giving beans
     scheduleBumpReminderInterval(message);
-    /*
-    const description = embed.description;
-    const openingSign = description.indexOf("<");
-    const closingSign = description.indexOf(">");
-    const userId = description.substring(openingSign + 2, closingSign);
-
-    const user = message.guild.members.resolve(userId);
-
-    const beans = getRandomBeans();
-
-    const emote = getEmote(message.guild, beans.type);
-
-    const userEmbed = new Discord.MessageEmbed()
-      .setColor(0xff9f01)
-      .setAuthor("You are the best!")
-      .setDescription(
-        `Thank you for bumping the server! Please take ${beans.value}  ${emote}`
-      );
-
-    db.add(`account.${userId}.${beans.type}`, beans.value);
-    if (beans.type === "devBeans") {
-      db.add(`account.${userId}.foreverDevBeans`, beans.value);
-    } else db.add(`account.${userId}.foreverGoldenBeans`, beans.value);
-    message.channel.send(userEmbed);
-    */
   }
 }
 

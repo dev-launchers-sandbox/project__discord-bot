@@ -143,31 +143,6 @@ function bumpCheck(message) {
   if (embed.image.url === "https://disboard.org/images/bot-command-image-bump.png") {
     // New code to send reminders about bumps, instead of giving beans
     scheduleBumpReminderInterval(message);
-    /*
-    const description = embed.description;
-    const openingSign = description.indexOf("<");
-    const closingSign = description.indexOf(">");
-    const userId = description.substring(openingSign + 2, closingSign);
-
-    const user = message.guild.members.resolve(userId);
-
-    const beans = getRandomBeans();
-
-    const emote = getEmote(message.guild, beans.type);
-
-    const userEmbed = new Discord.MessageEmbed()
-      .setColor(0xff9f01)
-      .setAuthor("You are the best!")
-      .setDescription(
-        `Thank you for bumping the server! Please take ${beans.value}  ${emote}`
-      );
-
-    db.add(`account.${userId}.${beans.type}`, beans.value);
-    if (beans.type === "devBeans") {
-      db.add(`account.${userId}.foreverDevBeans`, beans.value);
-    } else db.add(`account.${userId}.foreverGoldenBeans`, beans.value);
-    message.channel.send(userEmbed);
-    */
   }
 }
 
@@ -193,7 +168,7 @@ async function newLevelCheck(message, args) {
 
   const user = message.mentions.members.first();
   const lvl = args[4];
-  const levels = ["1", "5", "10", "15", "20", "25", "30", "35", "40"];
+  const levels = ["1", "2", "5", "10", "15", "20", "25", "30", "35", "40"];
   if (!levels.includes(lvl)) return;
 
   const index = levels.indexOf(lvl);
@@ -210,6 +185,7 @@ async function newLevelCheck(message, args) {
 function getRoleLevel(message, lvl) {
   let wordNum;
   if (lvl === "1") wordNum = "one";
+  else if (lvl === "2") wordNum = "two";
   else if (lvl === "5") wordNum = "five";
   else if (lvl === "10") wordNum = "ten";
   else if (lvl === "15") wordNum = "fifteen";

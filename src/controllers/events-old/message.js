@@ -168,7 +168,7 @@ async function newLevelCheck(message, args) {
 
   const user = message.mentions.members.first();
   const lvl = args[4];
-  const levels = ["1", "5", "10", "15", "20", "25", "30", "35", "40"];
+  const levels = ["1", "2", "5", "10", "15", "20", "25", "30", "35", "40"];
   if (!levels.includes(lvl)) return;
 
   const index = levels.indexOf(lvl);
@@ -185,6 +185,7 @@ async function newLevelCheck(message, args) {
 function getRoleLevel(message, lvl) {
   let wordNum;
   if (lvl === "1") wordNum = "one";
+  else if (lvl === "2") wordNum = "two";
   else if (lvl === "5") wordNum = "five";
   else if (lvl === "10") wordNum = "ten";
   else if (lvl === "15") wordNum = "fifteen";

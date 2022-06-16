@@ -4,6 +4,7 @@ const utils = require("./../../../../utils/commandUsage.js");
 
 const lvls = [
   "one",
+  "two",
   "five",
   "ten",
   "fifteen",
@@ -48,11 +49,8 @@ function sendOptionsEmbed(message) {
   message.channel.sendEmbed({
     color: 0xff9f01,
     title: `Level-Roles for ${message.guild.name}`,
-    footer:
-      "Use levels [name] [value] to set a value | Use delete to delete it",
-    fields: [
-      { name: "Level-Roles", value: lvls.map((x) => `\`${x}\``).join(" | ") },
-    ],
+    footer: "Use levels [name] [value] to set a value | Use delete to delete it",
+    fields: [{ name: "Level-Roles", value: lvls.map((x) => `\`${x}\``).join(" | ") }],
   });
 }
 

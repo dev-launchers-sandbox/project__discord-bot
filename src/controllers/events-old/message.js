@@ -132,7 +132,7 @@ function scheduleBumpReminderInterval(message) {
   this.bumpInterval = setInterval(() => {
     message.channel.sendEmbed({
       color: 0xff9f01,
-      title: "🤜🤛 Help grow the community! Run */bump'* to elevate our server on Disboard!",
+      title: "🤜🤛 Help grow the community! Run *'/bump'* to elevate our server on Disboard!",
     });
   }, 1000 * 60 * 60 * 2 + 1000 * 60 * 5); // 2 hours + five minutes
 }

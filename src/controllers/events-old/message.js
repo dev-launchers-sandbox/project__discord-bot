@@ -167,6 +167,7 @@ async function newLevelCheck(message, args) {
   if (!args.includes("advanced")) return;
 
   const user = message.mentions.members.first();
+  // Get the level from the message
   const lvl = args[4];
   const levels = ["1", "2", "5", "10", "15", "20", "25", "30", "35", "40"];
   if (!levels.includes(lvl)) return;

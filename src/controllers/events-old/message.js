@@ -6,7 +6,7 @@ const metrics = require("../../index.js");
 const CommandHandler = require("./../../plugins/.common/structures/CommandHandler/CommandHandler.js");
 
 module.exports = async (client, message) => {
-  // Right now, intervals won't be started until "!d bump" is typed at least once
+  // Right now, intervals won't be started until "/bump" is typed at least once
   this.bumpInterval = -1; // used to track bump intervals
 
   if (!message.guild) return;

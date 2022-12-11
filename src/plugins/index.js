@@ -40,4 +40,6 @@ module.exports = [
 
   // Invites plugin
   require("./Invites"),
+
+  require("./Migrations"),
 ];

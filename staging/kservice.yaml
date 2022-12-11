@@ -1,0 +1,42 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: discord-bot
+  namespace: discord-bot-staging
+spec:
+  template:
+    spec:
+      containers:
+      - name: discord-bot
+        image: devlaunchers/project_discord-bot:latest
+        ports:
+          - containerPort: 8000
+        env:
+          - name: DISCORD_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: project-discord-bot
+                key: discord-token
+          - name: METRICS_PORT
+            value: "3000"
+          - name: API_PORT
+            value: "8000"
+          - name: BACKEND_MTLS_CERT
+            value: "/etc/tls/api-client.pem"
+          - name: BACKEND_MTLS_KEY
+            value: "/etc/tls/api-key.key"
+          - name: BACKEND_CA
+            value: "/etc/tls/backend-ca.pem"
+        volumeMounts:
+          - name: api-mtls
+            # Mount 2 files, cert at /etc/tls/api-client.pem and key at /etc/tls/api-key.key
+            mountPath: "/etc/tls"
+            readOnly: true
+          - name: empty-data-folder
+            mountPath: /usr/src/app/data
+      volumes:
+        - name: api-mtls
+          secret:
+            secretName: tls
+        - name: empty-data-folder
+          emptyDir: {}

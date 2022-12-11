@@ -1,5 +1,5 @@
 const express = require("express");
-require("./../api.js");
+require("./../api/index.js");
 
 // Bring in polyfills (running old version of node)
 require("./utils/polyfills.js");
@@ -17,9 +17,9 @@ const promClient = require("prom-client");
 const speedyBuilds = process.argv.includes("speedyBuilds");
 
 if (speedyBuilds) {
-  console.log("SpeedyBuilds has been enabled");
+  console.log("Speedby Builds!");
 
-  function sendEvent(metric) { }
+  function sendEvent(metric) {}
   exports.sendEvent = sendEvent;
 } else {
   const metrics = registerMetrics();
@@ -50,9 +50,7 @@ if (speedyBuilds) {
     });
 
     const port = process.env.METRICS_PORT || 3000;
-    console.log(
-      `Metrics server listening to ${port}, metrics exposed on /metrics endpoint`
-    );
+    console.log(`Metrics server listening to ${port}, metrics exposed on /metrics endpoint`);
     server.listen(port);
   }
 
@@ -73,4 +71,3 @@ client.on("warn", console.warn);
 client.on("error", console.error);
 
 client.login(process.env.DISCORD_TOKEN);
-

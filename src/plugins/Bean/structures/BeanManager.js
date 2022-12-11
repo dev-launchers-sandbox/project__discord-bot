@@ -4,7 +4,7 @@ const { getRandomMessage } = require("./../../../utils/randomMessages.js");
 require("dotenv").config(); //load .env vars
 const pad_zero = (num) => (num < 10 ? "0" : "") + num;
 const LINE_SEPARATOR = "\n----------------------------\n";
-const DEVLAUNCHERS_GUILD_ID = process.env.MAIN_GUILD || "695791200052969482";
+const DEVLAUNCHERS_GUILD_ID = process.env.MAIN_GUILD || "829463953087660083";
 
 class BeanManager {
   constructor(dbh, client) {

@@ -27,14 +27,6 @@ spec:
               value: "/etc/tls/api-key.key"
             - name: BACKEND_CA
               value: "/etc/tls/backend-ca.pem"
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: 3000
-            initialDelaySeconds: 60
-            periodSeconds: 10
-            timeoutSeconds: 10
-            failureThreshold: 5
           volumeMounts:
             - name: discord-bot-storage
               mountPath: /usr/src/app/data
